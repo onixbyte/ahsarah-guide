@@ -41,10 +41,12 @@ mybatis-starter-core = { group = "org.mybatis.spring.boot", name = "mybatis-spri
 spring-boot-starter-jpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa" }
 hypersistence-core = { group = "io.hypersistence", name = "hypersistence-utils-hibernate-63", version.ref = "hypersistenceVersion" }
 postgres-driver = { group = "org.postgresql", name = "postgresql", version.ref = "postgresDriverVersion" }
+mysql-driver = { group = "com.mysql", name = "mysql-connector-j" }
 h2-database = { group = "com.h2database", name = "h2", version.ref = "h2Version" }
 spring-boot-starter-redis = { group = "org.springframework.boot", name = "spring-boot-starter-data-redis", version.ref = "springBootVersion" }
 flyway-core = { group = "org.flywaydb", name = "flyway-core" }
 flyway-postgresql = { group = "org.flywaydb", name = "flyway-database-postgresql" }
+flyway-mysql = { group = "org.flywaydb", name = "flyway-mysql" }
 
 # Spring Boot Core & Web
 spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web" }
