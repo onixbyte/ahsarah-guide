@@ -1,8 +1,8 @@
 package com.onixbyte.deltaforceguide.controller;
 
-import com.onixbyte.deltaforceguide.domain.dto.FirearmResponse;
+import com.onixbyte.deltaforceguide.domain.dto.ModificationResponse;
 import com.onixbyte.deltaforceguide.domain.dto.PageResponse;
-import com.onixbyte.deltaforceguide.service.FirearmQueryService;
+import com.onixbyte.deltaforceguide.service.ModificationService;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import org.springframework.data.domain.PageRequest;
@@ -16,28 +16,28 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Validated
 @RestController
-@RequestMapping("/api/v1/firearms")
-public class FirearmQueryController {
+@RequestMapping("/modifications")
+public class ModificationController {
 
-    private final FirearmQueryService firearmQueryService;
+    private final ModificationService modificationService;
 
-    public FirearmQueryController(FirearmQueryService firearmQueryService) {
-        this.firearmQueryService = firearmQueryService;
+    public ModificationController(ModificationService modificationService) {
+        this.modificationService = modificationService;
     }
 
     @GetMapping
-    public PageResponse<FirearmResponse> pageQuery(
+    public PageResponse<ModificationResponse> pageQuery(
             @RequestParam(defaultValue = "0") @Min(0) int page,
             @RequestParam(defaultValue = "20") @Min(1) @Max(100) int size,
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "DESC") Sort.Direction direction
     ) {
-        return firearmQueryService.pageQuery(PageRequest.of(page, size, Sort.by(direction, sortBy)));
+        return modificationService.pageQuery(PageRequest.of(page, size, Sort.by(direction, sortBy)));
     }
 
     @GetMapping("/{id}")
-    public FirearmResponse queryById(@PathVariable Long id) {
-        return firearmQueryService.queryById(id);
+    public ModificationResponse queryById(@PathVariable Long id) {
+        return modificationService.queryById(id);
     }
 }
 

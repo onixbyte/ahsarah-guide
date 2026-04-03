@@ -10,11 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
-public class ModificationQueryService {
+public class ModificationService {
 
     private final ModificationRepository modificationRepository;
 
-    public ModificationQueryService(ModificationRepository modificationRepository) {
+    public ModificationService(ModificationRepository modificationRepository) {
         this.modificationRepository = modificationRepository;
     }
 

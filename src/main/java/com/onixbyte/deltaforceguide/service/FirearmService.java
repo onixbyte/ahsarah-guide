@@ -10,11 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
-public class FirearmQueryService {
+public class FirearmService {
 
     private final FirearmRepository firearmRepository;
 
-    public FirearmQueryService(FirearmRepository firearmRepository) {
+    public FirearmService(FirearmRepository firearmRepository) {
         this.firearmRepository = firearmRepository;
     }
 

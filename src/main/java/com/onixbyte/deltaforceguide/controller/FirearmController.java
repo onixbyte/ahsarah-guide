@@ -1,8 +1,8 @@
 package com.onixbyte.deltaforceguide.controller;
 
-import com.onixbyte.deltaforceguide.domain.dto.ModificationResponse;
+import com.onixbyte.deltaforceguide.domain.dto.FirearmResponse;
 import com.onixbyte.deltaforceguide.domain.dto.PageResponse;
-import com.onixbyte.deltaforceguide.service.ModificationQueryService;
+import com.onixbyte.deltaforceguide.service.FirearmService;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import org.springframework.data.domain.PageRequest;
@@ -16,28 +16,28 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Validated
 @RestController
-@RequestMapping("/api/v1/modifications")
-public class ModificationQueryController {
+@RequestMapping("/firearms")
+public class FirearmController {
 
-    private final ModificationQueryService modificationQueryService;
+    private final FirearmService firearmService;
 
-    public ModificationQueryController(ModificationQueryService modificationQueryService) {
-        this.modificationQueryService = modificationQueryService;
+    public FirearmController(FirearmService firearmService) {
+        this.firearmService = firearmService;
     }
 
     @GetMapping
-    public PageResponse<ModificationResponse> pageQuery(
+    public PageResponse<FirearmResponse> pageQuery(
             @RequestParam(defaultValue = "0") @Min(0) int page,
             @RequestParam(defaultValue = "20") @Min(1) @Max(100) int size,
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "DESC") Sort.Direction direction
     ) {
-        return modificationQueryService.pageQuery(PageRequest.of(page, size, Sort.by(direction, sortBy)));
+        return firearmService.pageQuery(PageRequest.of(page, size, Sort.by(direction, sortBy)));
     }
 
     @GetMapping("/{id}")
-    public ModificationResponse queryById(@PathVariable Long id) {
-        return modificationQueryService.queryById(id);
+    public FirearmResponse queryById(@PathVariable Long id) {
+        return firearmService.queryById(id);
     }
 }
 
