@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.flyway.core)
     implementation(libs.flyway.mysql)
     implementation(libs.jackson.jsr310)
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.16")
     testImplementation(libs.spring.boot.starter.test)
     testImplementation(libs.reactor.test)
     testImplementation(libs.mybatis.starter.test)

@@ -1,7 +1,10 @@
 package com.onixbyte.deltaforceguide.domain.entity;
 
+import com.onixbyte.deltaforceguide.domain.converter.FirearmTypeConverter;
+import com.onixbyte.deltaforceguide.enumeration.FirearmType;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,10 +27,11 @@ public class Firearm {
     private String name;
 
     @Column(name = "type", nullable = false)
-    private Integer type;
+    @Convert(converter = FirearmTypeConverter.class)
+    private FirearmType type;
 
     @Column(name = "level", nullable = false)
-    private Integer level;
+    private String level;
 
     @Column(name = "review", columnDefinition = "TEXT")
     private String review;
@@ -51,19 +55,19 @@ public class Firearm {
         this.name = name;
     }
 
-    public Integer getType() {
+    public FirearmType getType() {
         return type;
     }
 
-    public void setType(Integer type) {
+    public void setType(FirearmType type) {
         this.type = type;
     }
 
-    public Integer getLevel() {
+    public String getLevel() {
         return level;
     }
 
-    public void setLevel(Integer level) {
+    public void setLevel(String level) {
         this.level = level;
     }
 

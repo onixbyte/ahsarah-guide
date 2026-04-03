@@ -23,12 +23,16 @@ public class CorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins(properties.allowedOrigins())
-                .allowedHeaders(properties.allowedHeaders())
+                .allowedOrigins(toSafeArray(properties.allowedOrigins()))
+                .allowedHeaders(toSafeArray(properties.allowedHeaders()))
                 .allowedMethods(toHttpMethodNames(properties.allowedMethods()))
                 .allowCredentials(properties.allowCredentials())
                 .maxAge(properties.maxAge().toSeconds())
-                .exposedHeaders(properties.exposedHeaders());
+                .exposedHeaders(toSafeArray(properties.exposedHeaders()));
+    }
+
+    private static String[] toSafeArray(String[] values) {
+        return values == null ? new String[0] : values;
     }
 
     private static String[] toHttpMethodNames(HttpMethod[] methods) {
