@@ -4,21 +4,21 @@ DROP TABLE IF EXISTS modification CASCADE;
 
 CREATE TABLE IF NOT EXISTS firearm
 (
-    id     BIGINT      NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id     BIGSERIAL   NOT NULL PRIMARY KEY,
     name   VARCHAR(64) NOT NULL,
     type   INT         NOT NULL,
-    level  INT         NOT NULL,
+    level  VARCHAR(10) NOT NULL,
     review TEXT        NULL
 );
 
 
 CREATE TABLE IF NOT EXISTS modification
 (
-    id         BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id         BIGSERIAL    NOT NULL PRIMARY KEY,
     firearm_id BIGINT       NOT NULL,
     name       VARCHAR(64)  NOT NULL,
     code       VARCHAR(64)  NOT NULL,
-    tags       JSON         NULL,
+    tags       JSONB        NULL,
     note       TEXT         NULL,
     author     VARCHAR(64)  NULL,
     video_url  VARCHAR(512) NULL,

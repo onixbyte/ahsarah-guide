@@ -1,2 +1,0 @@
-ALTER TABLE firearm
-    MODIFY level VARCHAR(2) NOT NULL;
