@@ -2,7 +2,9 @@ package com.onixbyte.deltaforceguide.service;
 
 import com.onixbyte.deltaforceguide.domain.dto.ModificationResponse;
 import com.onixbyte.deltaforceguide.domain.dto.PageResponse;
+import com.onixbyte.deltaforceguide.domain.entity.Modification;
 import com.onixbyte.deltaforceguide.repository.ModificationRepository;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -19,11 +21,12 @@ public class ModificationService {
     }
 
     @Transactional(readOnly = true)
-    public PageResponse<ModificationResponse> pageQuery(Pageable pageable) {
-        return PageResponse.from(
-                modificationRepository.findAllBy(pageable)
-                        .map(ModificationResponse::from)
-        );
+    public PageResponse<ModificationResponse> pageQuery(Long firearmId, Pageable pageable) {
+        Page<Modification> page = firearmId == null
+                ? modificationRepository.findAllBy(pageable)
+                : modificationRepository.findAllByFirearm_Id(firearmId, pageable);
+
+        return PageResponse.from(page.map(ModificationResponse::from));
     }
 
     @Transactional(readOnly = true)

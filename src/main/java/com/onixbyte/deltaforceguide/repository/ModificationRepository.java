@@ -15,6 +15,9 @@ public interface ModificationRepository extends JpaRepository<Modification, Long
     @EntityGraph(attributePaths = {"firearm"})
     Page<Modification> findAllBy(Pageable pageable);
 
+    @EntityGraph(attributePaths = {"firearm"})
+    Page<Modification> findAllByFirearm_Id(Long firearmId, Pageable pageable);
+
     @Override
     @EntityGraph(attributePaths = {"firearm"})
     Optional<Modification> findById(Long id);

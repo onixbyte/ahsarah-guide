@@ -2,6 +2,7 @@ package com.onixbyte.deltaforceguide.controller;
 
 import com.onixbyte.deltaforceguide.domain.dto.FirearmResponse;
 import com.onixbyte.deltaforceguide.domain.dto.PageResponse;
+import com.onixbyte.deltaforceguide.enumeration.FirearmType;
 import com.onixbyte.deltaforceguide.service.FirearmService;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -30,9 +31,10 @@ public class FirearmController {
             @RequestParam(defaultValue = "0") @Min(0) int page,
             @RequestParam(defaultValue = "20") @Min(1) @Max(100) int size,
             @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "DESC") Sort.Direction direction
+            @RequestParam(defaultValue = "DESC") Sort.Direction direction,
+            @RequestParam(required = false) FirearmType type
     ) {
-        return firearmService.pageQuery(PageRequest.of(page, size, Sort.by(direction, sortBy)));
+        return firearmService.pageQuery(type, PageRequest.of(page, size, Sort.by(direction, sortBy)));
     }
 
     @GetMapping("/{id}")

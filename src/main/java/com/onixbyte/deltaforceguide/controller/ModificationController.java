@@ -5,6 +5,7 @@ import com.onixbyte.deltaforceguide.domain.dto.PageResponse;
 import com.onixbyte.deltaforceguide.service.ModificationService;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.validation.annotation.Validated;
@@ -29,10 +30,11 @@ public class ModificationController {
     public PageResponse<ModificationResponse> pageQuery(
             @RequestParam(defaultValue = "0") @Min(0) int page,
             @RequestParam(defaultValue = "20") @Min(1) @Max(100) int size,
+            @RequestParam(required = false) @Positive Long firearmId,
             @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "DESC") Sort.Direction direction
     ) {
-        return modificationService.pageQuery(PageRequest.of(page, size, Sort.by(direction, sortBy)));
+        return modificationService.pageQuery(firearmId, PageRequest.of(page, size, Sort.by(direction, sortBy)));
     }
 
     @GetMapping("/{id}")
