@@ -8,6 +8,10 @@ public record FirearmResponse(
         String name,
         FirearmType type,
         String level,
+        String calibre,
+        Integer fireRate,
+        Integer armourDamage,
+        Integer bodyDamage,
         String review
 ) {
     public static FirearmResponse from(Firearm firearm) {
@@ -16,6 +20,10 @@ public record FirearmResponse(
                 firearm.getName(),
                 firearm.getType(),
                 firearm.getLevel(),
+                firearm.getCalibre(),
+                firearm.getFireRate(),
+                firearm.getArmourDamage(),
+                firearm.getBodyDamage(),
                 firearm.getReview()
         );
     }
