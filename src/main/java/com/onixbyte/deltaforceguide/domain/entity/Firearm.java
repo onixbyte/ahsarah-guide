@@ -36,6 +36,18 @@ public class Firearm {
     @Column(name = "review", columnDefinition = "TEXT")
     private String review;
 
+    @Column(name = "calibre")
+    private String calibre;
+
+    @Column(name = "fire_rate")
+    private Integer fireRate;
+
+    @Column(name = "armour_damage")
+    private Integer armourDamage;
+
+    @Column(name = "body_damage")
+    private Integer bodyDamage;
+
     @OneToMany(mappedBy = "firearm", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Modification> modifications = new ArrayList<>();
 
@@ -77,6 +89,38 @@ public class Firearm {
 
     public void setReview(String review) {
         this.review = review;
+    }
+
+    public String getCalibre() {
+        return calibre;
+    }
+
+    public void setCalibre(String calibre) {
+        this.calibre = calibre;
+    }
+
+    public Integer getFireRate() {
+        return fireRate;
+    }
+
+    public void setFireRate(Integer fireRate) {
+        this.fireRate = fireRate;
+    }
+
+    public Integer getArmourDamage() {
+        return armourDamage;
+    }
+
+    public void setArmourDamage(Integer armourDamage) {
+        this.armourDamage = armourDamage;
+    }
+
+    public Integer getBodyDamage() {
+        return bodyDamage;
+    }
+
+    public void setBodyDamage(Integer bodyDamage) {
+        this.bodyDamage = bodyDamage;
     }
 
     public List<Modification> getModifications() {

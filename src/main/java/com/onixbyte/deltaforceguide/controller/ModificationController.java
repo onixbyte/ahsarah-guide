@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @Validated
 @RestController
 @RequestMapping("/modifications")
@@ -32,9 +34,10 @@ public class ModificationController {
             @RequestParam(defaultValue = "20") @Min(1) @Max(100) int size,
             @RequestParam(required = false) @Positive Long firearmId,
             @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "DESC") Sort.Direction direction
+            @RequestParam(defaultValue = "DESC") Sort.Direction direction,
+            @RequestParam(required = false) List<String> tags
     ) {
-        return modificationService.pageQuery(firearmId, PageRequest.of(page, size, Sort.by(direction, sortBy)));
+        return modificationService.pageQuery(firearmId, tags, PageRequest.of(page, size, Sort.by(direction, sortBy)));
     }
 
     @GetMapping("/{id}")
@@ -42,4 +45,3 @@ public class ModificationController {
         return modificationService.queryById(id);
     }
 }
-
