@@ -1,6 +1,7 @@
 package com.onixbyte.deltaforceguide.repository;
 
 import com.onixbyte.deltaforceguide.domain.entity.Modification;
+import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -23,15 +24,16 @@ public interface ModificationRepository extends JpaRepository<Modification, Long
 
     @Override
     @EntityGraph(attributePaths = {"firearm"})
-    Optional<Modification> findById(Long id);
+    @NonNull
+    Optional<Modification> findById(@NonNull Long id);
 
     @Query(value = """
-            SELECT * FROM modification m 
+            SELECT * FROM modification m
             WHERE (:firearmId IS NULL OR m.firearm_id = :firearmId)
               AND (CAST(:tagsJson AS text) IS NULL OR cast(m.tags as jsonb) @> cast(CAST(:tagsJson AS text) as jsonb))
             """,
             countQuery = """
-            SELECT count(*) FROM modification m 
+            SELECT count(*) FROM modification m
             WHERE (:firearmId IS NULL OR m.firearm_id = :firearmId)
               AND (CAST(:tagsJson AS text) IS NULL OR cast(m.tags as jsonb) @> cast(CAST(:tagsJson AS text) as jsonb))
             """,
