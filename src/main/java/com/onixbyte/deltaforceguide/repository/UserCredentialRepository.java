@@ -1,0 +1,52 @@
+package com.onixbyte.deltaforceguide.repository;
+
+import com.onixbyte.deltaforceguide.domain.entity.UserCredential;
+import com.onixbyte.deltaforceguide.domain.entity.UserCredentialId;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface UserCredentialRepository extends JpaRepository<UserCredential, UserCredentialId> {
+
+    @EntityGraph(attributePaths = {"user"})
+    @Query("""
+            select uc
+            from UserCredential uc
+            where uc.user.id = :userId
+            """)
+    List<UserCredential> findAllByUserId(@Param("userId") Long userId);
+
+    @EntityGraph(attributePaths = {"user"})
+    @Query("""
+            select uc
+            from UserCredential uc
+            where uc.user.id = :userId
+              and uc.id.provider = :provider
+            """)
+    Optional<UserCredential> findByUserIdAndProvider(@Param("userId") Long userId, @Param("provider") String provider);
+
+    @Modifying
+    @Query("""
+            delete from UserCredential uc
+            where uc.user.id = :userId
+              and uc.id.provider = :provider
+            """)
+    void deleteByUserIdAndProvider(@Param("userId") Long userId, @Param("provider") String provider);
+
+    @Modifying
+    @Query("""
+            delete from UserCredential uc
+            where uc.user.id = :userId
+            """)
+    void deleteAllByUserId(@Param("userId") Long userId);
+}
+
+
+
