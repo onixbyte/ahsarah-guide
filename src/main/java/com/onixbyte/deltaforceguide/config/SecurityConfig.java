@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.onixbyte.deltaforceguide.filter.TokenAuthenticationFilter;
+import com.onixbyte.deltaforceguide.properties.CookieProperties;
 import com.onixbyte.deltaforceguide.properties.TokenProperties;
 import com.onixbyte.deltaforceguide.security.provider.UsernamePasswordAuthenticationProvider;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -26,7 +27,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-@EnableConfigurationProperties({TokenProperties.class})
+@EnableConfigurationProperties({TokenProperties.class, CookieProperties.class})
 public class SecurityConfig {
 
     @Bean

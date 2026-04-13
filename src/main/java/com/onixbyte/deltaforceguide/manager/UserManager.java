@@ -46,5 +46,9 @@ public class UserManager {
     public void deleteById(Long id) {
         userRepository.deleteById(id);
     }
+
+    public Optional<User> findByUsernameOrEmail(String principal) {
+        return userRepository.findByUsernameOrEmail(principal);
+    }
 }
 

@@ -43,7 +43,7 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
         }
 
         // get userContainer from database
-        var userContainer = userManager.findByUsername(usernamePasswordAuthentication.getPrincipal());
+        var userContainer = userManager.findByUsernameOrEmail(usernamePasswordAuthentication.getPrincipal());
         if (userContainer.isEmpty()) {
             log.error("User {} is trying to authenticate but no userContainer found.", usernamePasswordAuthentication.getPrincipal());
             throw new BizException(HttpStatus.UNAUTHORIZED, "用户名或密码错误。");
