@@ -4,6 +4,8 @@ import com.onixbyte.deltaforceguide.domain.dto.FirearmResponse;
 import com.onixbyte.deltaforceguide.domain.dto.PageResponse;
 import com.onixbyte.deltaforceguide.enumeration.FirearmType;
 import com.onixbyte.deltaforceguide.service.FirearmService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import org.springframework.data.domain.PageRequest;
@@ -15,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Validated
+@Tag(name = "武器管理", description = "与武器有关的操作")
 @RestController
 @RequestMapping("/firearms")
 public class FirearmController {
@@ -26,6 +28,8 @@ public class FirearmController {
         this.firearmService = firearmService;
     }
 
+    @Operation(description = "获取分页武器数据")
+    @Validated
     @GetMapping
     public PageResponse<FirearmResponse> pageQuery(
             @RequestParam(defaultValue = "0") @Min(0) int page,
@@ -37,6 +41,7 @@ public class FirearmController {
         return firearmService.pageQuery(type, PageRequest.of(page, size, Sort.by(direction, sortBy)));
     }
 
+    @Operation(description = "获取指定武器的数据")
     @GetMapping("/{id}")
     public FirearmResponse queryById(@PathVariable Long id) {
         return firearmService.queryById(id);
