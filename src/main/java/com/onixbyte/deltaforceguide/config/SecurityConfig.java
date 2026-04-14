@@ -45,8 +45,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests((customiser) -> customiser
                         .requestMatchers("/error", "/error/**").permitAll()
                         .requestMatchers("/captcha", "/captcha/**").permitAll()
-                        .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/auth/logout").authenticated()
+                        .requestMatchers("/auth/**").permitAll()
                         .requestMatchers(
                                 "/swagger-ui.html",
                                 "/swagger-ui",
