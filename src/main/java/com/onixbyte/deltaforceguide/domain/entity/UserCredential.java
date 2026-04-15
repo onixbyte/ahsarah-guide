@@ -80,4 +80,59 @@ public class UserCredential {
 	public void setCredential(String credential) {
 		this.credential = credential;
 	}
+
+	public static Builder builder() {
+		return new Builder();
+	}
+
+	public static class Builder {
+
+		private UserCredentialId id;
+		private User user;
+		private Long userId;
+		private String provider;
+		private String credential;
+
+		public Builder id(UserCredentialId id) {
+			this.id = id;
+			return this;
+		}
+
+		public Builder user(User user) {
+			this.user = user;
+			return this;
+		}
+
+		public Builder userId(Long userId) {
+			this.userId = userId;
+			return this;
+		}
+
+		public Builder provider(String provider) {
+			this.provider = provider;
+			return this;
+		}
+
+		public Builder credential(String credential) {
+			this.credential = credential;
+			return this;
+		}
+
+		public UserCredential build() {
+			UserCredential userCredential = new UserCredential();
+			userCredential.id = this.id == null ? new UserCredentialId() : this.id;
+			userCredential.user = this.user;
+			if (this.user != null) {
+				userCredential.id.setUserId(this.user.getId());
+			}
+			if (this.userId != null) {
+				userCredential.id.setUserId(this.userId);
+			}
+			if (this.provider != null) {
+				userCredential.id.setProvider(this.provider);
+			}
+			userCredential.credential = this.credential;
+			return userCredential;
+		}
+	}
 }

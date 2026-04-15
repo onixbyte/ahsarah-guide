@@ -44,6 +44,33 @@ public class UserCredentialId implements Serializable {
     public int hashCode() {
         return Objects.hash(userId, provider);
     }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private Long userId;
+        private String provider;
+
+        public Builder userId(Long userId) {
+            this.userId = userId;
+            return this;
+        }
+
+        public Builder provider(String provider) {
+            this.provider = provider;
+            return this;
+        }
+
+        public UserCredentialId build() {
+            UserCredentialId id = new UserCredentialId();
+            id.userId = this.userId;
+            id.provider = this.provider;
+            return id;
+        }
+    }
 }
 
 

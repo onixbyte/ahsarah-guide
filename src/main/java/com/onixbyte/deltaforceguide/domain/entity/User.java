@@ -70,4 +70,45 @@ public class User {
         this.credentials.remove(credential);
         credential.setUser(null);
     }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private Long id;
+        private String username;
+        private String email;
+        private List<UserCredential> credentials;
+
+        public Builder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder username(String username) {
+            this.username = username;
+            return this;
+        }
+
+        public Builder email(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public Builder credentials(List<UserCredential> credentials) {
+            this.credentials = credentials;
+            return this;
+        }
+
+        public User build() {
+            User user = new User();
+            user.id = this.id;
+            user.username = this.username;
+            user.email = this.email;
+            user.credentials = this.credentials == null ? new ArrayList<>() : this.credentials;
+            return user;
+        }
+    }
 }

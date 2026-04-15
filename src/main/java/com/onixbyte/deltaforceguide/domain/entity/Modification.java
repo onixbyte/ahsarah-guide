@@ -116,5 +116,74 @@ public class Modification {
     public void setVideoUrl(String videoUrl) {
         this.videoUrl = videoUrl;
     }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private Long id;
+        private Firearm firearm;
+        private String name;
+        private String code;
+        private List<String> tags;
+        private String note;
+        private String author;
+        private String videoUrl;
+
+        public Builder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder firearm(Firearm firearm) {
+            this.firearm = firearm;
+            return this;
+        }
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder code(String code) {
+            this.code = code;
+            return this;
+        }
+
+        public Builder tags(List<String> tags) {
+            this.tags = tags;
+            return this;
+        }
+
+        public Builder note(String note) {
+            this.note = note;
+            return this;
+        }
+
+        public Builder author(String author) {
+            this.author = author;
+            return this;
+        }
+
+        public Builder videoUrl(String videoUrl) {
+            this.videoUrl = videoUrl;
+            return this;
+        }
+
+        public Modification build() {
+            Modification modification = new Modification();
+            modification.id = this.id;
+            modification.firearm = this.firearm;
+            modification.name = this.name;
+            modification.code = this.code;
+            modification.tags = this.tags == null ? new ArrayList<>() : this.tags;
+            modification.note = this.note;
+            modification.author = this.author;
+            modification.videoUrl = this.videoUrl;
+            return modification;
+        }
+    }
 }
 

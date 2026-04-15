@@ -140,5 +140,88 @@ public class Firearm {
         this.modifications.remove(modification);
         modification.setFirearm(null);
     }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private Long id;
+        private String name;
+        private FirearmType type;
+        private String level;
+        private String review;
+        private String calibre;
+        private Integer fireRate;
+        private Integer armourDamage;
+        private Integer bodyDamage;
+        private List<Modification> modifications;
+
+        public Builder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder type(FirearmType type) {
+            this.type = type;
+            return this;
+        }
+
+        public Builder level(String level) {
+            this.level = level;
+            return this;
+        }
+
+        public Builder review(String review) {
+            this.review = review;
+            return this;
+        }
+
+        public Builder calibre(String calibre) {
+            this.calibre = calibre;
+            return this;
+        }
+
+        public Builder fireRate(Integer fireRate) {
+            this.fireRate = fireRate;
+            return this;
+        }
+
+        public Builder armourDamage(Integer armourDamage) {
+            this.armourDamage = armourDamage;
+            return this;
+        }
+
+        public Builder bodyDamage(Integer bodyDamage) {
+            this.bodyDamage = bodyDamage;
+            return this;
+        }
+
+        public Builder modifications(List<Modification> modifications) {
+            this.modifications = modifications;
+            return this;
+        }
+
+        public Firearm build() {
+            Firearm firearm = new Firearm();
+            firearm.id = this.id;
+            firearm.name = this.name;
+            firearm.type = this.type;
+            firearm.level = this.level;
+            firearm.review = this.review;
+            firearm.calibre = this.calibre;
+            firearm.fireRate = this.fireRate;
+            firearm.armourDamage = this.armourDamage;
+            firearm.bodyDamage = this.bodyDamage;
+            firearm.modifications = this.modifications == null ? new ArrayList<>() : this.modifications;
+            return firearm;
+        }
+    }
 }
 
