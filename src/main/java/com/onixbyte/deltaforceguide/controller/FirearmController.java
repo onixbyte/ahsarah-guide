@@ -1,5 +1,6 @@
 package com.onixbyte.deltaforceguide.controller;
 
+import com.onixbyte.deltaforceguide.domain.dto.FirearmRequest;
 import com.onixbyte.deltaforceguide.domain.dto.FirearmResponse;
 import com.onixbyte.deltaforceguide.domain.dto.PageResponse;
 import com.onixbyte.deltaforceguide.enumeration.FirearmType;
@@ -11,11 +12,7 @@ import jakarta.validation.constraints.Min;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "武器管理", description = "与武器有关的操作")
 @RestController
@@ -45,6 +42,11 @@ public class FirearmController {
     @GetMapping("/{id}")
     public FirearmResponse queryById(@PathVariable Long id) {
         return firearmService.queryById(id);
+    }
+
+    @PostMapping
+    public FirearmResponse addFirearm(@Validated @RequestBody FirearmRequest request) {
+        return firearmService.addFirearm(request);
     }
 }
 

@@ -1,5 +1,6 @@
 package com.onixbyte.deltaforceguide.service;
 
+import com.onixbyte.deltaforceguide.domain.dto.FirearmRequest;
 import com.onixbyte.deltaforceguide.domain.dto.FirearmResponse;
 import com.onixbyte.deltaforceguide.domain.dto.PageResponse;
 import com.onixbyte.deltaforceguide.domain.entity.Firearm;
@@ -35,6 +36,21 @@ public class FirearmService {
         return firearmRepository.findById(id)
                 .map(FirearmResponse::from)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Firearm not found: " + id));
+    }
+
+    public FirearmResponse addFirearm(FirearmRequest request) {
+        var firearm = firearmRepository.save(Firearm.builder()
+                .name(request.name())
+                .type(request.type())
+                .level(request.level())
+                .calibre(request.calibre())
+                .fireRate(request.fireRate())
+                .armourDamage(request.armourDamage())
+                .bodyDamage(request.bodyDamage())
+                .review(request.review())
+                .build());
+        
+        return FirearmResponse.from(firearm);
     }
 }
 
