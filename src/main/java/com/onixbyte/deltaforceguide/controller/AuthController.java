@@ -45,6 +45,7 @@ public class AuthController {
                 .body(UserResponse.from(user));
     }
 
+    @Operation(description = "退出登录")
     @PostMapping("/logout")
     public ResponseEntity<Void> logout() {
         var expiredCookie = cookieService.buildCookie(CookieName.ACCESS_TOKEN, "", Duration.ZERO);
