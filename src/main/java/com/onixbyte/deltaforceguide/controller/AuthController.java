@@ -6,9 +6,11 @@ import com.onixbyte.deltaforceguide.client.TokenClient;
 import com.onixbyte.deltaforceguide.service.AuthService;
 import com.onixbyte.deltaforceguide.service.CookieService;
 import com.onixbyte.deltaforceguide.shared.CookieName;
-import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Duration;
 
+@Tag(name = "用户鉴权", description = "处理用户登录与退出功能")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -30,8 +33,9 @@ public class AuthController {
         this.cookieService = cookieService;
     }
 
+    @Operation(description = "用户登录")
     @PostMapping("/login")
-    public ResponseEntity<UserResponse> login(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<UserResponse> login(@Validated @RequestBody LoginRequest request) {
         var user = authService.login(request);
         var accessToken = tokenClient.generateToken(user);
         var accessTokenCookie = cookieService.buildCookie(CookieName.ACCESS_TOKEN, accessToken);
