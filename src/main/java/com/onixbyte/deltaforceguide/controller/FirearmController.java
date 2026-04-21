@@ -48,5 +48,16 @@ public class FirearmController {
     public FirearmResponse addFirearm(@Validated @RequestBody FirearmRequest request) {
         return firearmService.addFirearm(request);
     }
-}
 
+    @Operation(description = "更新指定武器的数据")
+    @PutMapping("/{id}")
+    public FirearmResponse updateFirearm(@PathVariable Long id, @Validated @RequestBody FirearmRequest request) {
+        return firearmService.updateFirearm(id, request);
+    }
+
+    @Operation(description = "删除指定武器的数据")
+    @DeleteMapping("/{id}")
+    public void deleteFirearm(@PathVariable Long id) {
+        firearmService.deleteFirearm(id);
+    }
+}
