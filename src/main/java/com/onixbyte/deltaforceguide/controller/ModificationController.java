@@ -1,18 +1,26 @@
 package com.onixbyte.deltaforceguide.controller;
 
+import com.onixbyte.deltaforceguide.domain.dto.ModificationBatchDeleteRequest;
+import com.onixbyte.deltaforceguide.domain.dto.ModificationBatchCreateRequest;
+import com.onixbyte.deltaforceguide.domain.dto.ModificationRequest;
 import com.onixbyte.deltaforceguide.domain.dto.ModificationResponse;
 import com.onixbyte.deltaforceguide.domain.dto.PageResponse;
 import com.onixbyte.deltaforceguide.service.ModificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,5 +56,35 @@ public class ModificationController {
     @GetMapping("/{id}")
     public ModificationResponse queryById(@PathVariable Long id) {
         return modificationService.queryById(id);
+    }
+
+    @Operation(description = "创建改装")
+    @PostMapping
+    public ModificationResponse create(@Valid @RequestBody ModificationRequest request) {
+        return modificationService.create(request);
+    }
+
+    @Operation(description = "批量创建改装")
+    @PostMapping("/batch")
+    public List<ModificationResponse> batchCreate(@Valid @RequestBody ModificationBatchCreateRequest request) {
+        return modificationService.batchCreate(request.modifications());
+    }
+
+    @Operation(description = "修改指定改装")
+    @PutMapping("/{id}")
+    public ModificationResponse update(@PathVariable Long id, @Valid @RequestBody ModificationRequest request) {
+        return modificationService.update(id, request);
+    }
+
+    @Operation(description = "删除指定改装")
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        modificationService.delete(id);
+    }
+
+    @Operation(description = "批量删除改装")
+    @DeleteMapping("/batch-delete")
+    public void batchDelete(@Valid @RequestBody ModificationBatchDeleteRequest request) {
+        modificationService.batchDelete(request.ids());
     }
 }
