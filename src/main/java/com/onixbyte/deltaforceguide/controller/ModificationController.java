@@ -1,6 +1,5 @@
 package com.onixbyte.deltaforceguide.controller;
 
-import com.onixbyte.deltaforceguide.domain.dto.ModificationBatchDeleteRequest;
 import com.onixbyte.deltaforceguide.domain.dto.ModificationBatchCreateRequest;
 import com.onixbyte.deltaforceguide.domain.dto.ModificationRequest;
 import com.onixbyte.deltaforceguide.domain.dto.ModificationResponse;
@@ -84,7 +83,8 @@ public class ModificationController {
 
     @Operation(description = "批量删除改装")
     @DeleteMapping("/batch-delete")
-    public void batchDelete(@Valid @RequestBody ModificationBatchDeleteRequest request) {
-        modificationService.batchDelete(request.ids());
+    @Validated
+    public void batchDelete(@RequestParam List<@Positive Long> ids) {
+        modificationService.batchDelete(ids);
     }
 }

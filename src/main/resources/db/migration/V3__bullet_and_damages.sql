@@ -1,4 +1,5 @@
 -- 创建新表
+DROP TABLE IF EXISTS firearm_new;
 CREATE TABLE firearm_new
 (
     id            BIGSERIAL   NOT NULL,
@@ -20,10 +21,10 @@ SELECT id,
        name,
        type,
        level,
-       calibre,
+       '',
        0,
-       armour_damage,
-       body_damage,
+       0,
+       0,
        review
 FROM firearm;
 
