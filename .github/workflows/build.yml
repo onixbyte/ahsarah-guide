@@ -1,0 +1,30 @@
+name: Upload Release Assets
+
+on:
+  release:
+    types: [created] # 仅当创建 Release 之后触发
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+
+    # 必须授予权限以允许 Action 修改 Release
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create archive
+        run: |
+          TAG_NAME=${{ github.event.release.tag_name }}
+          tar -czvf "website-dist-${TAG_NAME}.tar.gz" --exclude=".git*" --exclude=".github*" .
+
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v2
+        with:
+          # 上传刚才生成的 tar.gz 文件
+          files: dist-${{ github.event.release.tag_name }}.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
