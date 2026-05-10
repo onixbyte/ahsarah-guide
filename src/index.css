@@ -1,6 +1,7 @@
 @layer theme, base, antd, components, utilities;
 
 @import 'tailwindcss';
+@plugin "@tailwindcss/typography";
 
 html, body {
   margin: 0;
@@ -56,7 +57,7 @@ html, body {
 
 .nav-item:hover::after,
 .nav-item.active::after {
-  height: 80%;  /* 向上打光的高度，可以调整 */
+  height: 80%;  /* Height of the upward glow; adjustable. */
 }
 
 .nav-item:hover,

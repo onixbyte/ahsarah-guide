@@ -3,10 +3,11 @@ import { defineConfig } from "vite"
 import react from "@vitejs/plugin-react"
 import tailwindcss from "@tailwindcss/vite"
 import portChecker from "vite-plugin-port-checker"
+import { Mode, plugin as markdown } from "vite-plugin-markdown"
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss(), portChecker()],
+  plugins: [react(), tailwindcss(), portChecker(), markdown({ mode: [Mode.HTML, Mode.TOC] })],
   base: "/",
   build: {
     rolldownOptions: {
