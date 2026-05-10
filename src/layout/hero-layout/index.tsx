@@ -59,40 +59,6 @@ export default function HeroLayout() {
                 }>
                 改枪码
               </NavLink>
-              {/* {user ? (
-                <Dropdown
-                  trigger={["hover"]}
-                  menu={{
-                    items: [
-                      {
-                        key: "logout",
-                        label: "退出登录",
-                        danger: true,
-                        onClick: handleLogout,
-                      },
-                    ],
-                  }}
-                >
-                  <span className="nav-item inline-flex items-center px-10 h-full text-base font-medium text-gray-500 hover:text-white cursor-pointer">
-                    {user.username}
-                  </span>
-                </Dropdown>
-              ) : (
-                <Link
-                  to="/login"
-                  className="nav-item inline-flex items-center px-10 h-full text-base font-medium transition-all duration-200 text-gray-500 hover:text-white"
-                >
-                  登录
-                </Link>
-              )}
-              <a
-                href="https://github.com/zihluwang/delta-force-firearm-modification-codes"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="nav-item inline-flex items-center px-10 h-full text-lg font-medium transition-all duration-200 text-gray-500 hover:text-white"
-              >
-                GitHub
-              </a> */}
             </nav>
           </div>
         </div>
