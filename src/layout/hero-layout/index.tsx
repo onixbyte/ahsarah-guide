@@ -32,7 +32,7 @@ export default function HeroLayout() {
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-10 h-full"> 
           <div className="flex justify-between items-center h-20"> 
             <div className="flex items-center">
-              <h1 className="text-xl font-semibold text-gray-900 text-white">三角洲行动改枪码库</h1>
+              <h1 className="text-xl font-semibold text-white">《三角洲》指南</h1>
             </div>
             <nav className="flex h-full"> 
               <NavLink
