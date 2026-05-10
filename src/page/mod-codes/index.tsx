@@ -56,7 +56,7 @@ export default function ModCodesPage() {
       page: page - 1,
       size: pageSize,
       sortBy: "id",
-      direction: "ASC",
+      direction: "DESC",
       firearmId,
       tags: selectedTags,
     }).then((pagedData) => {
