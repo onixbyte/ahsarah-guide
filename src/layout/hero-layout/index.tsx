@@ -100,18 +100,18 @@ export default function HeroLayout() {
               {isDropdownOpen && (
                 <div className="absolute top-full left-2/3 -translate-x-1/2 w-18 bg-gray-950 border border-gray-700 rounded-lg shadow-xl py-1 z-20 opacity-60">
                   <a
-                    href="https://github.com/zihluwang/frontend-repo"
+                    href="https://github.com/zihluwang/delta-force-guide-web"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition-colors">
-                    前端
+                    Web
                   </a>
                   <a
-                    href="https://github.com/zihluwang/backend-repo"
+                    href="https://github.com/zihluwang/delta-force-guide-server"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition-colors">
-                    后端
+                    Server
                   </a>
                 </div>
               )}
@@ -153,7 +153,7 @@ export default function HeroLayout() {
               <Link
                 to="/login"
                 className="flex items-center gap-1.5 text-gray-400 hover:text-white transition-colors duration-200">
-              <LoginOutlined className="text-lg opacity-80" />
+                <LoginOutlined className="text-lg opacity-80" />
                 登录
               </Link>
             )}
