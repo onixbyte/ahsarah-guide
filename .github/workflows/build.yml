@@ -2,13 +2,13 @@ name: Upload Release Assets
 
 on:
   release:
-    types: [created] # 仅当创建 Release 之后触发
+    types: [created] # Trigger only after a Release is created
 
 jobs:
   build-and-upload:
     runs-on: ubuntu-latest
 
-    # 必须授予权限以允许 Action 修改 Release
+    # Must grant permission to allow the Action to modify the Release
     permissions:
       contents: write
 
@@ -16,15 +16,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Create archive
-        run: |
-          TAG_NAME=${{ github.event.release.tag_name }}
-          tar -czvf "website-dist-${TAG_NAME}.tar.gz" --exclude=".git*" --exclude=".github*" .
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build release archive
+        run: pnpm build:tar
 
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v2
         with:
-          # 上传刚才生成的 tar.gz 文件
-          files: dist-${{ github.event.release.tag_name }}.tar.gz
+          files: dist.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
