@@ -52,5 +52,5 @@ VITE_REDUX_STORAGE=local      # "local" or "session" for Redux persistence
 
 ## Contributing conventions
 
-- User-facing copy and documentation in British English
+- User-facing copy, documentation, and code comments in British English
 - Commit messages use `chore:` prefix for dependency updates (per Dependabot config)
