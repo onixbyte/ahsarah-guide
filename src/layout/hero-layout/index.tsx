@@ -9,7 +9,7 @@ import {
   LoginOutlined,
 } from "@ant-design/icons"
 import { AuthApi } from "@/api"
-import { useAppDispatch, useAppSelector } from "@/store/hooks"
+import { useAppDispatch, useAppSelector } from "@/hooks/store"
 import { clearCurrentUser } from "@/store/auth-slice"
 import { useState } from "react"
 

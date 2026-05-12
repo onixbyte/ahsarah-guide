@@ -26,7 +26,7 @@ This is a Chinese-language SPA for browsing and managing Delta Force guide ("《
 - `EmptyLayout` (minimal) for `/login`
 All page components are lazy-loaded via `createBrowserRouter` + `lazy()`.
 
-**State** (`src/store/`): Redux Toolkit with two slices — `auth` (current user) and `firearms` (paginated firearm list). State is persisted to `localStorage` or `sessionStorage` based on the `VITE_REDUX_STORAGE` env var. Use typed hooks from `src/store/hooks.ts` (`useAppDispatch`, `useAppSelector`).
+**State** (`src/store/`): Redux Toolkit with two slices — `auth` (current user) and `firearms` (paginated firearm list). State is persisted to `localStorage` or `sessionStorage` based on the `VITE_REDUX_STORAGE` env var. Use typed hooks from `src/hooks/store.ts` (`useAppDispatch`, `useAppSelector`).
 
 **API layer** (`src/api/`): Axios instance (`src/shared/web-client/`) with base URL from `VITE_API_BASE_URL`, 10s timeout, and credentials. API modules: `FirearmApi`, `ModificationApi`, `TagApi`, `AuthApi`.
 
