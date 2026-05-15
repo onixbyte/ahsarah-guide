@@ -3,6 +3,7 @@ package com.onixbyte.deltaforceguide.controller;
 import com.onixbyte.deltaforceguide.domain.dto.LoginRequest;
 import com.onixbyte.deltaforceguide.domain.dto.UserResponse;
 import com.onixbyte.deltaforceguide.client.TokenClient;
+import com.onixbyte.deltaforceguide.security.annotation.RequiresAuth;
 import com.onixbyte.deltaforceguide.service.AuthService;
 import com.onixbyte.deltaforceguide.service.CookieService;
 import com.onixbyte.deltaforceguide.shared.CookieName;
@@ -45,6 +46,7 @@ public class AuthController {
                 .body(UserResponse.from(user));
     }
 
+    @RequiresAuth
     @Operation(description = "退出登录")
     @PostMapping("/logout")
     public ResponseEntity<Void> logout() {

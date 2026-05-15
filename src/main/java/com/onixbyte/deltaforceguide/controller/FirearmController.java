@@ -4,6 +4,7 @@ import com.onixbyte.deltaforceguide.domain.dto.FirearmRequest;
 import com.onixbyte.deltaforceguide.domain.dto.FirearmResponse;
 import com.onixbyte.deltaforceguide.domain.dto.PageResponse;
 import com.onixbyte.deltaforceguide.enumeration.FirearmType;
+import com.onixbyte.deltaforceguide.security.annotation.RequiresAuth;
 import com.onixbyte.deltaforceguide.service.FirearmService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -44,17 +45,20 @@ public class FirearmController {
         return firearmService.queryById(id);
     }
 
+    @RequiresAuth
     @PostMapping
     public FirearmResponse addFirearm(@Validated @RequestBody FirearmRequest request) {
         return firearmService.addFirearm(request);
     }
 
+    @RequiresAuth
     @Operation(description = "更新指定武器的数据")
     @PutMapping("/{id}")
     public FirearmResponse updateFirearm(@PathVariable Long id, @Validated @RequestBody FirearmRequest request) {
         return firearmService.updateFirearm(id, request);
     }
 
+    @RequiresAuth
     @Operation(description = "删除指定武器的数据")
     @DeleteMapping("/{id}")
     public void deleteFirearm(@PathVariable Long id) {

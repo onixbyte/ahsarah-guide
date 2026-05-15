@@ -10,7 +10,6 @@ import com.onixbyte.deltaforceguide.security.provider.UsernamePasswordAuthentica
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -43,24 +42,7 @@ public class SecurityConfig {
                 .sessionManagement((customiser) -> customiser
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((customiser) -> customiser
-                        .requestMatchers("/error", "/error/**").permitAll()
-                        .requestMatchers("/captcha", "/captcha/**").permitAll()
-                        .requestMatchers("/auth/logout").authenticated()
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers(
-                                "/swagger-ui.html",
-                                "/swagger-ui",
-                                "/swagger-ui/**",
-                                "/v3/api-docs",
-                                "/v3/api-docs.yaml",
-                                "/v3/api-docs/swagger-config"
-                        ).permitAll()
-                        .requestMatchers(HttpMethod.GET,
-                                "/firearms", "/firearms/*",
-                                "/modifications", "/modifications/*",
-                                "/daily-passwords", "/daily-passwords/*"
-                        ).permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .addFilterAfter(tokenAuthenticationFilter, ExceptionTranslationFilter.class)
                 .build();
