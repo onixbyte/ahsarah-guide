@@ -78,17 +78,17 @@ com.onixbyte.deltaforceguide
 
 ### API endpoints
 
-| Path | Methods | Auth |
-|---|---|---|
-| `/firearms` | GET, POST | GET public, POST requires auth |
-| `/firearms/{id}` | GET, PUT, DELETE | GET public, PUT/DELETE requires auth |
-| `/modifications` | GET, POST | GET public, POST requires auth |
-| `/modifications/{id}` | GET, PUT, DELETE | GET public, PUT/DELETE requires auth |
-| `/modifications/batch` | POST | Requires auth |
-| `/modifications/batch-delete` | DELETE | Requires auth |
-| `/tags` | GET | Public |
-| `/auth/login` | POST | Public |
-| `/auth/logout` | POST | Authenticated |
+| Path                          | Methods          | Auth                                 |
+|-------------------------------|------------------|--------------------------------------|
+| `/firearms`                   | GET, POST        | GET public, POST requires auth       |
+| `/firearms/{id}`              | GET, PUT, DELETE | GET public, PUT/DELETE requires auth |
+| `/modifications`              | GET, POST        | GET public, POST requires auth       |
+| `/modifications/{id}`         | GET, PUT, DELETE | GET public, PUT/DELETE requires auth |
+| `/modifications/batch`        | POST             | Requires auth                        |
+| `/modifications/batch-delete` | DELETE           | Requires auth                        |
+| `/tags`                       | GET              | Public                               |
+| `/auth/login`                 | POST             | Public                               |
+| `/auth/logout`                | POST             | Authenticated                        |
 
 ### Commit convention
 
