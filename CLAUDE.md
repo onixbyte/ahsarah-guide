@@ -65,7 +65,7 @@ com.onixbyte.deltaforceguide
 - **JPA + native queries**: Most CRUD uses Spring Data JPA. Native queries (in `ModificationRepository`) handle JSONB tag filtering with Postgres `@>` operator.
 - **Custom auth flow**: JWT tokens in httpOnly cookies (`AccessToken`). Spring Security with a custom `UsernamePasswordAuthenticationProvider` and `TokenAuthenticationFilter`. Tokens are auto-renewed within 5 min of expiry.
 - **JSONB storage**: `Modification.tags` and `Modification.accessories` (including nested `Tuning` objects) are stored as JSONB columns using Hypersistence Utils `JsonType`.
-- **Manager layer**: `UserManager` and `UserCredentialManager` sit between service and repository, adding `@Transactional` boundaries without mixing concerns.
+- **Strict layering**: The call chain must follow `Controller → Service → Manager → Repository/Mapper`. Skipping layers (e.g. Controller calling Manager directly, Service calling Repository directly) is not permitted. Each layer has a distinct responsibility: Controller handles HTTP concerns, Service contains business logic, Manager manages `@Transactional` boundaries and data access coordination, Repository/Mapper handles raw data access.
 - **DTOs as Java records**: All request/response objects are immutable records with static `from()` factory methods for entity→DTO conversion.
 - **Flyway migrations**: SQL migrations in `src/main/resources/db/migration/` — V2 (init), V3 (bullet/damage fields), V4 (user), V5 (accessories JSONB column).
 

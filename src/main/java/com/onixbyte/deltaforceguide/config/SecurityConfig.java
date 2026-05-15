@@ -57,7 +57,8 @@ public class SecurityConfig {
                         ).permitAll()
                         .requestMatchers(HttpMethod.GET,
                                 "/firearms", "/firearms/*",
-                                "/modifications", "/modifications/*"
+                                "/modifications", "/modifications/*",
+                                "/daily-passwords", "/daily-passwords/*"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
