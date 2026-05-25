@@ -35,6 +35,7 @@ package:
     - JAR_FILE=$(find build/libs -name '*.jar' | head -1)
     - echo "Building Docker image for tag $CI_COMMIT_TAG with JAR $JAR_FILE"
     - docker build
+        --provenance=false
         -f Dockerfile.ci
         --build-arg JAR_FILE="$JAR_FILE"
         -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG"
