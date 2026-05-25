@@ -3,12 +3,10 @@ variables:
   DOCKER_HOST: unix:///var/run/docker.sock
 
 stages:
-  - build
-  - package
-  - deploy
+  - release
 
-build:
-  stage: build
+release:
+  stage: release
   image: amazoncorretto:21-alpine
   cache:
     key: gradle
@@ -17,20 +15,9 @@ build:
       - .gradle/caches
   before_script:
     - chmod +x gradlew
+    - apk add --no-cache docker-cli
   script:
     - ./gradlew bootJar -x test -PartefactVersion="$CI_COMMIT_TAG"
-  artifacts:
-    paths:
-      - build/libs/*.jar
-  rules:
-    - if: $CI_COMMIT_TAG
-
-package:
-  stage: package
-  image: docker:27
-  needs:
-    - build
-  script:
     - JAR_FILE=$(find build/libs -name '*.jar' | head -1)
     - echo "Building Docker image for tag $CI_COMMIT_TAG with JAR $JAR_FILE"
     - docker build
@@ -40,15 +27,6 @@ package:
         -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG"
         .
     - docker tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG" "$CI_REGISTRY_IMAGE:latest"
-  rules:
-    - if: $CI_COMMIT_TAG
-
-deploy:
-  stage: deploy
-  image: docker:27
-  needs:
-    - package
-  script:
     - echo "Pushing image $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG"
     - docker login "$CI_REGISTRY" -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
     - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG"
