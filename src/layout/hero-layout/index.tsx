@@ -26,7 +26,7 @@ export default function HeroLayout() {
   }
 
   return (
-    <div className="bg-gray-50 ">
+    <div className="bg-[#1b252a] ">
       {/* Navigation Header */}
       <header className="bg-white shadow-sm border-b bg-[url('/nav_bg.png')] bg-cover bg-center">
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-10 h-full"> 
@@ -34,25 +34,25 @@ export default function HeroLayout() {
             <div className="flex items-center">
               <h1 className="text-xl font-semibold text-gray-900 text-white">三角洲行动改枪码库</h1>
             </div>
-            <nav className="flex h-full"> 
+            <nav className="flex h-full "> 
               <NavLink
                 to="/firearms"
                 className={({ isActive }) =>
                   `nav-item inline-flex items-center px-10 h-full text-base font-medium transition-all duration-200 ${isActive ? 'active' : ''
-                  } text-gray-500 hover:text-white`
+                  } text-gray-500 hover:text-white whitespace-nowrap`
                 }
               >
                 武器列表
               </NavLink>
-              <NavLink
+              {/* <NavLink
                 to="/mod-codes"
                 className={({ isActive }) =>
                   `nav-item inline-flex items-center px-10 h-full text-base font-medium transition-all duration-200 ${isActive ? 'active' : ''
-                  } text-gray-500 hover:text-white`
+                  } text-gray-500 hover:text-white whitespace-nowrap`
                 }
               >
                 改枪码
-              </NavLink>
+              </NavLink> */}
               {/* {user ? (
                 <Dropdown
                   trigger={["hover"]}
@@ -93,7 +93,7 @@ export default function HeroLayout() {
       </header>
 
       {/* Main Content Area */}
-      <main className="max-w-screen-2xl mx-auto py-6 sm:px-6 lg:px-10">
+      <main className=" max-w-screen-2xl mx-auto py-6 sm:px-6 lg:px-10">
         <div className="px-4 py-6 sm:px-0">
           <Outlet />
         </div>
@@ -134,7 +134,7 @@ export default function HeroLayout() {
             {isDropdownOpen && (
               <div className="absolute top-full left-2/3 -translate-x-1/2 w-18 bg-gray-950 border border-gray-700 rounded-lg shadow-xl py-1 z-20 opacity-60">
                 <a
-                  href="https://github.com/zihluwang/frontend-repo"
+                  href="https://github.com/zihluwang/delta-force-firearm-modification-codes"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition-colors"
@@ -193,7 +193,7 @@ export default function HeroLayout() {
                 to="/login"
                 className="flex items-center gap-1.5 text-gray-400 hover:text-white transition-colors duration-200"
               >
-                <img src="../../public/footer-3.png" alt="" className="w-8 w-8 opacity-80" />
+                <img src="/footer-3.png" alt="" className="w-8 w-8 opacity-80" />
                 登录
               </Link>
             )}
