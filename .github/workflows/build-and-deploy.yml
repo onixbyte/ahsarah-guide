@@ -6,6 +6,7 @@ on:
 
 env:
   APP_NAME: delta-force-guide-server
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   # ================================================================
