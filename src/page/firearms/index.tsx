@@ -4,7 +4,7 @@ import { FirearmApi } from "@/api"
 import FirearmCreateModal from "@/components/firearm-create-modal"
 import FirearmEditModal from "@/components/firearm-edit-modal"
 import ModCodes from "@/components/mod-codes"
-import { useAppSelector } from "@/store/hooks"
+import { useAppSelector } from "@/hooks/store"
 import { Firearm, FirearmType } from "@/types"
 import { Button, Card, Col, Pagination, Popconfirm, Row, Select, Tag, Typography, App } from "antd"
 import { ConfigProvider, theme } from 'antd';

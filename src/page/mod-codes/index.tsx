@@ -16,7 +16,7 @@ import { Link, useSearchParams } from "react-router-dom"
 import { ModificationApi, TagApi } from "@/api"
 import ModificationCreateModal from "@/components/modification-create-modal"
 import ModificationEditModal from "@/components/modification-edit-modal"
-import { useAppSelector } from "@/store/hooks"
+import { useAppSelector } from "@/hooks/store"
 import { Modification } from "@/types"
 
 const pageSize = 10
@@ -56,7 +56,7 @@ export default function ModCodesPage() {
       page: page - 1,
       size: pageSize,
       sortBy: "id",
-      direction: "ASC",
+      direction: "DESC",
       firearmId,
       tags: selectedTags,
     }).then((pagedData) => {

@@ -6,7 +6,7 @@ import { ModificationApi, TagApi } from "@/api";
 import { Modification } from "@/types";
 import ModificationCreateModal from "@/components/modification-create-modal";
 import ModificationEditModal from "@/components/modification-edit-modal";
-import { useAppSelector } from "@/store/hooks";
+import { useAppSelector } from "@/hooks/store";
 
 const pageSize = 10; // 常量，不需要 useState
 

@@ -1,6 +1,7 @@
 @layer theme, base, antd, components, utilities;
 
 @import 'tailwindcss';
+@plugin "@tailwindcss/typography";
 
 html,
 body {
@@ -111,7 +112,7 @@ body {
   letter-spacing: '0.5px';
 }
 
-/* 公共列样式：平均分配宽度，带有视觉区分 */
+
 .lmr-left,
 .lmr-middle,
 .lmr-right {
@@ -120,7 +121,7 @@ body {
   height: 100%;
 }
 
-/* 为左右中区域添加微妙的背景色差异，便于区分 */
+
 .lmr-left {
   flex: 1;
   background-color: '#555555';
@@ -167,7 +168,7 @@ body {
 }
 
 
-/* 响应式：小屏幕下自动转为垂直排列 */
+
 @media (max-width: 768px) {
   .lmr-container {
     flex-direction: column;

@@ -2,7 +2,7 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { App, Button, Card, Form, Input, Typography } from "antd"
 import { AuthApi } from "@/api"
-import { useAppDispatch } from "@/store/hooks"
+import { useAppDispatch } from "@/hooks/store"
 import { setCurrentUser } from "@/store/auth-slice"
 import { LoginRequest } from "@/types"
 
@@ -29,11 +29,11 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-gray-100 px-4 py-10 sm:py-16">
       <div className="mx-auto max-w-md">
-        <Card bordered={false} className="shadow-sm">
-          <Typography.Title level={3} className="!mb-2 text-center">
+        <Card variant="borderless" className="shadow-sm">
+          <Typography.Title level={3} className="mb-2! text-center">
             登录
           </Typography.Title>
-          <Typography.Paragraph className="!mb-6 text-center !text-gray-500">
+          <Typography.Paragraph className="mb-6! text-center text-gray-500!">
             使用你的帐号登录后即可继续操作
           </Typography.Paragraph>
 
@@ -54,7 +54,7 @@ export default function LoginPage() {
               <Input.Password autoComplete="current-password" placeholder="请输入密码" />
             </Form.Item>
 
-            <Form.Item className="!mb-0">
+            <Form.Item className="mb-0!">
               <Button type="primary" htmlType="submit" loading={loading} block>
                 登录
               </Button>

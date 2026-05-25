@@ -40,6 +40,10 @@ const router = createBrowserRouter(
           path: "mod-codes",
           lazy: lazy(() => import("@/page/mod-codes")),
         },
+        {
+          path: "legal",
+          lazy: lazy(() => import("@/page/legal"))
+        }
       ],
     },
     {

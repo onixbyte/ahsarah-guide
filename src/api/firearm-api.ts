@@ -7,9 +7,9 @@ interface FirearmParams extends PageQueryParams {
 }
 
 /**
- * 查询武器列表
+ * Fetch firearm list
  *
- * @param params 分页查询参数¬
+ * @param params Paged query parameters
  */
 export async function getFirearms(params?: FirearmParams): Promise<Page<Firearm>> {
   let uri = "/firearms"
@@ -28,9 +28,9 @@ export async function getFirearms(params?: FirearmParams): Promise<Page<Firearm>
 }
 
 /**
- * 根据 ID 查询武器
+ * Fetch firearm by ID
  *
- * @param id 武器 ID
+ * @param id Firearm ID
  */
 export async function getFirearm(id: number): Promise<Firearm> {
   const { data } = await WebClient.get<Firearm>(`/firearms/${id}`)
@@ -38,7 +38,7 @@ export async function getFirearm(id: number): Promise<Firearm> {
 }
 
 /**
- * 新建武器
+ * Create firearm
  * @param request
  */
 export async function addFirearm(request: AddFirearmRequest): Promise<Firearm> {
