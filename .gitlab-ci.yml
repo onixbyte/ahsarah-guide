@@ -1,6 +1,4 @@
 variables:
-  REGISTRY: registry.onixbyte.cn
-  IMAGE_NAME: delta-force-guide
   GRADLE_OPTS: -Dorg.gradle.daemon=false
   DOCKER_HOST: unix:///var/run/docker.sock
 
@@ -39,9 +37,9 @@ package:
     - docker build
         -f Dockerfile.ci
         --build-arg JAR_FILE="$JAR_FILE"
-        -t "$REGISTRY/$IMAGE_NAME:$CI_COMMIT_TAG"
+        -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG"
         .
-    - docker tag "$REGISTRY/$IMAGE_NAME:$CI_COMMIT_TAG" "$REGISTRY/$IMAGE_NAME:latest"
+    - docker tag "$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG" "$CI_REGISTRY_IMAGE:latest"
   rules:
     - if: $CI_COMMIT_TAG
 
@@ -51,9 +49,9 @@ deploy:
   needs:
     - package
   script:
-    - echo "Pushing image $REGISTRY/$IMAGE_NAME:$CI_COMMIT_TAG"
-    - docker login "$REGISTRY" -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
-    - docker push "$REGISTRY/$IMAGE_NAME:$CI_COMMIT_TAG"
-    - docker push "$REGISTRY/$IMAGE_NAME:latest"
+    - echo "Pushing image $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG"
+    - docker login "$CI_REGISTRY" -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
+    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_TAG"
+    - docker push "$CI_REGISTRY_IMAGE:latest"
   rules:
     - if: $CI_COMMIT_TAG
