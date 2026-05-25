@@ -18,6 +18,7 @@ mybatisVersion = "3.0.5"
 jacksonVersion = "2.19.2"
 hypersistenceVersion = "3.14.0"
 springDependencyManagementVersion = "1.1.7"
+springDocVersion = "2.8.16"
 
 [libraries]
 # General Utilities
@@ -57,8 +58,11 @@ spring-boot-configurationProcessor = { group = "org.springframework.boot", name 
 spring-boot-actuator = { group = "org.springframework.boot", name = "spring-boot-starter-actuator" }
 
 # Security & Auth
-spring-boot-starter-security = { group = "org.springframework.boot", name = "spring-boot-starter-security", version.ref = "springBootVersion" }
+spring-boot-starter-security = { group = "org.springframework.boot", name = "spring-boot-starter-security" }
 jwt-core = { group = "com.auth0", name = "java-jwt", version.ref = "javaJwtVersion" }
+
+# Spring Doc
+spring-boot-starter-doc = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-ui", version.ref = "springDocVersion" }
 
 # Cloud Services
 aws-sdk-bom = { group = "software.amazon.awssdk", name = "bom", version.ref = "awsSdkVersion" }
@@ -66,7 +70,7 @@ aws-sdk-s3 = { group = "software.amazon.awssdk", name = "s3" }
 
 # Testing
 spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-boot-starter-test", version.ref = "springBootVersion" }
-spring-security-test = { group = "org.springframework.security", name = "spring-security-test", version.ref = "springSecurityVersion" }
+spring-security-test = { group = "org.springframework.security", name = "spring-security-test" }
 reactor-test = { group = "io.projectreactor", name = "reactor-test", version.ref = "reactorVersion" }
 junit-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version.ref = "junitPlatformVersion" }
 mybatis-starter-test = { group = "org.mybatis.spring.boot", name = "mybatis-spring-boot-starter-test", version.ref = "mybatisVersion" }

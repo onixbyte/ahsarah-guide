@@ -10,6 +10,7 @@ public record ModificationResponse(
         String name,
         String code,
         List<String> tags,
+        List<AccessoryResponse> accessories,
         String note,
         String author,
         String videoUrl
@@ -21,6 +22,9 @@ public record ModificationResponse(
                 modification.getName(),
                 modification.getCode(),
                 modification.getTags(),
+                modification.getAccessories() == null
+                        ? List.of()
+                        : modification.getAccessories().stream().map(AccessoryResponse::from).toList(),
                 modification.getNote(),
                 modification.getAuthor(),
                 modification.getVideoUrl()

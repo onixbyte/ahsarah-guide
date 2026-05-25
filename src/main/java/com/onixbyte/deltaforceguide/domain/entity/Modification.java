@@ -1,17 +1,7 @@
 package com.onixbyte.deltaforceguide.domain.entity;
 
 import io.hypersistence.utils.hibernate.type.json.JsonType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Index;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import org.hibernate.annotations.Type;
 
 import java.util.ArrayList;
@@ -41,8 +31,12 @@ public class Modification {
     private String code;
 
     @Type(JsonType.class)
-    @Column(name = "tags", columnDefinition = "json")
+    @Column(name = "tags", columnDefinition = "jsonb")
     private List<String> tags = new ArrayList<>();
+
+    @Type(JsonType.class)
+    @Column(name = "accessories", columnDefinition = "jsonb")
+    private List<Accessory> accessories = new ArrayList<>();
 
     @Column(name = "note", columnDefinition = "TEXT")
     private String note;
@@ -93,6 +87,22 @@ public class Modification {
         this.tags = tags;
     }
 
+    public List<Accessory> getAccessories() {
+        return accessories;
+    }
+
+    public void setAccessories(List<Accessory> accessories) {
+        this.accessories = accessories;
+    }
+
+    public void addAccessory(Accessory modificationAccessory) {
+        this.accessories.add(modificationAccessory);
+    }
+
+    public void removeAccessory(Accessory modificationAccessory) {
+        this.accessories.remove(modificationAccessory);
+    }
+
     public String getNote() {
         return note;
     }
@@ -115,6 +125,82 @@ public class Modification {
 
     public void setVideoUrl(String videoUrl) {
         this.videoUrl = videoUrl;
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    public static class Builder {
+
+        private Long id;
+        private Firearm firearm;
+        private String name;
+        private String code;
+        private List<String> tags;
+        private List<Accessory> accessories;
+        private String note;
+        private String author;
+        private String videoUrl;
+
+        public Builder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder firearm(Firearm firearm) {
+            this.firearm = firearm;
+            return this;
+        }
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder code(String code) {
+            this.code = code;
+            return this;
+        }
+
+        public Builder tags(List<String> tags) {
+            this.tags = tags;
+            return this;
+        }
+
+        public Builder accessories(List<Accessory> accessories) {
+            this.accessories = accessories;
+            return this;
+        }
+
+        public Builder note(String note) {
+            this.note = note;
+            return this;
+        }
+
+        public Builder author(String author) {
+            this.author = author;
+            return this;
+        }
+
+        public Builder videoUrl(String videoUrl) {
+            this.videoUrl = videoUrl;
+            return this;
+        }
+
+        public Modification build() {
+            Modification modification = new Modification();
+            modification.id = this.id;
+            modification.firearm = this.firearm;
+            modification.name = this.name;
+            modification.code = this.code;
+            modification.tags = this.tags == null ? new ArrayList<>() : this.tags;
+            modification.accessories = this.accessories == null ? new ArrayList<>() : this.accessories;
+            modification.note = this.note;
+            modification.author = this.author;
+            modification.videoUrl = this.videoUrl;
+            return modification;
+        }
     }
 }
 

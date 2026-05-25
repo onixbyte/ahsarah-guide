@@ -143,6 +143,13 @@ test/
 gradle-app.setting
 .gradletasknamecache
 
+### Claude Code
+.claude/settings.local.json
+.claude/memory/
+.claude/plans/
+.claude/worktrees/
+.claude/scheduled_tasks.json
+
 # Eclipse Gradle plugin generated files
 # Eclipse Core
 .project

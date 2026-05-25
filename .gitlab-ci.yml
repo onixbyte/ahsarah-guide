@@ -1,0 +1,62 @@
+variables:
+  REGISTRY: registry.onixbyte.cn
+  IMAGE_NAME: delta-force-guide
+  GRADLE_OPTS: -Dorg.gradle.daemon=false
+
+stages:
+  - build
+  - package
+  - deploy
+
+build:
+  stage: build
+  image: amazoncorretto:21-alpine
+  cache:
+    key: gradle
+    paths:
+      - .gradle/wrapper
+      - .gradle/caches
+  before_script:
+    - chmod +x gradlew
+  script:
+    - ./gradlew bootJar -x test
+  artifacts:
+    paths:
+      - build/libs/*.jar
+    expire_in: 30 min
+  rules:
+    - if: $CI_COMMIT_TAG
+
+package:
+  stage: package
+  image: docker:27
+  services:
+    - docker:27-dind
+  needs:
+    - build
+  script:
+    - JAR_FILE=$(find build/libs -name '*.jar' | head -1)
+    - echo "Building Docker image for tag $CI_COMMIT_TAG with JAR $JAR_FILE"
+    - docker build
+        -f Dockerfile.ci
+        --build-arg JAR_FILE="$JAR_FILE"
+        -t "$REGISTRY/$IMAGE_NAME:$CI_COMMIT_TAG"
+        .
+    - docker tag "$REGISTRY/$IMAGE_NAME:$CI_COMMIT_TAG" "$REGISTRY/$IMAGE_NAME:latest"
+  rules:
+    - if: $CI_COMMIT_TAG
+
+deploy:
+  stage: deploy
+  image: docker:27
+  services:
+    - docker:27-dind
+  needs:
+    - package
+  script:
+    - echo "Pushing image $REGISTRY/$IMAGE_NAME:$CI_COMMIT_TAG"
+    - docker login "$REGISTRY" -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
+    - docker push "$REGISTRY/$IMAGE_NAME:$CI_COMMIT_TAG"
+    - docker push "$REGISTRY/$IMAGE_NAME:latest"
+  rules:
+    - if: $CI_COMMIT_TAG
