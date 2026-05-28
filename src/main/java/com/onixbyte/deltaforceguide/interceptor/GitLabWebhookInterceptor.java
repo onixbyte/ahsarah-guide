@@ -18,6 +18,14 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Base64;
 
+/**
+ * Verifies GitLab webhook requests by validating the {@code webhook-id},
+ * {@code webhook-timestamp}, and {@code webhook-signature} headers against
+ * a configured signing token using HMAC-SHA256.
+ *
+ * <p>Supports GitLab's v1 signature scheme. Verification is skipped when no
+ * signing token is configured.
+ */
 @Component
 public class GitLabWebhookInterceptor implements HandlerInterceptor {
 
@@ -26,10 +34,28 @@ public class GitLabWebhookInterceptor implements HandlerInterceptor {
 
     private final WebhookProperties webhookProperties;
 
+    /**
+     * Creates a new interceptor with the given webhook configuration.
+     *
+     * @param webhookProperties the webhook configuration properties
+     */
     public GitLabWebhookInterceptor(WebhookProperties webhookProperties) {
         this.webhookProperties = webhookProperties;
     }
 
+    /**
+     * Validates the GitLab webhook signature headers on the incoming request.
+     * Reads {@code webhook-id}, {@code webhook-timestamp}, and
+     * {@code webhook-signature} headers and verifies the signature against the
+     * configured signing token. If no token is configured, verification is skipped.
+     *
+     * @param request  the incoming HTTP request (must be a {@link RepeatedlyReadRequestWrapper})
+     * @param response the HTTP response
+     * @param handler  the chosen handler to execute
+     * @return {@code true} if the request is authentic
+     * @throws BizException with {@code 401} if headers are missing or the signature is invalid,
+     *                      with {@code 500} if verification fails unexpectedly
+     */
     @Override
     public boolean preHandle(
             @NonNull HttpServletRequest request,
@@ -90,6 +116,14 @@ public class GitLabWebhookInterceptor implements HandlerInterceptor {
         return true;
     }
 
+    /**
+     * Decodes a GitLab-format signing token by stripping the {@code whsec_} prefix
+     * and Base64-decoding the remainder.
+     *
+     * @param token the prefixed signing token
+     * @return the raw key bytes
+     * @throws BizException if the token does not start with {@code whsec_}
+     */
     private byte[] decodeSigningToken(String token) {
         if (!token.startsWith(TOKEN_PREFIX)) {
             throw new BizException(HttpStatus.INTERNAL_SERVER_ERROR,
@@ -99,6 +133,14 @@ public class GitLabWebhookInterceptor implements HandlerInterceptor {
         return Base64.getDecoder().decode(encoded);
     }
 
+    /**
+     * Computes the Base64-encoded HMAC-SHA256 digest for the given data.
+     *
+     * @param key  the secret key bytes
+     * @param data the content to sign
+     * @return Base64-encoded HMAC-SHA256 digest
+     * @throws Exception if the HMAC algorithm is unavailable
+     */
     private String computeHmacSha256(byte[] key, String data) throws Exception {
         var mac = Mac.getInstance("HmacSHA256");
         var secretKey = new SecretKeySpec(key, "HmacSHA256");
