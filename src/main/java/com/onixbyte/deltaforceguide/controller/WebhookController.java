@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/webhook")
+@RequestMapping("/webhooks")
 public class WebhookController {
 
     private static final Logger log = LoggerFactory.getLogger(WebhookController.class);
