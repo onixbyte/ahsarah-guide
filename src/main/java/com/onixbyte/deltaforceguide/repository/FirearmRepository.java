@@ -7,6 +7,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+/**
+ * Spring Data JPA repository for {@link Firearm} entity operations.
+ *
+ * @author zihluwang
+ */
 @Repository
 public interface FirearmRepository extends JpaRepository<Firearm, Long> {
 

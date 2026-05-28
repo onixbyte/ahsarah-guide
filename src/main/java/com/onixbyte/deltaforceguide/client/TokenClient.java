@@ -12,6 +12,11 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
+/**
+ * Client for generating and verifying JSON Web Tokens using the Auth0 java-jwt library.
+ *
+ * @author zihluwang
+ */
 @Component
 public class TokenClient {
 

@@ -17,7 +17,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -27,6 +26,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Service handling modification business logic including CRUD, batch operations, and tag filtering.
+ *
+ * @author zihluwang
+ */
 @Service
 public class ModificationService {
 
@@ -44,7 +48,14 @@ public class ModificationService {
         this.objectMapper = objectMapper;
     }
 
-    @Transactional(readOnly = true)
+    /**
+     * Queries modifications with optional firearm and tag filters.
+     *
+     * @param firearmId optional firearm ID filter
+     * @param tags optional tag list filter
+     * @param pageable pagination parameters
+     * @return a paginated response of modification records
+     */
     public PageResponse<ModificationResponse> pageQuery(Long firearmId, List<String> tags, Pageable pageable) {
         String tagsJson = null;
         if (tags != null && !tags.isEmpty()) {
@@ -65,19 +76,34 @@ public class ModificationService {
         return PageResponse.from(page.map(ModificationResponse::from));
     }
 
-    @Transactional(readOnly = true)
+    /**
+     * Finds a modification by its ID.
+     *
+     * @param id the modification ID
+     * @return the modification response
+     */
     public ModificationResponse queryById(Long id) {
         return modificationRepository.findById(id)
                 .map(ModificationResponse::from)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Modification not found: " + id));
     }
 
-    @Transactional(readOnly = true)
+    /**
+     * Finds all unique tags across modifications, optionally scoped to a firearm.
+     *
+     * @param firearmId optional firearm ID to scope the tag search
+     * @return list of unique tag strings
+     */
     public List<String> findAllTags(Long firearmId) {
         return modificationRepository.findAllTags(firearmId);
     }
 
-    @Transactional
+    /**
+     * Creates a new modification for a given firearm.
+     *
+     * @param request the modification creation request
+     * @return the created modification response
+     */
     public ModificationResponse create(ModificationRequest request) {
         Firearm firearm = firearmRepository.findById(request.firearmId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Firearm not found: " + request.firearmId()));
@@ -86,7 +112,12 @@ public class ModificationService {
         return ModificationResponse.from(modificationRepository.save(modification));
     }
 
-    @Transactional
+    /**
+     * Creates multiple modifications in a single batch operation.
+     *
+     * @param requests list of modification creation requests
+     * @return list of created modification responses
+     */
     public List<ModificationResponse> batchCreate(List<ModificationRequest> requests) {
         Set<Long> firearmIds = requests.stream()
                 .map(ModificationRequest::firearmId)
@@ -111,7 +142,13 @@ public class ModificationService {
                 .toList();
     }
 
-    @Transactional
+    /**
+     * Updates an existing modification identified by ID.
+     *
+     * @param id the modification ID
+     * @param request the updated modification data
+     * @return the updated modification response
+     */
     public ModificationResponse update(Long id, ModificationRequest request) {
         Modification modification = modificationRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Modification not found: " + id));
@@ -130,14 +167,22 @@ public class ModificationService {
         return ModificationResponse.from(modificationRepository.save(modification));
     }
 
-    @Transactional
+    /**
+     * Deletes a modification by its ID.
+     *
+     * @param id the modification ID to delete
+     */
     public void delete(Long id) {
         Modification modification = modificationRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Modification not found: " + id));
         modificationRepository.delete(modification);
     }
 
-    @Transactional
+    /**
+     * Deletes multiple modifications in a single batch operation.
+     *
+     * @param ids list of modification IDs to delete
+     */
     public void batchDelete(List<Long> ids) {
         Set<Long> uniqueIds = new LinkedHashSet<>(ids);
         List<Modification> modifications = modificationRepository.findAllById(uniqueIds);

@@ -19,6 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Duration;
 
+/**
+ * REST controller for user authentication endpoints (login, logout).
+ *
+ * @author zihluwang
+ */
 @Tag(name = "用户鉴权", description = "处理用户登录与退出功能")
 @RestController
 @RequestMapping("/auth")

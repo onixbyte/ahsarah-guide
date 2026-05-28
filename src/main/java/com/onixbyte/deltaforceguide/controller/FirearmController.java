@@ -15,6 +15,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * REST controller for firearm CRUD operations.
+ *
+ * @author zihluwang
+ */
 @Tag(name = "武器管理", description = "与武器有关的操作")
 @RestController
 @RequestMapping("/firearms")

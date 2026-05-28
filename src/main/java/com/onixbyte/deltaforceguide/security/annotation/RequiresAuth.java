@@ -7,6 +7,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Annotation to mark controller endpoints that require authentication.
+ *
+ * @author zihluwang
+ */
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @PreAuthorize("isAuthenticated()")

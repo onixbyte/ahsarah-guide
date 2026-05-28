@@ -23,12 +23,23 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+/**
+ * Spring Security configuration defining authentication, authorisation, and filter chains.
+ *
+ * @author zihluwang
+ */
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 @EnableConfigurationProperties({TokenProperties.class, CookieProperties.class})
 public class SecurityConfig {
 
+    /**
+     * Configures the HTTP security filter chain including endpoint authorisation and JWT filter.
+     *
+     * @param http the HTTP security builder
+     * @return the configured security filter chain
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity httpSecurity,
@@ -48,11 +59,20 @@ public class SecurityConfig {
                 .build();
     }
 
+    /**
+     * Provides the BCrypt password encoder for credential hashing.
+     * @return the BCrypt password encoder
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * Provides the authentication manager for the security configuration.
+     *
+     * @return the authentication manager
+     */
     @Bean
     public AuthenticationManager authenticationManager(
             UsernamePasswordAuthenticationProvider usernamePasswordAuthenticationProvider

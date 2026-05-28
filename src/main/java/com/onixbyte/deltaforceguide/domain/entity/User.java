@@ -12,6 +12,11 @@ import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Entity representing an application user with authentication credentials.
+ *
+ * @author zihluwang
+ */
 @Entity
 @Table(name = "app_user")
 public class User {

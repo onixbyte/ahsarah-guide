@@ -6,6 +6,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+/**
+ * Global exception handler that translates exceptions into standard error responses.
+ *
+ * @author zihluwang
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 

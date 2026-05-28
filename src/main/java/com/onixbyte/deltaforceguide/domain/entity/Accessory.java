@@ -3,6 +3,11 @@ package com.onixbyte.deltaforceguide.domain.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Entity representing an accessory attached to a modification, stored as JSONB.
+ *
+ * @author zihluwang
+ */
 public class Accessory {
 
     private String slotName;

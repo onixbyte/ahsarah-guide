@@ -6,6 +6,16 @@ import org.springframework.boot.web.server.Cookie;
 
 import java.time.Duration;
 
+/**
+ * Configuration properties for HTTP cookies used in authentication, prefixed with "app.cookie".
+ *
+ * @param httpOnly  whether the cookie is httpOnly
+ * @param secure    whether the cookie is secure
+ * @param path      the cookie path
+ * @param maxAge    the maximum age of the cookie
+ * @param sameSite  the SameSite policy for the cookie
+ * @author zihluwang
+ */
 @ConfigurationProperties(prefix = "app.cookie")
 public record CookieProperties(
         @DefaultValue("true") Boolean httpOnly,

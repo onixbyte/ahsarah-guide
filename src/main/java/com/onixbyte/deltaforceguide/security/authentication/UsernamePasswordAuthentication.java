@@ -8,6 +8,11 @@ import org.springframework.security.core.GrantedAuthority;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Custom authentication token for username/password-based login flows.
+ *
+ * @author zihluwang
+ */
 public class UsernamePasswordAuthentication implements Authentication, CredentialsContainer {
     private final String username;
     private String password;

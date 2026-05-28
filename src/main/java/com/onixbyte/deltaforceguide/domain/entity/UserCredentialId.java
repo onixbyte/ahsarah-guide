@@ -5,6 +5,11 @@ import jakarta.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Composite key for the UserCredential entity, combining user ID and provider.
+ *
+ * @author zihluwang
+ */
 @Embeddable
 public class UserCredentialId implements Serializable {
 

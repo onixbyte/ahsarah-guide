@@ -8,6 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * REST controller for retrieving daily-generated passwords.
+ *
+ * @author zihluwang
+ */
 @Tag(name = "每日密码", description = "获取每日密码信息")
 @RestController
 @RequestMapping("/daily-passwords")

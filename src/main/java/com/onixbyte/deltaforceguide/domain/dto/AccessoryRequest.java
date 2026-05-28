@@ -6,6 +6,11 @@ import jakarta.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Request DTO for creating or updating an accessory attached to a modification.
+ *
+ * @author zihluwang
+ */
 public record AccessoryRequest(
         @NotBlank(message = "插槽名称不能为空")
         String slotName,
