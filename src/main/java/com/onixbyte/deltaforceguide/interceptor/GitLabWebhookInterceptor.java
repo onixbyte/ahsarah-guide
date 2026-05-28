@@ -45,6 +45,7 @@ public class GitLabWebhookInterceptor implements HandlerInterceptor {
 
     /**
      * Validates the GitLab webhook signature headers on the incoming request.
+     * <p>
      * Reads {@code webhook-id}, {@code webhook-timestamp}, and
      * {@code webhook-signature} headers and verifies the signature against the
      * configured signing token. If no token is configured, verification is skipped.
