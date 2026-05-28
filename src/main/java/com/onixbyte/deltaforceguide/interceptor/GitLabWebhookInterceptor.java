@@ -1,7 +1,7 @@
 package com.onixbyte.deltaforceguide.interceptor;
 
 import com.onixbyte.deltaforceguide.exeption.BizException;
-import com.onixbyte.deltaforceguide.properties.WebhookProperties;
+import com.onixbyte.deltaforceguide.manager.WebhookManager;
 import com.onixbyte.deltaforceguide.wrapper.RepeatedlyReadRequestWrapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -32,15 +32,15 @@ public class GitLabWebhookInterceptor implements HandlerInterceptor {
     private static final Logger log = LoggerFactory.getLogger(GitLabWebhookInterceptor.class);
     private static final String TOKEN_PREFIX = "whsec_";
 
-    private final WebhookProperties webhookProperties;
+    private final WebhookManager webhookManager;
 
     /**
      * Creates a new interceptor with the given webhook configuration.
      *
-     * @param webhookProperties the webhook configuration properties
+     * @param webhookManager the webhook manager
      */
-    public GitLabWebhookInterceptor(WebhookProperties webhookProperties) {
-        this.webhookProperties = webhookProperties;
+    public GitLabWebhookInterceptor(WebhookManager webhookManager) {
+        this.webhookManager = webhookManager;
     }
 
     /**
@@ -77,7 +77,7 @@ public class GitLabWebhookInterceptor implements HandlerInterceptor {
                     "Missing webhook verification headers");
         }
 
-        var signingToken = webhookProperties.gitlab().signingToken();
+        var signingToken = webhookManager.getGitLabWebhookProperties().signingToken();
         if (signingToken == null || signingToken.isBlank()) {
             log.debug("No GitLab signing token configured, skipping signature verification");
             return true;
