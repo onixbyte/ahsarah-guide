@@ -13,7 +13,7 @@ public class FilterConfig {
         var registrationBean = new FilterRegistrationBean<WebhookFilter>();
 
         registrationBean.setFilter(webhookFilter);
-        registrationBean.addUrlPatterns("/webhook/*");
+        registrationBean.addUrlPatterns("/webhooks/*");
         registrationBean.setOrder(1);
 
         return registrationBean;
