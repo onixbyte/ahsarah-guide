@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+import com.onixbyte.deltaforceguide.exeption.BizException;
 import org.yaml.snakeyaml.Yaml;
 
 import java.time.Duration;
@@ -112,7 +112,7 @@ public class WebhookService {
                 toLong(data.get("firearmId")),
                 (String) data.get("firearmName"));
         if (firearmId == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+            throw new BizException(HttpStatus.BAD_REQUEST,
                     "YAML must contain firearmId or firearmName");
         }
         String name = (String) data.get("name");
