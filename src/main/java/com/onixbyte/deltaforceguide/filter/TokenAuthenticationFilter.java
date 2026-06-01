@@ -16,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -29,6 +28,11 @@ import java.time.Instant;
 import java.util.Objects;
 import java.util.Optional;
 
+/**
+ * Servlet filter that extracts and validates JWT tokens from httpOnly cookies for each request.
+ *
+ * @author zihluwang
+ */
 @Component
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
@@ -52,6 +56,13 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         this.handlerExceptionResolver = handlerExceptionResolver;
     }
 
+    /**
+     * Extracts JWT from httpOnly cookie, validates it, and sets the security context.
+     *
+     * @param request the HTTP request
+     * @param response the HTTP response
+     * @param filterChain the filter chain
+     */
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,

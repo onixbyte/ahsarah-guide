@@ -11,9 +11,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+/**
+ * Service handling firearm business logic including CRUD operations and queries.
+ *
+ * @author zihluwang
+ */
 @Service
 public class FirearmService {
 
@@ -23,7 +27,13 @@ public class FirearmService {
         this.firearmRepository = firearmRepository;
     }
 
-    @Transactional(readOnly = true)
+    /**
+     * Queries firearms with optional type filter and pagination.
+     *
+     * @param type optional firearm type filter
+     * @param pageable pagination parameters
+     * @return a paginated response of firearm records
+     */
     public PageResponse<FirearmResponse> pageQuery(FirearmType type, Pageable pageable) {
         Page<Firearm> page = type == null
                 ? firearmRepository.findAll(pageable)
@@ -32,13 +42,24 @@ public class FirearmService {
         return PageResponse.from(page.map(FirearmResponse::from));
     }
 
-    @Transactional(readOnly = true)
+    /**
+     * Finds a firearm by its ID.
+     *
+     * @param id the firearm ID
+     * @return the firearm response
+     */
     public FirearmResponse queryById(Long id) {
         return firearmRepository.findById(id)
                 .map(FirearmResponse::from)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Firearm not found: " + id));
     }
 
+    /**
+     * Creates a new firearm from the provided request data.
+     *
+     * @param request the firearm creation request
+     * @return the created firearm response
+     */
     public FirearmResponse addFirearm(FirearmRequest request) {
         var firearm = firearmRepository.save(Firearm.builder()
                 .name(request.name())
@@ -54,7 +75,13 @@ public class FirearmService {
         return FirearmResponse.from(firearm);
     }
 
-    @Transactional
+    /**
+     * Updates an existing firearm identified by ID.
+     *
+     * @param id the firearm ID
+     * @param request the updated firearm data
+     * @return the updated firearm response
+     */
     public FirearmResponse updateFirearm(Long id, FirearmRequest request) {
         var firearm = firearmRepository.findById(id)
                 .orElseThrow(() -> new BizException(HttpStatus.NOT_FOUND, "Firearm not found: " + id));
@@ -71,7 +98,11 @@ public class FirearmService {
         return FirearmResponse.from(firearmRepository.save(firearm));
     }
 
-    @Transactional
+    /**
+     * Deletes a firearm by its ID.
+     *
+     * @param id the firearm ID to delete
+     */
     public void deleteFirearm(Long id) {
         Firearm firearm = firearmRepository.findById(id)
                 .orElseThrow(() -> new BizException(HttpStatus.NOT_FOUND, "Firearm not found: " + id));

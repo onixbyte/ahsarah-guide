@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Entity representing an accessory attached to a modification, stored as JSONB.
+ *
+ * @author zihluwang
+ */
 public class Accessory {
 
     private String slotName;

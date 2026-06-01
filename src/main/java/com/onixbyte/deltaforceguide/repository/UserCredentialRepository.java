@@ -12,9 +12,20 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Spring Data JPA repository for {@link UserCredential} entity operations.
+ *
+ * @author zihluwang
+ */
 @Repository
 public interface UserCredentialRepository extends JpaRepository<UserCredential, UserCredentialId> {
 
+    /**
+     * Find all credentials belonging to a given user.
+     *
+     * @param userId the user ID
+     * @return list of matching credentials
+     */
     @EntityGraph(attributePaths = {"user"})
     @Query("""
             select uc
@@ -23,6 +34,13 @@ public interface UserCredentialRepository extends JpaRepository<UserCredential, 
             """)
     List<UserCredential> findAllByUserId(@Param("userId") Long userId);
 
+    /**
+     * Find a specific credential for a user by provider.
+     *
+     * @param userId   the user ID
+     * @param provider the authentication provider identifier
+     * @return an optional containing the matching credential, or empty if not found
+     */
     @EntityGraph(attributePaths = {"user"})
     @Query("""
             select uc
@@ -32,6 +50,12 @@ public interface UserCredentialRepository extends JpaRepository<UserCredential, 
             """)
     Optional<UserCredential> findByUserIdAndProvider(@Param("userId") Long userId, @Param("provider") String provider);
 
+    /**
+     * Delete a specific credential for a user by provider.
+     *
+     * @param userId   the user ID
+     * @param provider the authentication provider identifier
+     */
     @Modifying
     @Query("""
             delete from UserCredential uc
@@ -40,6 +64,11 @@ public interface UserCredentialRepository extends JpaRepository<UserCredential, 
             """)
     void deleteByUserIdAndProvider(@Param("userId") Long userId, @Param("provider") String provider);
 
+    /**
+     * Delete all credentials for a given user.
+     *
+     * @param userId the user ID
+     */
     @Modifying
     @Query("""
             delete from UserCredential uc

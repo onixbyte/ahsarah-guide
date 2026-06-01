@@ -4,6 +4,11 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
+/**
+ * Generic paginated response wrapper for list endpoints.
+ *
+ * @author zihluwang
+ */
 public record PageResponse<T>(
         List<T> items,
         int page,

@@ -10,6 +10,11 @@ import com.onixbyte.deltaforceguide.service.ModificationService;
 
 import java.util.List;
 
+/**
+ * REST controller for retrieving available modification tags.
+ *
+ * @author zihluwang
+ */
 @Tag(name = "标签管理", description = "管理标签信息")
 @RestController
 @RequestMapping("/tags")

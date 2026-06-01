@@ -2,6 +2,11 @@ package com.onixbyte.deltaforceguide.exeption;
 
 import org.springframework.http.HttpStatus;
 
+/**
+ * Custom runtime exception that carries an HTTP status code for API error responses.
+ *
+ * @author zihluwang
+ */
 public class BizException extends RuntimeException {
 
     /**

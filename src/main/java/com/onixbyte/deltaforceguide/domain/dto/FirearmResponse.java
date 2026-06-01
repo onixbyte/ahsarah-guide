@@ -3,6 +3,11 @@ package com.onixbyte.deltaforceguide.domain.dto;
 import com.onixbyte.deltaforceguide.domain.entity.Firearm;
 import com.onixbyte.deltaforceguide.enumeration.FirearmType;
 
+/**
+ * Response DTO for a firearm record, including associated modifications.
+ *
+ * @author zihluwang
+ */
 public record FirearmResponse(
         Long id,
         String name,

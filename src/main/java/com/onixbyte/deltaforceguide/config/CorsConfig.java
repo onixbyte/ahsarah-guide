@@ -12,10 +12,21 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
 import java.util.stream.Stream;
 
+/**
+ * Configuration for CORS (Cross-Origin Resource Sharing) policies.
+ *
+ * @author zihluwang
+ */
 @Configuration
 @EnableConfigurationProperties({CorsProperties.class})
 public class CorsConfig {
 
+    /**
+     * Creates the CORS configuration source with properties from configuration.
+     *
+     * @param properties the CORS configuration properties
+     * @return the CORS configuration source
+     */
     @Bean
     public CorsConfigurationSource corsConfigurationSource(
             CorsProperties properties

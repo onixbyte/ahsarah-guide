@@ -4,6 +4,11 @@ import com.onixbyte.deltaforceguide.domain.entity.Accessory;
 
 import java.util.List;
 
+/**
+ * Response DTO for an accessory attached to a modification.
+ *
+ * @author zihluwang
+ */
 public record AccessoryResponse(
         String slotName,
         String accessoryName,

@@ -2,6 +2,11 @@ package com.onixbyte.deltaforceguide.domain.dto;
 
 import com.onixbyte.deltaforceguide.domain.entity.User;
 
+/**
+ * Response DTO for a user account, including associated credentials.
+ *
+ * @author zihluwang
+ */
 public record UserResponse(
         Long id,
         String username,

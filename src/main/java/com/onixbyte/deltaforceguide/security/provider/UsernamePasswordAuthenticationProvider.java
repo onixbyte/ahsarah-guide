@@ -17,6 +17,11 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+/**
+ * Authentication provider that validates username/password credentials against stored BCrypt hashes.
+ *
+ * @author zihluwang
+ */
 @Component
 public class UsernamePasswordAuthenticationProvider implements AuthenticationProvider {
 
@@ -36,6 +41,12 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
         this.userCredentialRepository = userCredentialRepository;
     }
 
+    /**
+     * Validates the username/password credentials against stored BCrypt hashes.
+     *
+     * @param authentication the authentication request object
+     * @return a fully authenticated object including user details
+     */
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         if (!(authentication instanceof UsernamePasswordAuthentication usernamePasswordAuthentication)) {
@@ -75,6 +86,12 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
         return usernamePasswordAuthentication;
     }
 
+    /**
+     * Checks if this provider supports the given authentication type.
+     *
+     * @param authentication the authentication class to check
+     * @return true if this provider supports the given type
+     */
     @Override
     public boolean supports(Class<?> authentication) {
         return UsernamePasswordAuthentication.class.isAssignableFrom(authentication);

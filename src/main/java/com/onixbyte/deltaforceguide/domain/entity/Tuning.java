@@ -2,6 +2,11 @@ package com.onixbyte.deltaforceguide.domain.entity;
 
 import java.util.Objects;
 
+/**
+ * Entity representing a tuning adjustment for an accessory, stored as JSONB within Accessory.
+ *
+ * @author zihluwang
+ */
 public class Tuning {
 
     private String tuningName;

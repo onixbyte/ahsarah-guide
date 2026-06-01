@@ -15,6 +15,11 @@ import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Entity representing a firearm in the Delta Force game.
+ *
+ * @author zihluwang
+ */
 @Entity
 @Table(name = "firearm")
 public class Firearm {

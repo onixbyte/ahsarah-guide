@@ -9,6 +9,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Spring Data JPA repository for {@link Firearm} entity operations.
+ *
+ * @author zihluwang
+ */
 @Repository
 public interface FirearmRepository extends JpaRepository<Firearm, Long> {
 

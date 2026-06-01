@@ -12,6 +12,11 @@ import jakarta.persistence.MapsId;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+/**
+ * Entity representing a user credential linked to an authentication provider.
+ *
+ * @author zihluwang
+ */
 @Entity
 @Table(name = "app_user_credential")
 public class UserCredential {
@@ -28,7 +33,7 @@ public class UserCredential {
 	@JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_user_credential_user"))
 	private User user;
 
-	@Column(name = "credential", nullable = false, length = 255)
+	@Column(name = "credential", nullable = false)
 	private String credential;
 
 	public UserCredentialId getId() {
