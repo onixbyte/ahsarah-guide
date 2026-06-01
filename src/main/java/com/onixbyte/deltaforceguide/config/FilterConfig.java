@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class FilterConfig {
 
     @Bean
-    public FilterRegistrationBean<WebhookFilter> loggingFilter(WebhookFilter webhookFilter) {
+    public FilterRegistrationBean<WebhookFilter> webhookFilter(WebhookFilter webhookFilter) {
         var registrationBean = new FilterRegistrationBean<WebhookFilter>();
 
         registrationBean.setFilter(webhookFilter);
