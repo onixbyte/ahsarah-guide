@@ -27,7 +27,7 @@ public class TrafficInterceptor implements HandlerInterceptor {
         var contentLength = request.getContentLength();
         var userAgent = request.getHeader("User-Agent");
 
-        log.info("Request method={}, uri={}, query={}, ip={}, content-type={}, content-length={}, user-agent={}",
+        log.debug("Request method={}, uri={}, query={}, ip={}, content-type={}, content-length={}, user-agent={}",
                 method, uri, query, ip, contentType, contentLength, userAgent);
         return true;
     }
