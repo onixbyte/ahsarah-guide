@@ -1,9 +1,6 @@
 package com.onixbyte.deltaforceguide.service;
 
-import com.onixbyte.deltaforceguide.domain.dto.AccessoryRequest;
-import com.onixbyte.deltaforceguide.domain.dto.GitHubIssueRequest;
-import com.onixbyte.deltaforceguide.domain.dto.ModificationRequest;
-import com.onixbyte.deltaforceguide.domain.dto.TuningRequest;
+import com.onixbyte.deltaforceguide.domain.dto.*;
 import com.onixbyte.deltaforceguide.manager.ModificationManager;
 import com.onixbyte.deltaforceguide.manager.WebhookManager;
 import org.slf4j.Logger;
@@ -168,7 +165,7 @@ public class WebhookService {
     }
 
     private boolean isAllowedSender(
-            com.onixbyte.deltaforceguide.domain.dto.GitHubWebhookSender sender
+            GitHubWebhookSender sender
     ) {
         var allowedUsers = webhookManager.github().allowedUsers();
         if (allowedUsers == null || allowedUsers.isEmpty()) {
@@ -180,7 +177,7 @@ public class WebhookService {
         return allowedUsers.contains(sender.login());
     }
 
-    private boolean hasTriggerLabel(List<com.onixbyte.deltaforceguide.domain.dto.GitHubWebhookLabel> labels) {
+    private boolean hasTriggerLabel(List<GitHubWebhookLabel> labels) {
         if (labels == null) {
             return false;
         }
