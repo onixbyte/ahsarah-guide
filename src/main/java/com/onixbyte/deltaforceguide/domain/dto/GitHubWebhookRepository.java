@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record GitHubWebhookLabel(
-        String name
+public record GitHubWebhookRepository(
+        String fullName
 ) {
 }
