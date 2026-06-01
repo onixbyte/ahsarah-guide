@@ -1,11 +1,11 @@
 package com.onixbyte.deltaforceguide.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onixbyte.deltaforceguide.domain.dto.AccessoryRequest;
 import com.onixbyte.deltaforceguide.domain.dto.GitHubIssueRequest;
 import com.onixbyte.deltaforceguide.domain.dto.ModificationRequest;
 import com.onixbyte.deltaforceguide.domain.dto.TuningRequest;
 import com.onixbyte.deltaforceguide.manager.ModificationManager;
+import com.onixbyte.deltaforceguide.manager.WebhookManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -29,20 +29,30 @@ public class WebhookService {
 
     private final ModificationManager modificationManager;
     private final RedisTemplate<String, Object> redisTemplate;
+    private final WebhookManager webhookManager;
     private final Yaml yaml;
 
     public WebhookService(
             ModificationManager modificationManager,
-            RedisTemplate<String, Object> redisTemplate
+            RedisTemplate<String, Object> redisTemplate,
+            WebhookManager webhookManager
     ) {
         this.modificationManager = modificationManager;
         this.redisTemplate = redisTemplate;
+        this.webhookManager = webhookManager;
         this.yaml = new Yaml();
     }
 
     public void processIssueEvent(GitHubIssueRequest request) {
         var issue = request.issue();
         var repository = request.repository();
+        var sender = request.sender();
+
+        if (!isAllowedSender(sender)) {
+            log.info("Issue #{} sender={} not in allowed-users, skipping",
+                    issue.number(), sender != null ? sender.login() : "null");
+            return;
+        }
 
         if (!hasTriggerLabel(issue.labels())) {
             log.debug("Issue #{} lacks trigger label, skipping", issue.number());
@@ -153,6 +163,19 @@ public class WebhookService {
                     .toList();
         }
         return new ArrayList<>();
+    }
+
+    private boolean isAllowedSender(
+            com.onixbyte.deltaforceguide.domain.dto.GitHubWebhookSender sender
+    ) {
+        var allowedUsers = webhookManager.github().allowedUsers();
+        if (allowedUsers == null || allowedUsers.isEmpty()) {
+            return true;
+        }
+        if (sender == null || sender.login() == null) {
+            return false;
+        }
+        return allowedUsers.contains(sender.login());
     }
 
     private boolean hasTriggerLabel(List<com.onixbyte.deltaforceguide.domain.dto.GitHubWebhookLabel> labels) {

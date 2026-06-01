@@ -6,10 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record GitHubIssueRequest(
-        String action,
-        GitHubWebhookIssue issue,
-        GitHubWebhookRepository repository,
-        GitHubWebhookSender sender
+public record GitHubWebhookSender(
+        String login
 ) {
 }
