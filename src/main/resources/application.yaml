@@ -39,6 +39,12 @@ mybatis:
   type-handlers-package: com.onixbyte.deltaforceguide.mapper.handler
   mapper-locations: classpath:/mapper/*.xml
 
+app:
+  webhook:
+    github:
+      secret: ${GITHUB_WEBHOOK_SECRET:}
+      allowed-users: []
+
 logging:
   level:
     org.hibernate:
