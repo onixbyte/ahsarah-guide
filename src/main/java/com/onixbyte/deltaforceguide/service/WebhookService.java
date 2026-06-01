@@ -22,7 +22,7 @@ public class WebhookService {
     private static final String TRIGGER_LABEL = "weapon-mod";
     private static final Duration DEDUP_TTL = Duration.ofHours(12);
     private static final Pattern YAML_FENCE =
-            Pattern.compile("```ya?ml\\s*\\n(.*?)```", Pattern.DOTALL);
+            Pattern.compile("```ya?ml\\s*\\R(.*?)```", Pattern.DOTALL);
 
     private final ModificationManager modificationManager;
     private final RedisTemplate<String, Object> redisTemplate;
