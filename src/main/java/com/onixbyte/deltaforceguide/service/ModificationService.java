@@ -79,12 +79,10 @@ public class ModificationService {
         return modificationRepository.findAllTags(firearmId);
     }
 
-    @Transactional
     public ModificationResponse create(ModificationRequest request) {
         return modificationManager.create(request);
     }
 
-    @Transactional
     public List<ModificationResponse> batchCreate(List<ModificationRequest> requests) {
         return modificationManager.batchCreate(requests);
     }
