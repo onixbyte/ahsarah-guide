@@ -1,7 +1,7 @@
 package com.onixbyte.deltaforceguide.config;
 
+import com.onixbyte.deltaforceguide.interceptor.GitHubWebhookInterceptor;
 import com.onixbyte.deltaforceguide.interceptor.TrafficInterceptor;
-import com.onixbyte.deltaforceguide.interceptor.GitLabWebhookInterceptor;
 import com.onixbyte.deltaforceguide.properties.AppProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -15,21 +15,21 @@ public class AppConfig implements WebMvcConfigurer {
 
     private final TrafficInterceptor trafficInterceptor;
 
-    private final GitLabWebhookInterceptor gitLabWebhookInterceptor;
+    private final GitHubWebhookInterceptor gitHubWebhookInterceptor;
 
     @Autowired
     public AppConfig(
             TrafficInterceptor trafficInterceptor,
-            GitLabWebhookInterceptor gitLabWebhookInterceptor
+            GitHubWebhookInterceptor gitHubWebhookInterceptor
     ) {
         this.trafficInterceptor = trafficInterceptor;
-        this.gitLabWebhookInterceptor = gitLabWebhookInterceptor;
+        this.gitHubWebhookInterceptor = gitHubWebhookInterceptor;
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(trafficInterceptor);
-        registry.addInterceptor(gitLabWebhookInterceptor)
-                .addPathPatterns("/webhook/gitlab");
+        registry.addInterceptor(gitHubWebhookInterceptor)
+                .addPathPatterns("/webhooks/github");
     }
 }
