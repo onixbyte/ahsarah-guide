@@ -71,6 +71,21 @@ public class ModificationManager {
                 .toList();
     }
 
+    public Long resolveFirearmId(Long firearmId, String firearmName) {
+        if (firearmId != null) {
+            return firearmId;
+        }
+        if (firearmName == null || firearmName.isBlank()) {
+            return null;
+        }
+        var matches = firearmRepository.findByName(firearmName);
+        if (matches.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    "Firearm not found by name: " + firearmName);
+        }
+        return matches.getFirst().getId();
+    }
+
     private Modification toEntity(ModificationRequest request, Firearm firearm) {
         return Modification.builder()
                 .firearm(firearm)

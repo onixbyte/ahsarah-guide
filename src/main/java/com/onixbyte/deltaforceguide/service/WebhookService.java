@@ -109,7 +109,9 @@ public class WebhookService {
     }
 
     private ModificationRequest mapToRequest(Map<String, Object> data) {
-        Long firearmId = toLong(data.get("firearmId"));
+        Long firearmId = modificationManager.resolveFirearmId(
+                toLong(data.get("firearmId")),
+                (String) data.get("firearmName"));
         String name = (String) data.get("name");
         String code = (String) data.get("code");
         List<String> tags = toStringList(data.get("tags"));
