@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Spring Data JPA repository for {@link Firearm} entity operations.
  *
@@ -16,5 +18,7 @@ import org.springframework.stereotype.Repository;
 public interface FirearmRepository extends JpaRepository<Firearm, Long> {
 
 	Page<Firearm> findAllByType(FirearmType type, Pageable pageable);
+
+	List<Firearm> findByName(String name);
 }
 

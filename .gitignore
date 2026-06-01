@@ -157,3 +157,6 @@ gradle-app.setting
 .classpath
 
 gradle.properties
+
+# frp config
+frpc.toml

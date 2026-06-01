@@ -2,6 +2,7 @@ package com.onixbyte.deltaforceguide.domain.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Entity representing an accessory attached to a modification, stored as JSONB.
@@ -49,5 +50,23 @@ public class Accessory {
 
     public void removeTuning(Tuning tuning) {
         this.tunings.remove(tuning);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Accessory accessory)) {
+            return false;
+        }
+        return Objects.equals(slotName, accessory.slotName)
+                && Objects.equals(accessoryName, accessory.accessoryName)
+                && Objects.equals(tunings, accessory.tunings);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(slotName, accessoryName, tunings);
     }
 }

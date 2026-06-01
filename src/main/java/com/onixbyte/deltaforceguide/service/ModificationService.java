@@ -9,6 +9,7 @@ import com.onixbyte.deltaforceguide.domain.entity.Accessory;
 import com.onixbyte.deltaforceguide.domain.entity.Firearm;
 import com.onixbyte.deltaforceguide.domain.entity.Modification;
 import com.onixbyte.deltaforceguide.domain.entity.Tuning;
+import com.onixbyte.deltaforceguide.manager.ModificationManager;
 import com.onixbyte.deltaforceguide.repository.FirearmRepository;
 import com.onixbyte.deltaforceguide.repository.ModificationRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -20,10 +21,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -36,15 +35,18 @@ public class ModificationService {
 
     private final ModificationRepository modificationRepository;
     private final FirearmRepository firearmRepository;
+    private final ModificationManager modificationManager;
     private final ObjectMapper objectMapper;
 
     public ModificationService(
             ModificationRepository modificationRepository,
             FirearmRepository firearmRepository,
+            ModificationManager modificationManager,
             ObjectMapper objectMapper
     ) {
         this.modificationRepository = modificationRepository;
         this.firearmRepository = firearmRepository;
+        this.modificationManager = modificationManager;
         this.objectMapper = objectMapper;
     }
 
@@ -105,11 +107,7 @@ public class ModificationService {
      * @return the created modification response
      */
     public ModificationResponse create(ModificationRequest request) {
-        Firearm firearm = firearmRepository.findById(request.firearmId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Firearm not found: " + request.firearmId()));
-
-        Modification modification = toEntity(request, firearm);
-        return ModificationResponse.from(modificationRepository.save(modification));
+        return modificationManager.create(request);
     }
 
     /**
@@ -119,27 +117,7 @@ public class ModificationService {
      * @return list of created modification responses
      */
     public List<ModificationResponse> batchCreate(List<ModificationRequest> requests) {
-        Set<Long> firearmIds = requests.stream()
-                .map(ModificationRequest::firearmId)
-                .collect(java.util.stream.Collectors.toCollection(LinkedHashSet::new));
-
-        Map<Long, Firearm> firearmMap = new HashMap<>();
-        firearmRepository.findAllById(firearmIds).forEach(firearm -> firearmMap.put(firearm.getId(), firearm));
-
-        if (firearmMap.size() != firearmIds.size()) {
-            List<Long> missingFirearmIds = firearmIds.stream()
-                    .filter(id -> !firearmMap.containsKey(id))
-                    .toList();
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Firearm not found: " + missingFirearmIds);
-        }
-
-        List<Modification> modifications = requests.stream()
-                .map(request -> toEntity(request, firearmMap.get(request.firearmId())))
-                .toList();
-        return modificationRepository.saveAll(modifications)
-                .stream()
-                .map(ModificationResponse::from)
-                .toList();
+        return modificationManager.batchCreate(requests);
     }
 
     /**
@@ -198,19 +176,6 @@ public class ModificationService {
         }
 
         modificationRepository.deleteAllInBatch(modifications);
-    }
-
-    private Modification toEntity(ModificationRequest request, Firearm firearm) {
-        return Modification.builder()
-                .firearm(firearm)
-                .name(request.name())
-                .code(request.code())
-                .tags(safeTags(request.tags()))
-                .accessories(toAccessories(request.accessories()))
-                .note(request.note())
-                .author(request.author())
-                .videoUrl(request.videoUrl())
-                .build();
     }
 
     private List<String> safeTags(List<String> tags) {
