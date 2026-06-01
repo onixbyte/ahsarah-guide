@@ -31,6 +31,7 @@ jackson-jsr310 = { group = "com.fasterxml.jackson.datatype", name = "jackson-dat
 onixbyte-versionCatalogue = { group = "com.onixbyte", name = "version-catalogue", version.ref = "onixbyteVersion" }
 onixbyte-tuple = { group = "com.onixbyte", name = "tuple" }
 onixbyte-commonToolbox = { group = "com.onixbyte", name = "common-toolbox" }
+onixbyte-cryptoToolbox = { group = "com.onixbyte", name = "crypto-toolbox", version.ref = "onixbyteVersion" }
 onixbyte-mathToolbox = { group = "com.onixbyte", name = "math-toolbox" }
 onixbyte-identityGenerator = { group = "com.onixbyte", name = "identity-generator" }
 onixbyte-captcha = { group = "com.onixbyte", name = "captcha", version.ref = "onixbyteCaptcha" }

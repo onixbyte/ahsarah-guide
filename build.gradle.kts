@@ -36,6 +36,7 @@ dependencies {
     implementation(libs.onixbyte.identityGenerator)
     implementation(libs.onixbyte.captcha)
     implementation(libs.onixbyte.regions)
+    implementation(libs.onixbyte.cryptoToolbox)
     implementation(libs.jwt.core)
     implementation(libs.spring.boot.configurationProcessor)
     implementation(libs.spring.boot.actuator)
