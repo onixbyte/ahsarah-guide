@@ -172,7 +172,7 @@ public class WebhookService {
     private boolean isAllowedSender(
             GitHubWebhookSender sender
     ) {
-        var allowedUsers = webhookManager.github().allowedUsers();
+        var allowedUsers = webhookManager.allowedUsers();
         if (allowedUsers == null || allowedUsers.isEmpty()) {
             return true;
         }

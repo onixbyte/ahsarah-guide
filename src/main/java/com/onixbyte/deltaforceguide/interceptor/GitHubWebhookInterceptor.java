@@ -48,7 +48,7 @@ public class GitHubWebhookInterceptor implements HandlerInterceptor {
                     "Request body is not readable");
         }
 
-        var secret = webhookManager.github().secret();
+        var secret = webhookManager.secret();
         if (secret == null || secret.isBlank()) {
             log.debug("No GitHub webhook secret configured, skipping signature verification");
             return true;

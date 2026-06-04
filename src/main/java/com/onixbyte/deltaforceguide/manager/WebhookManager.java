@@ -1,21 +1,24 @@
 package com.onixbyte.deltaforceguide.manager;
 
 import com.onixbyte.deltaforceguide.properties.GitHubWebhookProperties;
-import com.onixbyte.deltaforceguide.properties.WebhookProperties;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class WebhookManager {
 
-    private final WebhookProperties webhookProperties;
+    private final GitHubWebhookProperties gitHubWebhookProperties;
 
-    @Autowired
-    public WebhookManager(WebhookProperties webhookProperties) {
-        this.webhookProperties = webhookProperties;
+    public WebhookManager(GitHubWebhookProperties gitHubWebhookProperties) {
+        this.gitHubWebhookProperties = gitHubWebhookProperties;
     }
 
-    public GitHubWebhookProperties github() {
-        return webhookProperties.github();
+    public String secret() {
+        return gitHubWebhookProperties.secret();
+    }
+
+    public List<String> allowedUsers() {
+        return gitHubWebhookProperties.allowedUsers();
     }
 }

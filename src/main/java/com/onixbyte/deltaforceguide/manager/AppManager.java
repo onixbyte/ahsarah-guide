@@ -18,6 +18,10 @@ public class AppManager {
      * @return the version string of this application
      */
     public String getVersion() {
-        return appProperties.version();
+        return "v%s-%s by @%s".formatted(
+                appProperties.version(),
+                appProperties.channel(),
+                appProperties.vendor()
+        );
     }
 }
