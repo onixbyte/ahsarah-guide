@@ -73,8 +73,7 @@ public class WebhookService {
             return;
         }
 
-        @SuppressWarnings("unchecked")
-        var data = (Map<String, Object>) yaml.load(parsedYaml);
+        var data = yaml.<Map<String, Object>>load(parsedYaml);
         if (data == null) {
             log.warn("Empty YAML block in issue #{}", issue.number());
             return;

@@ -64,7 +64,7 @@ public class GitHubWebhookInterceptor implements HandlerInterceptor {
 
         var body = req.getBodyString();
         try {
-            var computed = "sha256=" + CryptoUtil.hmacSha256(secret, body);
+            var computed = "sha256=" + CryptoUtil.hmacSha256(body, secret);
 
             if (!MessageDigest.isEqual(
                     computed.getBytes(StandardCharsets.UTF_8),
