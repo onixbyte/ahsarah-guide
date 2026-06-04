@@ -27,6 +27,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * REST controller for modification CRUD operations, including batch creation and deletion.
+ *
+ * @author zihluwang
+ */
 @Tag(name = "改装管理", description = "对枪械改装的管理")
 @RestController
 @RequestMapping("/modifications")

@@ -7,6 +7,11 @@ import org.hibernate.annotations.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Entity representing a firearm modification or build configuration.
+ *
+ * @author zihluwang
+ */
 @Entity
 @Table(
     name = "modification",

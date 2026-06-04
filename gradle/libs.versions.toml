@@ -4,10 +4,9 @@ javaJwtVersion = "4.5.1"
 postgresDriverVersion = "42.7.9"
 h2Version = "2.2.224"
 springBootVersion = "3.5.13"
-springSecurityVersion = "6.5.2"
 reactorVersion = "3.7.8"
 junitPlatformVersion = "1.12.2"
-onixbyteVersion = "3.3.0"
+onixbyteVersion = "3.4.0"
 onixbyteCaptcha = "1.1.0"
 onixbyteRegions = "2025.12.0"
 awsSdkVersion = "2.25.48"
@@ -32,6 +31,7 @@ jackson-jsr310 = { group = "com.fasterxml.jackson.datatype", name = "jackson-dat
 onixbyte-versionCatalogue = { group = "com.onixbyte", name = "version-catalogue", version.ref = "onixbyteVersion" }
 onixbyte-tuple = { group = "com.onixbyte", name = "tuple" }
 onixbyte-commonToolbox = { group = "com.onixbyte", name = "common-toolbox" }
+onixbyte-cryptoToolbox = { group = "com.onixbyte", name = "crypto-toolbox", version.ref = "onixbyteVersion" }
 onixbyte-mathToolbox = { group = "com.onixbyte", name = "math-toolbox" }
 onixbyte-identityGenerator = { group = "com.onixbyte", name = "identity-generator" }
 onixbyte-captcha = { group = "com.onixbyte", name = "captcha", version.ref = "onixbyteCaptcha" }
@@ -42,12 +42,10 @@ mybatis-starter-core = { group = "org.mybatis.spring.boot", name = "mybatis-spri
 spring-boot-starter-jpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa" }
 hypersistence-core = { group = "io.hypersistence", name = "hypersistence-utils-hibernate-63", version.ref = "hypersistenceVersion" }
 postgres-driver = { group = "org.postgresql", name = "postgresql", version.ref = "postgresDriverVersion" }
-mysql-driver = { group = "com.mysql", name = "mysql-connector-j" }
 h2-database = { group = "com.h2database", name = "h2", version.ref = "h2Version" }
 spring-boot-starter-redis = { group = "org.springframework.boot", name = "spring-boot-starter-data-redis", version.ref = "springBootVersion" }
 flyway-core = { group = "org.flywaydb", name = "flyway-core" }
 flyway-postgresql = { group = "org.flywaydb", name = "flyway-database-postgresql" }
-flyway-mysql = { group = "org.flywaydb", name = "flyway-mysql" }
 
 # Spring Boot Core & Web
 spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web" }

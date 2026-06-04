@@ -8,6 +8,11 @@ import jakarta.validation.constraints.Positive;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Request DTO for creating or updating a modification.
+ *
+ * @author zihluwang
+ */
 public record ModificationRequest(
         @NotNull(message = "武器ID不能为空")
         @Positive(message = "武器ID必须为正数")

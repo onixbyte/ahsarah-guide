@@ -10,6 +10,11 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * Spring Data JPA repository for {@link User} entity operations.
+ *
+ * @author zihluwang
+ */
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
@@ -28,6 +33,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByEmail(String email);
 
+    /**
+     * Find a user by either username or email.
+     *
+     * @param principal the username or email to search for
+     * @return an optional containing the matching user, or empty if not found
+     */
     @EntityGraph(attributePaths = {"credentials"})
     @Query("""
             select u

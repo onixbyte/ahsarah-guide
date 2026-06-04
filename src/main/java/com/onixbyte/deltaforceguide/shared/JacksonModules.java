@@ -13,6 +13,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+/**
+ * Shared Jackson {@link com.fasterxml.jackson.databind.Module} instances for custom date/time
+ * serialisation and deserialisation across the application.
+ *
+ * @author zihluwang
+ */
 public class JacksonModules {
 
     public static final SimpleModule DATE_TIME_MODULE = initialiseDateTimeModule();

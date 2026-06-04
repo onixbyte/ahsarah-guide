@@ -3,6 +3,11 @@ package com.onixbyte.deltaforceguide.domain.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 
+/**
+ * Login request containing principle (username/email) and credential (password).
+ *
+ * @author zihluwang
+ */
 @Schema(description = "登录请求")
 public record LoginRequest(
         @NotBlank(message = "登录名称不能为空")

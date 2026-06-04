@@ -4,6 +4,11 @@ import com.onixbyte.deltaforceguide.domain.entity.Modification;
 
 import java.util.List;
 
+/**
+ * Response DTO for a modification record including accessories and tags.
+ *
+ * @author zihluwang
+ */
 public record ModificationResponse(
         Long id,
         Long firearmId,

@@ -10,9 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
-import java.util.Optional;
-
+/**
+ * Service handling user authentication, login, and session management.
+ *
+ * @author zihluwang
+ */
 @Service
 public class AuthService {
 
@@ -23,6 +25,16 @@ public class AuthService {
         this.authenticationManager = authenticationManager;
     }
 
+    /**
+     * Authenticates a user with the given login credentials.
+     * <p>
+     * Delegates authentication to Spring Security's {@link AuthenticationManager} and verifies
+     * that the result is of the expected {@link UsernamePasswordAuthentication} type.
+     *
+     * @param request the login credentials containing principle and password
+     * @return the authenticated {@link User}
+     * @throws BizException if authentication fails or the result type is unexpected
+     */
     public User login(LoginRequest request) {
         var _authentication = authenticationManager.authenticate(UsernamePasswordAuthentication
                 .unauthenticated(request.principle(), request.credential()));

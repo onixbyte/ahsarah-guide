@@ -17,6 +17,11 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.util.Objects;
 
+/**
+ * Manager for daily password data access and caching coordination.
+ *
+ * @author zihluwang
+ */
 @Component
 public class DailyPasswordManager {
 
@@ -49,6 +54,10 @@ public class DailyPasswordManager {
         this.redisTemplate = redisTemplate;
     }
 
+    /**
+     * Retrieves the daily password from cache or generates a new one.
+     * @return the daily password response
+     */
     public DailyPasswordResponse getDailyPassword() {
         var key = CACHE_KEY_PREFIX + LocalDate.now();
 

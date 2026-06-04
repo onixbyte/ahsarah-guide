@@ -5,6 +5,8 @@ plugins {
 }
 
 val artefactVersion: String by project
+val buildChannel: String by project
+val vendor: String by project
 
 group = "com.onixbyte.helix"
 version = artefactVersion
@@ -36,6 +38,7 @@ dependencies {
     implementation(libs.onixbyte.identityGenerator)
     implementation(libs.onixbyte.captcha)
     implementation(libs.onixbyte.regions)
+    implementation(libs.onixbyte.cryptoToolbox)
     implementation(libs.jwt.core)
     implementation(libs.spring.boot.configurationProcessor)
     implementation(libs.spring.boot.actuator)
@@ -58,6 +61,16 @@ dependencies {
     runtimeOnly(libs.postgres.driver)
     testRuntimeOnly(libs.h2.database)
     testRuntimeOnly(libs.junit.launcher)
+}
+
+tasks.processResources {
+    filesMatching("application.yaml") {
+        expand(
+            "appVersion" to artefactVersion,
+            "channel" to buildChannel,
+            "vendor" to vendor
+        )
+    }
 }
 
 tasks.test {

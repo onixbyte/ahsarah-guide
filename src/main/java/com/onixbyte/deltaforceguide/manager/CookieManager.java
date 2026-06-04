@@ -6,6 +6,11 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 
+/**
+ * Manager providing cookie construction operations with configurable properties.
+ *
+ * @author zihluwang
+ */
 @Component
 public class CookieManager {
 
