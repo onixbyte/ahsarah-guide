@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 
 /**
  * REST controller for user authentication endpoints (login, logout).
@@ -43,12 +44,14 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<UserResponse> login(@Validated @RequestBody LoginRequest request) {
         var user = authService.login(request);
+        var currentTime = LocalDateTime.now();
         var accessToken = tokenClient.generateToken(user);
         var accessTokenCookie = cookieService.buildCookie(CookieName.ACCESS_TOKEN, accessToken);
+        var cookieMaxAge = accessTokenCookie.getMaxAge();
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, accessTokenCookie.toString())
-                .body(UserResponse.from(user));
+                .body(UserResponse.from(user, currentTime.plus(cookieMaxAge)));
     }
 
     @RequiresAuth
