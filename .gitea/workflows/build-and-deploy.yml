@@ -25,6 +25,7 @@ jobs:
           ./gradlew bootJar -x test
           -PartefactVersion="${{ gitea.event.release.tag_name }}"
           -PbuildChannel=stable
+          -Pvendor=${{ vars.VENDOR }}
 
       - name: Resolve JAR file path
         id: jar
