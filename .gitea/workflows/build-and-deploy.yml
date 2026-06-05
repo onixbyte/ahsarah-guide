@@ -56,10 +56,9 @@ jobs:
       - name: Generate image tags
         id: meta
         run: |
-          DOCKERHUB_USER="${{ secrets.DOCKER_HUB_USERNAME }}"
-          REPO_NAME=$(echo "${{ gitea.repository.name }}" | tr '[:upper:]' '[:lower:]')
-          echo "tag_version=${DOCKERHUB_USER}/${REPO_NAME}:${{ gitea.event.release.tag_name }}" >> "$GITHUB_OUTPUT"
-          echo "tag_latest=${DOCKERHUB_USER}/${REPO_NAME}:latest" >> "$GITHUB_OUTPUT"
+          DOCKERHUB_USER="${{ vars.DOCKER_HUB_USERNAME }}"
+          echo "tag_version=${DOCKERHUB_USER}/${APP_NAME}:${{ gitea.event.release.tag_name }}" >> "$GITHUB_OUTPUT"
+          echo "tag_latest=${DOCKERHUB_USER}/${APP_NAME}:latest" >> "$GITHUB_OUTPUT"
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
