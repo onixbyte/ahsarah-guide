@@ -65,8 +65,21 @@ jobs:
         with:
           context: .
           file: Dockerfile.ci
-          build-args: JAR_FILE=${{ steps.jar.outputs.file }}
+          build-args: |
+            JAR_FILE=${{ steps.jar.outputs.file }}
+            IMAGE_VERSION=${{ gitea.event.release.tag_name }}
+            IMAGE_VENDOR=${{ vars.VENDOR }}
+            BUILD_DATE=${{ gitea.event.release.published_at }}
           push: true
           tags: |
             ${{ steps.meta.outputs.tag_version }}
             ${{ steps.meta.outputs.tag_latest }}
+
+      - name: Push README to Docker Hub
+        run: >
+          docker run --rm
+          -v "$(pwd)/README.md:/workspace/README.md:ro"
+          -e DOCKER_USER="${{ vars.DOCKER_HUB_USERNAME }}"
+          -e DOCKER_PASS="${{ secrets.DOCKER_HUB_TOKEN }}"
+          chko/docker-pushrm:latest
+          "${{ vars.DOCKER_HUB_USERNAME }}/${{ env.APP_NAME }}"
