@@ -78,7 +78,7 @@ jobs:
       - name: Push README to Docker Hub
         run: >
           docker run --rm
-          -v "$(pwd)/README.md:/data/README.md:ro"
+          -v "$(pwd)/README.md:/README.md:ro"
           -e DOCKER_USER="${{ vars.DOCKER_HUB_USERNAME }}"
           -e DOCKER_PASS="${{ secrets.DOCKER_HUB_TOKEN }}"
           chko/docker-pushrm:latest
