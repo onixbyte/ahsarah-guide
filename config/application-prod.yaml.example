@@ -9,15 +9,19 @@ spring:
       host: localhost
       port: 6379
       database: 0
-      # password: 6hLFVqfGPviTYukn # Uncomment if password is necessary
+      # password: qwerty # Uncomment if password is necessary
 
 logging:
   pattern:
     # dateformat: dd MMM yyyy HH:mm:ss.SSS # Modify this for custom date format.
 
 app:
-  common:
-    version: 1.3.0.8-dev # Application version, you can change to any version you like, used for communication with frontend.
+  cookie:
+    http-only: true
+    secure: false
+    same-site: none
+    path: '/'
+    max-age: P1D
   cors:
     allowed-origins: # Cross-origin allowed origins
       - "http://localhost:5173" # Dev server for vite.
@@ -41,12 +45,10 @@ app:
     issuer: dfguide.local # Issuer host
     secret: qwertyuiopasdfghjklzxcvbnm123456 # JWT singing secret, a 32-byte long or longer string is recommended
     valid-time: PT2H # JWT valid duration
-  cookie: # Cookie settings.
-    http-only: true
-    secure: false
-    same-site: lax
-    path: '/'
-    max-age: PT2H
+  webhook:
+    github:
+      secret: 123456
+      allowed-users: [ octotcat, onixbyte ]
 
 springdoc:
   api-docs:
