@@ -7,6 +7,8 @@ import com.onixbyte.deltaforceguide.filter.TokenAuthenticationFilter;
 import com.onixbyte.deltaforceguide.properties.CookieProperties;
 import com.onixbyte.deltaforceguide.properties.TokenProperties;
 import com.onixbyte.deltaforceguide.security.provider.UsernamePasswordAuthenticationProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +21,8 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import com.onixbyte.deltaforceguide.exeption.BizException;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -33,6 +37,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @EnableMethodSecurity
 @EnableConfigurationProperties({TokenProperties.class, CookieProperties.class})
 public class SecurityConfig {
+
+    private static final Logger log = LoggerFactory.getLogger(SecurityConfig.class);
 
     /**
      * Configures the HTTP security filter chain including endpoint authorisation and JWT filter.
@@ -54,6 +60,16 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((customiser) -> customiser
                         .anyRequest().permitAll()
+                )
+                .exceptionHandling(customiser -> customiser
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            log.error("Unauthenticated request: {}", request, authException);
+                            throw new BizException(HttpStatus.UNAUTHORIZED, "请先登录");
+                        })
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            log.error("Denied request: {}", request, accessDeniedException);
+                            throw new BizException(HttpStatus.FORBIDDEN, "权限不足");
+                        })
                 )
                 .addFilterAfter(tokenAuthenticationFilter, ExceptionTranslationFilter.class)
                 .build();

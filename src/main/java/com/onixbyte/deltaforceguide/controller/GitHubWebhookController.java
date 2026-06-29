@@ -3,6 +3,8 @@ package com.onixbyte.deltaforceguide.controller;
 import com.onixbyte.deltaforceguide.domain.dto.GitHubIssueRequest;
 import com.onixbyte.deltaforceguide.service.WebhookService;
 import com.onixbyte.deltaforceguide.shared.GitHubWebhookHeader;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "GitHub WebHook")
 @RestController
 @RequestMapping("/webhooks/github")
 public class GitHubWebhookController {
@@ -24,6 +27,7 @@ public class GitHubWebhookController {
         this.webhookService = webhookService;
     }
 
+    @Operation(description = "GitHub WebHook 接口")
     @PostMapping
     public ResponseEntity<Void> handleWebhook(
             @RequestHeader(GitHubWebhookHeader.EVENT) String event,

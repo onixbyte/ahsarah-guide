@@ -65,6 +65,7 @@ dependencies {
 
 tasks.processResources {
     filesMatching("application.yaml") {
+        println("appVersion = ${artefactVersion}, channel = ${buildChannel}, vendor = ${vendor}")
         expand(
             "appVersion" to artefactVersion,
             "channel" to buildChannel,
