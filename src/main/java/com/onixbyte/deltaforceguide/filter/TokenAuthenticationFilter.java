@@ -4,6 +4,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.onixbyte.deltaforceguide.client.TokenClient;
 import com.onixbyte.deltaforceguide.exeption.BizException;
 import com.onixbyte.deltaforceguide.manager.UserManager;
+import com.onixbyte.deltaforceguide.manager.UserRoleManager;
 import com.onixbyte.deltaforceguide.security.authentication.UsernamePasswordAuthentication;
 import com.onixbyte.deltaforceguide.service.CookieService;
 import jakarta.servlet.FilterChain;
@@ -16,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -27,6 +29,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Servlet filter that extracts and validates JWT tokens from httpOnly cookies for each request.
@@ -40,17 +43,20 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     private static final Duration ACCESS_TOKEN_RENEW_THRESHOLD = Duration.ofMinutes(5);
 
     private final UserManager userManager;
+    private final UserRoleManager userRoleManager;
     private final TokenClient tokenClient;
     private final CookieService cookieService;
     private final HandlerExceptionResolver handlerExceptionResolver;
 
     public TokenAuthenticationFilter(
             UserManager userManager,
+            UserRoleManager userRoleManager,
             TokenClient tokenClient,
             CookieService cookieService,
             HandlerExceptionResolver handlerExceptionResolver
     ) {
         this.userManager = userManager;
+        this.userRoleManager = userRoleManager;
         this.tokenClient = tokenClient;
         this.cookieService = cookieService;
         this.handlerExceptionResolver = handlerExceptionResolver;
@@ -87,7 +93,11 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             }
 
             var user = userWrapper.get();
-            var authentication = UsernamePasswordAuthentication.authenticated(user);
+            var roles = userRoleManager.findAllByUserId(user.getId());
+            var authorities = roles.stream()
+                    .map(r -> new SimpleGrantedAuthority(r.getRole()))
+                    .collect(Collectors.toList());
+            var authentication = UsernamePasswordAuthentication.authenticated(user, authorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             if (shouldRenew(decodedToken.getExpiresAt().toInstant())) {

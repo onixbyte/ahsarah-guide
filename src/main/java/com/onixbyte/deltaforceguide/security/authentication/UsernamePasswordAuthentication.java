@@ -5,6 +5,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -18,25 +19,40 @@ public class UsernamePasswordAuthentication implements Authentication, Credentia
     private String password;
     private boolean authenticated;
     private User user;
+    private Collection<? extends GrantedAuthority> authorities;
 
-    private UsernamePasswordAuthentication(String username, String password, boolean authenticated, User user) {
+    private UsernamePasswordAuthentication(
+            String username,
+            String password,
+            boolean authenticated,
+            User user,
+            Collection<? extends GrantedAuthority> authorities
+    ) {
         this.username = username;
         this.password = password;
         this.authenticated = authenticated;
         this.user = user;
+        this.authorities = authorities == null ? List.of() : new ArrayList<>(authorities);
     }
 
     public static UsernamePasswordAuthentication unauthenticated(String username, String password) {
-        return new UsernamePasswordAuthentication(username, password, false, null);
+        return new UsernamePasswordAuthentication(username, password, false, null, List.of());
     }
 
     public static UsernamePasswordAuthentication authenticated(User user) {
-        return new UsernamePasswordAuthentication(user.getUsername(), null, true, user);
+        return new UsernamePasswordAuthentication(user.getUsername(), null, true, user, List.of());
+    }
+
+    public static UsernamePasswordAuthentication authenticated(
+            User user,
+            Collection<? extends GrantedAuthority> authorities
+    ) {
+        return new UsernamePasswordAuthentication(user.getUsername(), null, true, user, authorities);
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return authorities;
     }
 
     @Override
