@@ -1,14 +1,29 @@
 package com.onixbyte.deltaforceguide.service;
 
+import com.onixbyte.deltaforceguide.domain.dto.BuildSummaryResponse;
+import com.onixbyte.deltaforceguide.domain.dto.ChangePasswordRequest;
+import com.onixbyte.deltaforceguide.domain.dto.PageResponse;
+import com.onixbyte.deltaforceguide.domain.dto.UpdateProfileRequest;
+import com.onixbyte.deltaforceguide.domain.dto.UserProfileResponse;
 import com.onixbyte.deltaforceguide.domain.entity.User;
 import com.onixbyte.deltaforceguide.domain.entity.UserCredential;
+import com.onixbyte.deltaforceguide.domain.entity.UserRole;
+import com.onixbyte.deltaforceguide.exeption.BizException;
 import com.onixbyte.deltaforceguide.manager.UserCredentialManager;
 import com.onixbyte.deltaforceguide.manager.UserManager;
+import com.onixbyte.deltaforceguide.manager.UserRoleManager;
+import com.onixbyte.deltaforceguide.shared.CredentialProvider;
+import com.onixbyte.deltaforceguide.shared.Role;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service for user account management and profile operations.
@@ -20,10 +35,19 @@ public class UserService {
 
     private final UserManager userManager;
     private final UserCredentialManager userCredentialManager;
+    private final UserRoleManager userRoleManager;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserManager userManager, UserCredentialManager userCredentialManager) {
+    public UserService(
+            UserManager userManager,
+            UserCredentialManager userCredentialManager,
+            UserRoleManager userRoleManager,
+            PasswordEncoder passwordEncoder
+    ) {
         this.userManager = userManager;
         this.userCredentialManager = userCredentialManager;
+        this.userRoleManager = userRoleManager;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -149,6 +173,106 @@ public class UserService {
     private User ensureUserExists(Long userId) {
         return userManager.findById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found: " + userId));
+    }
+
+    /**
+     * Builds the full profile response for the given user, including their assigned roles.
+     *
+     * @param user the authenticated user
+     * @return the user's profile response
+     */
+    public UserProfileResponse getProfile(User user) {
+        var roles = userRoleManager.findAllByUserId(user.getId()).stream()
+                .map(UserRole::getRole)
+                .toList();
+        return UserProfileResponse.from(user, roles);
+    }
+
+    /**
+     * Updates the current user's profile information (nickname and email).
+     * If the email address changes, the email verification status is reset.
+     *
+     * @param user    the authenticated user
+     * @param request the update request containing new nickname and email
+     * @return the updated user profile response
+     */
+    public UserProfileResponse updateProfile(User user, UpdateProfileRequest request) {
+        if (StringUtils.hasText(request.nickname())) {
+            user.setNickname(request.nickname());
+        }
+        if (StringUtils.hasText(request.email()) && !Objects.equals(user.getEmail(), request.email())) {
+            user.setEmail(request.email());
+            user.setEmailVerified(false);
+        }
+        userManager.save(user);
+        return getProfile(user);
+    }
+
+    /**
+     * Changes the current user's password after validating the old password.
+     *
+     * @param user    the authenticated user
+     * @param request the change password request containing old and new passwords
+     * @throws BizException if the old password is incorrect
+     */
+    public void changePassword(User user, ChangePasswordRequest request) {
+        var credential = userCredentialManager.findByUserIdAndProvider(user.getId(), CredentialProvider.LOCAL);
+        if (credential.isEmpty() || !passwordEncoder.matches(request.oldPassword(), credential.get().getCredential())) {
+            throw new BizException(HttpStatus.BAD_REQUEST, "旧密码不正确。");
+        }
+        var encoded = passwordEncoder.encode(request.newPassword());
+        upsertCredential(user.getId(), CredentialProvider.LOCAL, encoded);
+    }
+
+    /**
+     * Retrieves a paginated list of the current user's custom modification builds.
+     * This is a skeleton implementation that returns an empty page.
+     * It will be activated when the CustomModification entity is introduced.
+     *
+     * @param user     the authenticated user
+     * @param pageable pagination parameters
+     * @return an empty paginated response
+     */
+    public PageResponse<BuildSummaryResponse> getBuilds(User user, Pageable pageable) {
+        var emptyPage = Page.<BuildSummaryResponse>empty(pageable);
+        return PageResponse.from(emptyPage);
+    }
+
+    /**
+     * Assigns a role to a user. Only {@code ROLE_ADMIN} may be assigned via this API.
+     *
+     * @param userId the target user ID
+     * @param role   the role to assign
+     * @throws BizException if attempting to assign a protected role
+     */
+    public void assignRole(Long userId, String role) {
+        if (!Role.ROLE_ADMIN.equals(role)) {
+            throw new BizException(HttpStatus.BAD_REQUEST, "只能通过API分配ROLE_ADMIN角色。");
+        }
+        var user = ensureUserExists(userId);
+        if (userRoleManager.existsByUserIdAndRole(userId, role)) {
+            return; // already assigned — idempotent
+        }
+        var userRole = UserRole.builder()
+                .user(user)
+                .role(role)
+                .build();
+        userRoleManager.save(userRole);
+    }
+
+    /**
+     * Removes a role from a user. Only {@code ROLE_ADMIN} may be removed via this API.
+     *
+     * @param userId the target user ID
+     * @param role   the role to remove
+     * @throws BizException if attempting to remove a protected role
+     */
+    public void removeRole(Long userId, String role) {
+        if (!Role.ROLE_ADMIN.equals(role)) {
+            throw new BizException(HttpStatus.BAD_REQUEST, "只能通过API移除ROLE_ADMIN角色。");
+        }
+        ensureUserExists(userId);
+        userRoleManager.deleteByUserIdAndRole(userId, role);
     }
 }
 
