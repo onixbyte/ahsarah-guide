@@ -2,7 +2,7 @@ package com.onixbyte.deltaforceguide.filter;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.onixbyte.deltaforceguide.client.TokenClient;
-import com.onixbyte.deltaforceguide.exeption.BizException;
+import com.onixbyte.deltaforceguide.exeption.UnauthorisedException;
 import com.onixbyte.deltaforceguide.manager.UserManager;
 import com.onixbyte.deltaforceguide.manager.UserRoleManager;
 import com.onixbyte.deltaforceguide.security.authentication.UsernamePasswordAuthentication;
@@ -16,11 +16,11 @@ import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.util.WebUtils;
 
@@ -89,7 +89,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
             var userWrapper = userManager.findByUsername(username);
             if (userWrapper.isEmpty()) {
-                throw new BizException(HttpStatus.UNAUTHORIZED, "登录已过期，请重新登录");
+                throw new UnauthorisedException("登录已过期，请重新登录");
             }
 
             var user = userWrapper.get();
@@ -110,8 +110,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         } catch (JWTVerificationException e) {
             log.error("JWT verification failed.", e);
             handlerExceptionResolver.resolveException(request, response, null,
-                    new BizException(HttpStatus.UNAUTHORIZED, "登录已过期，请重新登录"));
-        } catch (BizException e) {
+                    new UnauthorisedException("登录已过期，请重新登录"));
+        } catch (ResponseStatusException e) {
             handlerExceptionResolver.resolveException(request, response, null, e);
         }
     }

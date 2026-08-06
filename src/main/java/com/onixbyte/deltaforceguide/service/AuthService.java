@@ -2,11 +2,10 @@ package com.onixbyte.deltaforceguide.service;
 
 import com.onixbyte.deltaforceguide.domain.dto.LoginRequest;
 import com.onixbyte.deltaforceguide.domain.entity.User;
-import com.onixbyte.deltaforceguide.exeption.BizException;
+import com.onixbyte.deltaforceguide.exeption.InternalServerErrorException;
 import com.onixbyte.deltaforceguide.security.authentication.UsernamePasswordAuthentication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +32,6 @@ public class AuthService {
      *
      * @param request the login credentials containing principle and password
      * @return the authenticated {@link User}
-     * @throws BizException if authentication fails or the result type is unexpected
      */
     public User login(LoginRequest request) {
         var _authentication = authenticationManager.authenticate(UsernamePasswordAuthentication
@@ -43,7 +41,7 @@ public class AuthService {
                     "Type mismatched, required type is UsernamePasswordAuthentication but got {}.",
                     _authentication.getClass()
             );
-            throw new BizException(HttpStatus.INTERNAL_SERVER_ERROR, "登录服务异常，请稍后再试。");
+            throw new InternalServerErrorException("登录服务异常，请稍后再试。");
         }
 
         return authentication.getDetails();

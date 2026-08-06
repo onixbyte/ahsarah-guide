@@ -5,7 +5,7 @@ import com.onixbyte.deltaforceguide.domain.dto.FirearmResponse;
 import com.onixbyte.deltaforceguide.domain.dto.PageResponse;
 import com.onixbyte.deltaforceguide.domain.entity.Firearm;
 import com.onixbyte.deltaforceguide.enumeration.FirearmType;
-import com.onixbyte.deltaforceguide.exeption.BizException;
+import com.onixbyte.deltaforceguide.exeption.NotFoundException;
 import com.onixbyte.deltaforceguide.repository.FirearmRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -84,7 +84,7 @@ public class FirearmService {
      */
     public FirearmResponse updateFirearm(Long id, FirearmRequest request) {
         var firearm = firearmRepository.findById(id)
-                .orElseThrow(() -> new BizException(HttpStatus.NOT_FOUND, "Firearm not found: " + id));
+                .orElseThrow(() -> new NotFoundException("Firearm not found: " + id));
 
         firearm.setName(request.name());
         firearm.setType(request.type());
@@ -105,7 +105,7 @@ public class FirearmService {
      */
     public void deleteFirearm(Long id) {
         Firearm firearm = firearmRepository.findById(id)
-                .orElseThrow(() -> new BizException(HttpStatus.NOT_FOUND, "Firearm not found: " + id));
+                .orElseThrow(() -> new NotFoundException("Firearm not found: " + id));
         firearmRepository.delete(firearm);
     }
 }

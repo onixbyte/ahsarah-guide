@@ -1,7 +1,8 @@
 package com.onixbyte.deltaforceguide.interceptor;
 
 import com.onixbyte.crypto.util.CryptoUtil;
-import com.onixbyte.deltaforceguide.exeption.BizException;
+import com.onixbyte.deltaforceguide.exeption.InternalServerErrorException;
+import com.onixbyte.deltaforceguide.exeption.UnauthorisedException;
 import com.onixbyte.deltaforceguide.manager.WebhookManager;
 import com.onixbyte.deltaforceguide.shared.GitHubWebhookHeader;
 import com.onixbyte.deltaforceguide.wrapper.RepeatedlyReadRequestWrapper;
@@ -10,7 +11,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -44,7 +44,7 @@ public class GitHubWebhookInterceptor implements HandlerInterceptor {
             @NonNull Object handler
     ) {
         if (!(request instanceof RepeatedlyReadRequestWrapper req)) {
-            throw new BizException(HttpStatus.INTERNAL_SERVER_ERROR,
+            throw new InternalServerErrorException(
                     "Request body is not readable");
         }
 
@@ -58,7 +58,7 @@ public class GitHubWebhookInterceptor implements HandlerInterceptor {
         if (signatureHeader == null || signatureHeader.isBlank()) {
             log.warn("Missing {} header from ip={}",
                     GitHubWebhookHeader.SIGNATURE_256, request.getRemoteAddr());
-            throw new BizException(HttpStatus.UNAUTHORIZED,
+            throw new UnauthorisedException(
                     "Missing webhook signature header");
         }
 
@@ -70,13 +70,13 @@ public class GitHubWebhookInterceptor implements HandlerInterceptor {
                     computed.getBytes(StandardCharsets.UTF_8),
                     signatureHeader.getBytes(StandardCharsets.UTF_8))) {
                 log.warn("Invalid webhook signature from ip={}", request.getRemoteAddr());
-                throw new BizException(HttpStatus.UNAUTHORIZED, "Invalid webhook signature");
+                throw new UnauthorisedException("Invalid webhook signature");
             }
 
             return true;
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
             log.error("Failed to compute HMAC-SHA256", e);
-            throw new BizException(HttpStatus.INTERNAL_SERVER_ERROR,
+            throw new InternalServerErrorException(
                     "Failed to verify webhook signature");
         }
     }

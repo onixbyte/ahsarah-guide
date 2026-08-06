@@ -4,11 +4,10 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.onixbyte.deltaforceguide.domain.dto.DailyPasswordResponse;
-import com.onixbyte.deltaforceguide.exeption.BizException;
+import com.onixbyte.deltaforceguide.exeption.InternalServerErrorException;
 import com.onixbyte.deltaforceguide.shared.JacksonModules;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
@@ -76,7 +75,7 @@ public class DailyPasswordManager {
                 .body(DailyPasswordResponse.class);
 
         if (Objects.isNull(response)) {
-            throw new BizException(HttpStatus.INTERNAL_SERVER_ERROR, "暂无每日密码数据。");
+            throw new InternalServerErrorException("暂无每日密码数据。");
         }
 
         redisTemplate.opsForValue().set(key, response, Duration.ofDays(1L));

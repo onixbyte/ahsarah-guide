@@ -1,7 +1,8 @@
 package com.onixbyte.deltaforceguide.security.provider;
 
 import com.onixbyte.deltaforceguide.domain.entity.UserCredential;
-import com.onixbyte.deltaforceguide.exeption.BizException;
+import com.onixbyte.deltaforceguide.exeption.InternalServerErrorException;
+import com.onixbyte.deltaforceguide.exeption.UnauthorisedException;
 import com.onixbyte.deltaforceguide.manager.UserManager;
 import com.onixbyte.deltaforceguide.repository.UserCredentialRepository;
 import com.onixbyte.deltaforceguide.security.authentication.UsernamePasswordAuthentication;
@@ -10,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -50,14 +50,14 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         if (!(authentication instanceof UsernamePasswordAuthentication usernamePasswordAuthentication)) {
-            throw new BizException(HttpStatus.INTERNAL_SERVER_ERROR, "用户认证失败，请稍后再试。");
+            throw new InternalServerErrorException("用户认证失败，请稍后再试。");
         }
 
         // get userContainer from database
         var userContainer = userManager.findByUsernameOrEmail(usernamePasswordAuthentication.getPrincipal());
         if (userContainer.isEmpty()) {
             log.error("User {} is trying to authenticate but no userContainer found.", usernamePasswordAuthentication.getPrincipal());
-            throw new BizException(HttpStatus.UNAUTHORIZED, "用户名或密码错误。");
+            throw new UnauthorisedException("用户名或密码错误。");
         }
 
         var user = userContainer.get();
@@ -68,12 +68,12 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
 
         // get userContainer credentials from database
         var userCredentials = userCredentialRepository.findOne(Example.of(userCredentialExample))
-                .orElseThrow(() -> new BizException(HttpStatus.UNAUTHORIZED, "您还没有配置密码，请联系管理员处理。"));
+                .orElseThrow(() -> new UnauthorisedException("您还没有配置密码，请联系管理员处理。"));
 
         // validate password
         if (!passwordEncoder.matches(usernamePasswordAuthentication.getCredentials(), userCredentials.getCredential())) {
             log.error("User {} is trying to authenticate but password is incorrect.", usernamePasswordAuthentication.getPrincipal());
-            throw new BizException(HttpStatus.UNAUTHORIZED, "用户名或密码错误。");
+            throw new UnauthorisedException("用户名或密码错误。");
         }
 
         // erase credentials

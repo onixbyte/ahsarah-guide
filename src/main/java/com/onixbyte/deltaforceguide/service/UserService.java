@@ -1,14 +1,10 @@
 package com.onixbyte.deltaforceguide.service;
 
-import com.onixbyte.deltaforceguide.domain.dto.BuildSummaryResponse;
-import com.onixbyte.deltaforceguide.domain.dto.ChangePasswordRequest;
-import com.onixbyte.deltaforceguide.domain.dto.PageResponse;
-import com.onixbyte.deltaforceguide.domain.dto.UpdateProfileRequest;
-import com.onixbyte.deltaforceguide.domain.dto.UserProfileResponse;
+import com.onixbyte.deltaforceguide.domain.dto.*;
 import com.onixbyte.deltaforceguide.domain.entity.User;
 import com.onixbyte.deltaforceguide.domain.entity.UserCredential;
 import com.onixbyte.deltaforceguide.domain.entity.UserRole;
-import com.onixbyte.deltaforceguide.exeption.BizException;
+import com.onixbyte.deltaforceguide.exeption.BadRequestException;
 import com.onixbyte.deltaforceguide.manager.UserCredentialManager;
 import com.onixbyte.deltaforceguide.manager.UserManager;
 import com.onixbyte.deltaforceguide.manager.UserRoleManager;
@@ -213,12 +209,11 @@ public class UserService {
      *
      * @param user    the authenticated user
      * @param request the change password request containing old and new passwords
-     * @throws BizException if the old password is incorrect
      */
     public void changePassword(User user, ChangePasswordRequest request) {
         var credential = userCredentialManager.findByUserIdAndProvider(user.getId(), CredentialProvider.LOCAL);
         if (credential.isEmpty() || !passwordEncoder.matches(request.oldPassword(), credential.get().getCredential())) {
-            throw new BizException(HttpStatus.BAD_REQUEST, "旧密码不正确。");
+            throw new BadRequestException("旧密码不正确。");
         }
         var encoded = passwordEncoder.encode(request.newPassword());
         upsertCredential(user.getId(), CredentialProvider.LOCAL, encoded);
@@ -243,11 +238,10 @@ public class UserService {
      *
      * @param userId the target user ID
      * @param role   the role to assign
-     * @throws BizException if attempting to assign a protected role
      */
     public void assignRole(Long userId, String role) {
         if (!Role.ROLE_ADMIN.equals(role)) {
-            throw new BizException(HttpStatus.BAD_REQUEST, "只能通过API分配ROLE_ADMIN角色。");
+            throw new BadRequestException("只能通过API分配ROLE_ADMIN角色。");
         }
         var user = ensureUserExists(userId);
         if (userRoleManager.existsByUserIdAndRole(userId, role)) {
@@ -265,11 +259,10 @@ public class UserService {
      *
      * @param userId the target user ID
      * @param role   the role to remove
-     * @throws BizException if attempting to remove a protected role
      */
     public void removeRole(Long userId, String role) {
         if (!Role.ROLE_ADMIN.equals(role)) {
-            throw new BizException(HttpStatus.BAD_REQUEST, "只能通过API移除ROLE_ADMIN角色。");
+            throw new BadRequestException("只能通过API移除ROLE_ADMIN角色。");
         }
         ensureUserExists(userId);
         userRoleManager.deleteByUserIdAndRole(userId, role);

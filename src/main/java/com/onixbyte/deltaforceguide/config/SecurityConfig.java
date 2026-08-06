@@ -3,6 +3,8 @@ package com.onixbyte.deltaforceguide.config;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.onixbyte.deltaforceguide.exeption.ForbiddenException;
+import com.onixbyte.deltaforceguide.exeption.UnauthorisedException;
 import com.onixbyte.deltaforceguide.filter.TokenAuthenticationFilter;
 import com.onixbyte.deltaforceguide.properties.CookieProperties;
 import com.onixbyte.deltaforceguide.properties.TokenProperties;
@@ -12,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -22,7 +23,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import com.onixbyte.deltaforceguide.exeption.BizException;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -43,7 +43,7 @@ public class SecurityConfig {
     /**
      * Configures the HTTP security filter chain including endpoint authorisation and JWT filter.
      *
-     * @param http the HTTP security builder
+     * @param httpSecurity the HTTP security builder
      * @return the configured security filter chain
      */
     @Bean
@@ -64,11 +64,11 @@ public class SecurityConfig {
                 .exceptionHandling(customiser -> customiser
                         .authenticationEntryPoint((request, response, authException) -> {
                             log.error("Unauthenticated request: {}", request, authException);
-                            throw new BizException(HttpStatus.UNAUTHORIZED, "请先登录");
+                            throw new UnauthorisedException("请先登录");
                         })
                         .accessDeniedHandler((request, response, accessDeniedException) -> {
                             log.error("Denied request: {}", request, accessDeniedException);
-                            throw new BizException(HttpStatus.FORBIDDEN, "权限不足");
+                            throw new ForbiddenException("权限不足");
                         })
                 )
                 .addFilterAfter(tokenAuthenticationFilter, ExceptionTranslationFilter.class)
@@ -77,6 +77,7 @@ public class SecurityConfig {
 
     /**
      * Provides the BCrypt password encoder for credential hashing.
+     *
      * @return the BCrypt password encoder
      */
     @Bean
