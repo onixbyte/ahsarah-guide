@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@PreAuthorize("isAuthenticated() && hasRole('ROLE_SUPER_USER')")
+@PreAuthorize("isAuthenticated() && hasRole('SUPER_USER')")
 public @interface RequiresSuperUser {
 }
