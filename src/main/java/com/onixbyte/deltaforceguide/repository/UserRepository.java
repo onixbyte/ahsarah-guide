@@ -16,7 +16,7 @@ import java.util.Optional;
  * @author zihluwang
  */
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends BaseRepository<User, Long> {
 
     @Override
     @EntityGraph(attributePaths = {"credentials"})

@@ -93,5 +93,9 @@ public class UsernamePasswordAuthentication implements Authentication, Credentia
     public void setDetails(User user) {
         this.user = user;
     }
+
+    public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
+        this.authorities = new ArrayList<>(authorities);
+    }
 }
 

@@ -15,7 +15,7 @@ import java.util.List;
  * @author zihluwang
  */
 @Repository
-public interface FirearmRepository extends JpaRepository<Firearm, Long> {
+public interface FirearmRepository extends BaseRepository<Firearm, Long> {
 
 	Page<Firearm> findAllByType(FirearmType type, Pageable pageable);
 

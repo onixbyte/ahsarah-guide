@@ -2,10 +2,7 @@ package com.onixbyte.deltaforceguide.repository;
 
 import com.onixbyte.deltaforceguide.domain.entity.UserCredential;
 import com.onixbyte.deltaforceguide.domain.entity.UserCredentialId;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -18,7 +15,9 @@ import java.util.Optional;
  * @author zihluwang
  */
 @Repository
-public interface UserCredentialRepository extends JpaRepository<UserCredential, UserCredentialId> {
+public interface UserCredentialRepository extends
+        JpaRepository<UserCredential, UserCredentialId>,
+        JpaSpecificationExecutor<UserCredential> {
 
     /**
      * Find all credentials belonging to a given user.

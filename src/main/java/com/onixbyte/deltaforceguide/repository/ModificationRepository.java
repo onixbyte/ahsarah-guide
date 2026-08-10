@@ -20,7 +20,7 @@ import java.util.Optional;
  * @author zihluwang
  */
 @Repository
-public interface ModificationRepository extends JpaRepository<Modification, Long> {
+public interface ModificationRepository extends BaseRepository<Modification, Long> {
 
     @EntityGraph(attributePaths = {"firearm"})
     Page<Modification> findAllBy(Pageable pageable);

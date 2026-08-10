@@ -17,7 +17,7 @@ import java.util.List;
  * @author zihluwang
  */
 @Repository
-public interface UserRoleRepository extends JpaRepository<UserRole, UserRoleId> {
+public interface UserRoleRepository extends BaseRepository<UserRole, UserRoleId> {
 
     /**
      * Find all roles assigned to a given user.
