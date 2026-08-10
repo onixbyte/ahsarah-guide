@@ -23,28 +23,58 @@ app:
     path: '/'
     max-age: P1D
   cors:
-    allowed-origins: # Cross-origin allowed origins
+    # Cross-origin allowed origins
+    allowed-origins:
       - "http://localhost:5173" # Dev server for vite.
       - "http://localhost:4173" # Preview server for vite.
-    allow-credentials: true # Must be set to `true` since we are using cookie. You can change it only when you have modified how this application executing authentication.
+
+    # Must be set to `true` since we are using cookie. You can change it only when you have
+    # modified how this application executing authentication.
+    allow-credentials: true
+
+    # Whether allow private network addresses.
     allow-private-network: false
+
+    # Allowed headers.
     allowed-headers:
       - "Content-Type"
       - "Authorization"
+
+    # Allowed methods.
+    #
+    # Since the usage of HttpMethod from Spring Framework, all methods should be UPPER CASE.
+    # e.g., GET, POST, PUT, PATCH, DELETE, OPTIONS
     allowed-methods:
       - GET
       - POST
       - PUT
       - PATCH
       - DELETE
+
+    # Headers are allowed being displayed on Web pages.
     exposed-headers:
       - "Content-Type"
       - "Authorization"
+
+    # Cross-origin policy max age.
     max-age: PT2H
   jwt:
-    issuer: dfguide.local # Issuer host
-    secret: qwertyuiopasdfghjklzxcvbnm123456 # JWT singing secret, a 32-byte long or longer string is recommended
-    valid-time: PT2H # JWT valid duration
+    # Issuer host
+    issuer: dfguide.local
+
+    # Token singing secret, a 32-byte long or longer string is recommended
+    secret: qwertyuiopasdfghjklzxcvbnm123456
+
+    # Token valid duration.
+    #
+    # Default to PT2H (2 hours).
+    valid-time: PT2H
+
+    # Token renew threshold. If valid time of this token is less than this value, then a new token
+    # will be delivered to the user.
+    #
+    # Default to PT5M (5 min).
+    renew-threshold: PT5M
   webhook:
     github:
       secret: 123456
@@ -52,6 +82,8 @@ app:
 
 springdoc:
   api-docs:
-    enabled: true # Set to `false` if you do not need api docs (recommended in production mode).
+    # Set to `false` if you do not need api docs (recommended in production mode).
+    enabled: true
   swagger-ui:
-    enabled: true # Set to `false` if you do not need swagger ui (recommended in production mode).
+    # Set to `false` if you do not need swagger ui (recommended in production mode).
+    enabled: true

@@ -1,6 +1,7 @@
 package com.onixbyte.deltaforceguide.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.time.Duration;
 
@@ -16,6 +17,7 @@ import java.time.Duration;
 public record TokenProperties(
         String issuer,
         String secret,
-        Duration validTime
+        @DefaultValue("PT2H") Duration validTime,
+        @DefaultValue("PT5M") Duration renewThreshold
 ) {
 }
