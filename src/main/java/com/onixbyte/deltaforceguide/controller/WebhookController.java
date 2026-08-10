@@ -14,21 +14,21 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "GitHub WebHook")
+@Tag(name = "WebHook")
 @RestController
-@RequestMapping("/webhooks/github")
-public class GitHubWebhookController {
+@RequestMapping("/webhooks")
+public class WebhookController {
 
-    private static final Logger log = LoggerFactory.getLogger(GitHubWebhookController.class);
+    private static final Logger log = LoggerFactory.getLogger(WebhookController.class);
 
     private final WebhookService webhookService;
 
-    public GitHubWebhookController(WebhookService webhookService) {
+    public WebhookController(WebhookService webhookService) {
         this.webhookService = webhookService;
     }
 
     @Operation(description = "GitHub WebHook 接口")
-    @PostMapping
+    @PostMapping("/github")
     public ResponseEntity<Void> handleWebhook(
             @RequestHeader(GitHubWebhookHeader.EVENT) String event,
             @RequestBody GitHubIssueRequest request
