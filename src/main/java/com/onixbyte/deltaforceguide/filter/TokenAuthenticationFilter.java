@@ -3,10 +3,10 @@ package com.onixbyte.deltaforceguide.filter;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.onixbyte.deltaforceguide.client.TokenClient;
 import com.onixbyte.deltaforceguide.exeption.UnauthorisedException;
+import com.onixbyte.deltaforceguide.manager.CookieManager;
 import com.onixbyte.deltaforceguide.manager.UserManager;
 import com.onixbyte.deltaforceguide.manager.UserRoleManager;
 import com.onixbyte.deltaforceguide.security.authentication.UsernamePasswordAuthentication;
-import com.onixbyte.deltaforceguide.service.CookieService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -45,20 +45,20 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     private final UserManager userManager;
     private final UserRoleManager userRoleManager;
     private final TokenClient tokenClient;
-    private final CookieService cookieService;
+    private final CookieManager cookieManager;
     private final HandlerExceptionResolver handlerExceptionResolver;
 
     public TokenAuthenticationFilter(
             UserManager userManager,
             UserRoleManager userRoleManager,
             TokenClient tokenClient,
-            CookieService cookieService,
+            CookieManager cookieManager,
             HandlerExceptionResolver handlerExceptionResolver
     ) {
         this.userManager = userManager;
         this.userRoleManager = userRoleManager;
         this.tokenClient = tokenClient;
-        this.cookieService = cookieService;
+        this.cookieManager = cookieManager;
         this.handlerExceptionResolver = handlerExceptionResolver;
     }
 
@@ -102,7 +102,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
             if (shouldRenew(decodedToken.getExpiresAt().toInstant())) {
                 var renewedToken = tokenClient.generateToken(user);
-                var renewedTokenCookie = cookieService.buildCookie("AccessToken", renewedToken);
+                var renewedTokenCookie = cookieManager.buildCookie("AccessToken", renewedToken);
                 response.addHeader(HttpHeaders.SET_COOKIE, renewedTokenCookie.toString());
             }
 
