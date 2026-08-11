@@ -2,6 +2,7 @@ package com.onixbyte.deltaforceguide.security.resolver;
 
 import com.onixbyte.deltaforceguide.domain.entity.User;
 import com.onixbyte.deltaforceguide.security.authentication.UsernamePasswordAuthentication;
+import org.jspecify.annotations.NonNull;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,9 +31,9 @@ public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolve
 
     @Override
     public User resolveArgument(
-            MethodParameter parameter,
+            @NonNull MethodParameter parameter,
             ModelAndViewContainer mavContainer,
-            NativeWebRequest webRequest,
+            @NonNull NativeWebRequest webRequest,
             WebDataBinderFactory binderFactory
     ) {
         var auth = SecurityContextHolder.getContext().getAuthentication();
