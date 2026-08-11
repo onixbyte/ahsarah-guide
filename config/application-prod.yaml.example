@@ -1,48 +1,81 @@
 spring:
   datasource:
+    # PostgreSQL connection URL.
     url: jdbc:postgresql://localhost:5432/dfguide_dev
+
+    # PostgreSQL username.
     username: postgres
+
+    # PostgreSQL password.
     password: 123456
+
+    # PostgreSQL JDBC driver class name.
     driver-class-name: org.postgresql.Driver
   data:
     redis:
+      # Redis server host.
       host: localhost
+
+      # Redis server port.
       port: 6379
+
+      # Redis database index.
+      #
+      # Default to 0.
       database: 0
-      # password: qwerty # Uncomment if password is necessary
+
+      # Redis server password.
+      #
+      # Uncomment if the server requires a password.
+      #
+      # password: qwerty
 
 logging:
   pattern:
-    # dateformat: dd MMM yyyy HH:mm:ss.SSS # Modify this for custom date format.
+    # Date format used in log output. Uncomment to use a custom format.
+    #
+    # Default to the date format provided by Spring Boot.
+    # dateformat: dd MMM yyyy HH:mm:ss.SSS
 
 app:
   cookie:
+    # Whether the cookie is accessible from JavaScript. Keep `true` to mitigate XSS attacks.
     http-only: true
-    secure: false
+
+    # Whether the cookie is only sent over HTTPS. Set to `true` in production is recommended.
+    secure: true
+
+    # SameSite policy of the cookie.
+    #
+    # NOTE that `none` requires `secure` to be `true`.
     same-site: none
+
+    # Cookie path.
     path: '/'
+
+    # Cookie max age.
     max-age: P1D
   cors:
-    # Cross-origin allowed origins
-    allowed-origins:
-      - "http://localhost:5173" # Dev server for vite.
-      - "http://localhost:4173" # Preview server for vite.
+    # Cross-origin allowed origins. Add your custom origins here.
+    allowed-origins: []
 
-    # Must be set to `true` since we are using cookie. You can change it only when you have
-    # modified how this application executing authentication.
+    # Whether to allow credentials (cookies, authorisation headers) in cross-origin requests.
+    #
+    # Must be `true` since the application uses cookies for authentication. Change it only when
+    # the authentication mechanism no longer relies on cookies.
     allow-credentials: true
 
-    # Whether allow private network addresses.
+    # Whether to allow requests originating from private network addresses.
     allow-private-network: false
 
-    # Allowed headers.
+    # Headers allowed in cross-origin requests.
     allowed-headers:
       - "Content-Type"
       - "Authorization"
 
-    # Allowed methods.
+    # HTTP methods allowed in cross-origin requests.
     #
-    # Since the usage of HttpMethod from Spring Framework, all methods should be UPPER CASE.
+    # Methods are matched against Spring's HttpMethod, so they must be written in UPPER CASE.
     # e.g., GET, POST, PUT, PATCH, DELETE, OPTIONS
     allowed-methods:
       - GET
@@ -51,18 +84,20 @@ app:
       - PATCH
       - DELETE
 
-    # Headers are allowed being displayed on Web pages.
+    # Response headers exposed to the browser in cross-origin responses.
     exposed-headers:
       - "Content-Type"
       - "Authorization"
 
-    # Cross-origin policy max age.
+    # How long the CORS pre-flight response may be cached by the browser.
+    #
+    # Default to PT2H (2 hours).
     max-age: PT2H
   jwt:
-    # Issuer host
+    # Issuer identifier, domain name is recommended.
     issuer: dfguide.local
 
-    # Token singing secret, a 32-byte long or longer string is recommended
+    # Token signing secret, a 32-byte long or longer string is recommended.
     secret: qwertyuiopasdfghjklzxcvbnm123456
 
     # Token valid duration.
@@ -70,20 +105,27 @@ app:
     # Default to PT2H (2 hours).
     valid-time: PT2H
 
-    # Token renew threshold. If valid time of this token is less than this value, then a new token
-    # will be delivered to the user.
+    # Token renew threshold.
+    #
+    # If valid time of this token is less than this value, then a new token will be delivered to
+    # the user.
     #
     # Default to PT5M (5 min).
     renew-threshold: PT5M
   webhook:
     github:
+      # GitHub webhook secret. Used to verify the signature of incoming webhook requests.
       secret: 123456
-      allowed-users: [ octotcat, onixbyte ]
+
+      # GitHub usernames allowed to trigger webhook events.
+      allowed-users: [ octocat, onixbyte ]
 
 springdoc:
   api-docs:
-    # Set to `false` if you do not need api docs (recommended in production mode).
+    # Whether to expose the OpenAPI documentation. Set to `false` if you do not need it
+    # (recommended in production mode).
     enabled: true
   swagger-ui:
-    # Set to `false` if you do not need swagger ui (recommended in production mode).
+    # Whether to expose the Swagger UI. Set to `false` if you do not need it
+    # (recommended in production mode).
     enabled: true
