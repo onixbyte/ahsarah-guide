@@ -1,6 +1,7 @@
 package com.onixbyte.deltaforceguide.controller;
 
 import com.onixbyte.deltaforceguide.domain.dto.LoginRequest;
+import com.onixbyte.deltaforceguide.domain.dto.RegisterRequest;
 import com.onixbyte.deltaforceguide.domain.dto.UserResponse;
 import com.onixbyte.deltaforceguide.security.annotation.RequiresAuth;
 import com.onixbyte.deltaforceguide.service.AuthService;
@@ -45,5 +46,12 @@ public class AuthController {
         return ResponseEntity.noContent()
                 .header(HttpHeaders.SET_COOKIE, expiredCookie.toString())
                 .build();
+    }
+
+    @Operation(description = "用户注册")
+    @PostMapping("/register")
+    public ResponseEntity<UserResponse> register(@Validated @RequestBody RegisterRequest request) {
+        var user = authService.register(request);
+        return authService.getUserResponseResponseEntity(user);
     }
 }

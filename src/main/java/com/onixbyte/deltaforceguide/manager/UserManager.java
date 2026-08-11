@@ -1,7 +1,9 @@
 package com.onixbyte.deltaforceguide.manager;
 
 import com.onixbyte.deltaforceguide.domain.entity.User;
+import com.onixbyte.deltaforceguide.domain.entity.UserRole;
 import com.onixbyte.deltaforceguide.repository.UserRepository;
+import com.onixbyte.deltaforceguide.repository.UserRoleRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,9 +19,11 @@ import java.util.Optional;
 public class UserManager {
 
     private final UserRepository userRepository;
+    private final UserRoleRepository userRoleRepository;
 
-    public UserManager(UserRepository userRepository) {
+    public UserManager(UserRepository userRepository, UserRoleRepository userRoleRepository) {
         this.userRepository = userRepository;
+        this.userRoleRepository = userRoleRepository;
     }
 
     /**
@@ -82,6 +86,43 @@ public class UserManager {
      */
     public Optional<User> findByUsernameOrEmail(String principal) {
         return userRepository.findByUsernameOrEmail(principal);
+    }
+
+    /**
+     * Checks whether a username is already registered.
+     *
+     * @param username the username to check
+     * @return true if the username is already taken
+     */
+    public boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    /**
+     * Checks whether an email address is already registered.
+     *
+     * @param email the email address to check
+     * @return true if the email address is already taken
+     */
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    /**
+     * Persists a new user together with an initial role assignment in a single transaction.
+     *
+     * @param user the user to persist, whose credentials are cascaded
+     * @param role the initial role name to assign
+     * @return the saved user
+     */
+    @Transactional
+    public User createWithRole(User user, String role) {
+        var saved = userRepository.save(user);
+        userRoleRepository.save(UserRole.builder()
+                .user(saved)
+                .role(role)
+                .build());
+        return saved;
     }
 }
 
