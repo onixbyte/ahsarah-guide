@@ -26,9 +26,6 @@ public class EmailClient {
 
     private final TemplateEngine emailTemplateEngine;
 
-    @Value("${spring.mail.username}")
-    private String fromAddress;
-
     @Autowired
     public EmailClient(
             JavaMailSender mailSender,
@@ -36,6 +33,13 @@ public class EmailClient {
     ) {
         this.mailSender = mailSender;
         this.emailTemplateEngine = emailTemplateEngine;
+    }
+
+    private String fromAddress;
+
+    @Autowired
+    public void setFromAddress(@Value("${spring.mail.username}") String fromAddress) {
+        this.fromAddress = fromAddress;
     }
 
     /**

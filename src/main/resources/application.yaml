@@ -32,6 +32,10 @@ spring:
     baseline-on-migrate: true
   thymeleaf:
     enabled: false
+  mail:
+    # This configuration is used to suppressing warnings of no beans found of JavaMailSender.
+    host: example.smtp.com
+    username: app@dfguide.onixbyte.cn
 
 mybatis:
   configuration:
