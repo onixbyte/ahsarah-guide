@@ -39,9 +39,6 @@ public class User {
     @Column(name = "avatar_url")
     private String avatarUrl;
 
-    @Column(name = "email_verified", nullable = false)
-    private Boolean emailVerified = false;
-
     @Column(name = "enabled", nullable = false)
     private Boolean enabled = true;
 
@@ -92,14 +89,6 @@ public class User {
 
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;
-    }
-
-    public Boolean getEmailVerified() {
-        return emailVerified;
-    }
-
-    public void setEmailVerified(Boolean emailVerified) {
-        this.emailVerified = emailVerified;
     }
 
     public Boolean getEnabled() {
@@ -160,7 +149,6 @@ public class User {
         private String email;
         private String nickname;
         private String avatarUrl;
-        private Boolean emailVerified;
         private Boolean enabled;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
@@ -188,11 +176,6 @@ public class User {
 
         public Builder avatarUrl(String avatarUrl) {
             this.avatarUrl = avatarUrl;
-            return this;
-        }
-
-        public Builder emailVerified(Boolean emailVerified) {
-            this.emailVerified = emailVerified;
             return this;
         }
 
@@ -224,7 +207,6 @@ public class User {
             user.nickname = this.nickname == null || this.nickname.isBlank()
                     ? this.username : this.nickname;
             user.avatarUrl = this.avatarUrl;
-            user.emailVerified = this.emailVerified != null && this.emailVerified;
             user.enabled = this.enabled == null || this.enabled;
             user.createdAt = this.createdAt;
             user.updatedAt = this.updatedAt;

@@ -24,6 +24,8 @@ public record RegisterRequest(
         String avatarUrl,
         @NotBlank(message = "密码不能为空")
         @Schema(description = "密码", requiredMode = Schema.RequiredMode.REQUIRED)
-        String password
+        String password,
+        @NotBlank(message = "验证码 ID 不能为空") String verificationCodeId,
+        @NotBlank(message = "验证码不能为空") String verificationCode
 ) {
 }

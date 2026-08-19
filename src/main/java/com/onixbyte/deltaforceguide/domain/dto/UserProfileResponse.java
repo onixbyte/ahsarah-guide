@@ -16,7 +16,6 @@ public record UserProfileResponse(
         String nickname,
         String email,
         String avatarUrl,
-        Boolean emailVerified,
         Boolean enabled,
         LocalDateTime createdAt,
         List<String> roles
@@ -37,7 +36,6 @@ public record UserProfileResponse(
                         ? user.getUsername() : user.getNickname(),
                 user.getEmail(),
                 user.getAvatarUrl(),
-                user.getEmailVerified(),
                 user.getEnabled(),
                 user.getCreatedAt(),
                 roles

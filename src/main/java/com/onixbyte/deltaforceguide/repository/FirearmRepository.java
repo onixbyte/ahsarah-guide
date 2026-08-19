@@ -5,6 +5,7 @@ import com.onixbyte.deltaforceguide.enumeration.FirearmType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
  * @author zihluwang
  */
 @Repository
-public interface FirearmRepository extends BaseRepository<Firearm, Long> {
+public interface FirearmRepository extends JpaRepository<Firearm, Long>, JpaSpecificationExecutor<Firearm> {
 
 	Page<Firearm> findAllByType(FirearmType type, Pageable pageable);
 

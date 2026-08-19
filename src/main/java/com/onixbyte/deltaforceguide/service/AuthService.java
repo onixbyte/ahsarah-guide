@@ -1,12 +1,16 @@
 package com.onixbyte.deltaforceguide.service;
 
+import com.onixbyte.captcha.text.TextProducer;
+import com.onixbyte.deltaforceguide.client.EmailClient;
 import com.onixbyte.deltaforceguide.client.TokenClient;
 import com.onixbyte.deltaforceguide.domain.dto.LoginRequest;
 import com.onixbyte.deltaforceguide.domain.dto.RegisterRequest;
+import com.onixbyte.deltaforceguide.domain.dto.SendVerificationCodeRequest;
 import com.onixbyte.deltaforceguide.domain.dto.UserResponse;
 import com.onixbyte.deltaforceguide.domain.entity.User;
 import com.onixbyte.deltaforceguide.domain.entity.UserCredential;
 import com.onixbyte.deltaforceguide.exeption.BadRequestException;
+import com.onixbyte.deltaforceguide.exeption.ConflictException;
 import com.onixbyte.deltaforceguide.exeption.InternalServerErrorException;
 import com.onixbyte.deltaforceguide.manager.CookieManager;
 import com.onixbyte.deltaforceguide.manager.UserManager;
@@ -17,6 +21,8 @@ import com.onixbyte.deltaforceguide.shared.Role;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.CacheManager;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +32,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * Service handling user authentication, login, and session management.
@@ -41,19 +48,31 @@ public class AuthService {
     private final CookieManager cookieManager;
     private final UserManager userManager;
     private final PasswordEncoder passwordEncoder;
+    private final TextProducer textProducer;
+    private final CacheManager cacheManager;
+    private final RedisTemplate<String, Object> redisTemplate;
+    private final EmailClient emailClient;
 
     public AuthService(
             AuthenticationManager authenticationManager,
             TokenClient tokenClient,
             CookieManager cookieManager,
             UserManager userManager,
-            PasswordEncoder passwordEncoder
+            PasswordEncoder passwordEncoder,
+            TextProducer textProducer,
+            CacheManager cacheManager,
+            RedisTemplate<String, Object> redisTemplate,
+            EmailClient emailClient
     ) {
         this.authenticationManager = authenticationManager;
         this.tokenClient = tokenClient;
         this.cookieManager = cookieManager;
         this.userManager = userManager;
         this.passwordEncoder = passwordEncoder;
+        this.textProducer = textProducer;
+        this.cacheManager = cacheManager;
+        this.redisTemplate = redisTemplate;
+        this.emailClient = emailClient;
     }
 
     /**
@@ -96,6 +115,19 @@ public class AuthService {
             throw new BadRequestException("该邮箱已被注册。");
         }
 
+        var code = request.verificationCode();
+        var verificationCodeId = request.verificationCodeId();
+
+        var storedCode = redisTemplate.opsForValue().get("verification-code:" + verificationCodeId);
+        if (!(storedCode instanceof String strStoredCode)) {
+            log.error("storedCode not a String, storedCode={}", storedCode);
+            throw new InternalServerErrorException("系统内部错误，请重试");
+        }
+
+        if (!code.equalsIgnoreCase(strStoredCode)) {
+            throw new BadRequestException("邮箱验证码不正确，请重试。");
+        }
+
         var now = LocalDateTime.now();
         var user = User.builder()
                 .username(username)
@@ -128,5 +160,40 @@ public class AuthService {
 
     public HttpCookie logout() {
         return cookieManager.buildCookie(CookieName.ACCESS_TOKEN, "", Duration.ZERO);
+    }
+
+    /**
+     * Generates and dispatches a verification code to the given email address.
+     * <p>
+     * The code is cached under the returned UUID for 10 minutes and emailed
+     * asynchronously to the recipient. The UUID must be supplied back to the
+     * server when verifying the code.
+     *
+     * @param request the verification code request containing the target username and email
+     * @return the UUID identifying the verification record, to be used when verifying the code
+     * @throws ConflictException if the username or email is already registered
+     */
+    public String sendVerificationCode(SendVerificationCodeRequest request) {
+        // Check username.
+        if (userManager.existsByUsername(request.username())) {
+            throw new ConflictException("用户名【" + request.username() + "】已被使用。");
+        }
+
+        // Check email address.
+        if (userManager.existsByEmail(request.email())) {
+            throw new ConflictException("邮箱地址【" + request.email() + "】已被使用。");
+        }
+
+        // Generate UUID and verification code.
+        var uuid = UUID.randomUUID().toString().replace("-", "");
+        var code = textProducer.getText();
+
+        // Save verification code to cache.
+        redisTemplate.opsForValue().set("verification-code:" + uuid, code, Duration.ofMinutes(10L));
+
+        // Send email.
+        emailClient.sendVerificationCode(request.email(), request.username(), code, 10);
+
+        return uuid;
     }
 }

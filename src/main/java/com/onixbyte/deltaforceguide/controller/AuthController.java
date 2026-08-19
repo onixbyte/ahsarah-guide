@@ -1,8 +1,6 @@
 package com.onixbyte.deltaforceguide.controller;
 
-import com.onixbyte.deltaforceguide.domain.dto.LoginRequest;
-import com.onixbyte.deltaforceguide.domain.dto.RegisterRequest;
-import com.onixbyte.deltaforceguide.domain.dto.UserResponse;
+import com.onixbyte.deltaforceguide.domain.dto.*;
 import com.onixbyte.deltaforceguide.security.annotation.RequiresAuth;
 import com.onixbyte.deltaforceguide.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -46,6 +44,13 @@ public class AuthController {
         return ResponseEntity.noContent()
                 .header(HttpHeaders.SET_COOKIE, expiredCookie.toString())
                 .build();
+    }
+
+    @Operation(description = "发送邮件验证码")
+    @PostMapping("/verification-code")
+    public SendVerificationCodeResponse sendVerificationCode(@Validated @RequestBody SendVerificationCodeRequest request) {
+        var verificationCodeId = authService.sendVerificationCode(request);
+        return new SendVerificationCodeResponse(verificationCodeId);
     }
 
     @Operation(description = "用户注册")

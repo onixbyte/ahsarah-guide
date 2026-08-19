@@ -196,10 +196,7 @@ public class UserService {
         if (StringUtils.hasText(request.nickname())) {
             user.setNickname(request.nickname());
         }
-        if (StringUtils.hasText(request.email()) && !Objects.equals(user.getEmail(), request.email())) {
-            user.setEmail(request.email());
-            user.setEmailVerified(false);
-        }
+
         userManager.save(user);
         return getProfile(user);
     }

@@ -2,10 +2,7 @@ package com.onixbyte.deltaforceguide.repository;
 
 import com.onixbyte.deltaforceguide.domain.entity.UserRole;
 import com.onixbyte.deltaforceguide.domain.entity.UserRoleId;
-import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -17,7 +14,7 @@ import java.util.List;
  * @author zihluwang
  */
 @Repository
-public interface UserRoleRepository extends BaseRepository<UserRole, UserRoleId> {
+public interface UserRoleRepository extends JpaRepository<UserRole, UserRoleId>, JpaSpecificationExecutor<UserRole> {
 
     /**
      * Find all roles assigned to a given user.
