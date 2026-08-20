@@ -1,5 +1,6 @@
 package com.onixbyte.deltaforceguide.security.provider;
 
+import com.onixbyte.deltaforceguide.domain.entity.UserCredentialId;
 import com.onixbyte.deltaforceguide.domain.entity.UserRole;
 import com.onixbyte.deltaforceguide.exeption.InternalServerErrorException;
 import com.onixbyte.deltaforceguide.exeption.UnauthorisedException;
@@ -9,7 +10,6 @@ import com.onixbyte.deltaforceguide.repository.UserRoleRepository;
 import com.onixbyte.deltaforceguide.security.authentication.UsernamePasswordAuthentication;
 import com.onixbyte.deltaforceguide.shared.CredentialProvider;
 import com.onixbyte.deltaforceguide.shared.Role;
-import jakarta.persistence.criteria.Predicate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -70,13 +69,13 @@ public class UsernamePasswordAuthenticationProvider implements AuthenticationPro
 
         var user = userContainer.get();
 
+        var userCredentialId = UserCredentialId.builder()
+                .provider(CredentialProvider.LOCAL)
+                .userId(user.getId())
+                .build();
+
         // get userContainer credentials from database
-        var userCredentials = userCredentialRepository.findOne((root, query, cb) -> {
-                    var predicates = new ArrayList<Predicate>();
-                    predicates.add(cb.equal(root.get("provider"), CredentialProvider.LOCAL));
-                    predicates.add(cb.equal(root.get("userId"), user.getId()));
-                    return cb.and(predicates.toArray(Predicate[]::new));
-                })
+        var userCredentials = userCredentialRepository.findOne((root, query, cb) -> cb.equal(root.get("id"), userCredentialId))
                 .orElseThrow(() -> new UnauthorisedException("您还没有配置密码，请联系管理员处理。"));
 
         // validate password
