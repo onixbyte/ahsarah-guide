@@ -4,7 +4,9 @@ import com.onixbyte.deltaforceguide.domain.dto.ModificationBatchCreateRequest;
 import com.onixbyte.deltaforceguide.domain.dto.ModificationRequest;
 import com.onixbyte.deltaforceguide.domain.dto.ModificationResponse;
 import com.onixbyte.deltaforceguide.domain.dto.PageResponse;
+import com.onixbyte.deltaforceguide.domain.entity.User;
 import com.onixbyte.deltaforceguide.security.annotation.RequiresAuth;
+import com.onixbyte.deltaforceguide.security.resolver.CurrentUser;
 import com.onixbyte.deltaforceguide.service.ModificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -66,15 +68,21 @@ public class ModificationController {
     @RequiresAuth
     @Operation(description = "创建改装")
     @PostMapping
-    public ModificationResponse create(@Valid @RequestBody ModificationRequest request) {
-        return modificationService.create(request);
+    public ModificationResponse create(
+            @CurrentUser User user,
+            @Valid @RequestBody ModificationRequest request
+    ) {
+        return modificationService.create(request, user);
     }
 
     @RequiresAuth
     @Operation(description = "批量创建改装")
     @PostMapping("/batch")
-    public List<ModificationResponse> batchCreate(@Valid @RequestBody ModificationBatchCreateRequest request) {
-        return modificationService.batchCreate(request.modifications());
+    public List<ModificationResponse> batchCreate(
+            @CurrentUser User user,
+            @Valid @RequestBody ModificationBatchCreateRequest request
+    ) {
+        return modificationService.batchCreate(request.modifications(), user);
     }
 
     @RequiresAuth

@@ -1,12 +1,10 @@
 package com.onixbyte.deltaforceguide.domain.entity;
 
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
@@ -14,6 +12,8 @@ import jakarta.persistence.Table;
 
 /**
  * Entity representing a role assignment linking a user to a security role.
+ * <p>
+ * A user owns at most one role assignment, so the user ID is the primary key.
  *
  * @author zihluwang
  */
@@ -21,24 +21,24 @@ import jakarta.persistence.Table;
 @Table(name = "user_role")
 public class UserRole {
 
-    @EmbeddedId
-    @AttributeOverrides({
-        @AttributeOverride(name = "userId", column = @Column(name = "user_id")),
-        @AttributeOverride(name = "role", column = @Column(name = "role"))
-    })
-    private UserRoleId id = new UserRoleId();
+    @Id
+    @Column(name = "user_id")
+    private Long userId;
 
     @MapsId("userId")
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_user_role_user"))
     private User user;
 
-    public UserRoleId getId() {
-        return id;
+    @Column(name = "role", nullable = false, length = 32)
+    private String role;
+
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setId(UserRoleId id) {
-        this.id = id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public User getUser() {
@@ -47,32 +47,17 @@ public class UserRole {
 
     public void setUser(User user) {
         this.user = user;
-        if (this.id == null) {
-            this.id = new UserRoleId();
+        if (user != null) {
+            this.userId = user.getId();
         }
-        this.id.setUserId(user == null ? null : user.getId());
-    }
-
-    public Long getUserId() {
-        return id == null ? null : id.getUserId();
-    }
-
-    public void setUserId(Long userId) {
-        if (this.id == null) {
-            this.id = new UserRoleId();
-        }
-        this.id.setUserId(userId);
     }
 
     public String getRole() {
-        return id == null ? null : id.getRole();
+        return role;
     }
 
     public void setRole(String role) {
-        if (this.id == null) {
-            this.id = new UserRoleId();
-        }
-        this.id.setRole(role);
+        this.role = role;
     }
 
     public static Builder builder() {
@@ -81,15 +66,9 @@ public class UserRole {
 
     public static class Builder {
 
-        private UserRoleId id;
         private User user;
         private Long userId;
         private String role;
-
-        public Builder id(UserRoleId id) {
-            this.id = id;
-            return this;
-        }
 
         public Builder user(User user) {
             this.user = user;
@@ -108,16 +87,13 @@ public class UserRole {
 
         public UserRole build() {
             UserRole userRole = new UserRole();
-            userRole.id = this.id == null ? new UserRoleId() : this.id;
             userRole.user = this.user;
+            userRole.role = this.role;
             if (this.user != null) {
-                userRole.id.setUserId(this.user.getId());
+                userRole.userId = this.user.getId();
             }
             if (this.userId != null) {
-                userRole.id.setUserId(this.userId);
-            }
-            if (this.role != null) {
-                userRole.id.setRole(this.role);
+                userRole.userId = this.userId;
             }
             return userRole;
         }

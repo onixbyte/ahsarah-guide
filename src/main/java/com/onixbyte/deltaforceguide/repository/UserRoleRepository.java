@@ -1,7 +1,6 @@
 package com.onixbyte.deltaforceguide.repository;
 
 import com.onixbyte.deltaforceguide.domain.entity.UserRole;
-import com.onixbyte.deltaforceguide.domain.entity.UserRoleId;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -14,7 +13,7 @@ import java.util.List;
  * @author zihluwang
  */
 @Repository
-public interface UserRoleRepository extends JpaRepository<UserRole, UserRoleId>, JpaSpecificationExecutor<UserRole> {
+public interface UserRoleRepository extends JpaRepository<UserRole, Long>, JpaSpecificationExecutor<UserRole> {
 
     /**
      * Find all roles assigned to a given user.
@@ -41,7 +40,7 @@ public interface UserRoleRepository extends JpaRepository<UserRole, UserRoleId>,
             select count(ur) > 0
             from UserRole ur
             where ur.user.id = :userId
-              and ur.id.role = :role
+              and ur.role = :role
             """)
     boolean existsByUserIdAndRole(@Param("userId") Long userId, @Param("role") String role);
 
@@ -55,7 +54,7 @@ public interface UserRoleRepository extends JpaRepository<UserRole, UserRoleId>,
     @Query("""
             delete from UserRole ur
             where ur.user.id = :userId
-              and ur.id.role = :role
+              and ur.role = :role
             """)
     void deleteByUserIdAndRole(@Param("userId") Long userId, @Param("role") String role);
 

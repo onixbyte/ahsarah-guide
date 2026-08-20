@@ -88,7 +88,7 @@ public class WebhookService {
     private void processSingle(Long issueNumber, Map<String, Object> data) {
         var request = mapToRequest(data);
         log.info("Creating modification from issue #{}: name={}", issueNumber, request.name());
-        modificationManager.create(request);
+        modificationManager.create(request, null);
     }
 
     @SuppressWarnings("unchecked")
@@ -102,7 +102,7 @@ public class WebhookService {
                 .map(this::mapToRequest)
                 .toList();
         log.info("Batch creating {} modifications from issue #{}", requests.size(), issueNumber);
-        modificationManager.batchCreate(requests);
+        modificationManager.batchCreate(requests, null);
     }
 
     private ModificationRequest mapToRequest(Map<String, Object> data) {

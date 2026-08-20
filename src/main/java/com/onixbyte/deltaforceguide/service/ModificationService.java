@@ -8,6 +8,7 @@ import com.onixbyte.deltaforceguide.domain.dto.TuningRequest;
 import com.onixbyte.deltaforceguide.domain.entity.Accessory;
 import com.onixbyte.deltaforceguide.domain.entity.Firearm;
 import com.onixbyte.deltaforceguide.domain.entity.Modification;
+import com.onixbyte.deltaforceguide.domain.entity.User;
 import com.onixbyte.deltaforceguide.domain.entity.Tuning;
 import com.onixbyte.deltaforceguide.manager.ModificationManager;
 import com.onixbyte.deltaforceguide.repository.FirearmRepository;
@@ -104,20 +105,22 @@ public class ModificationService {
      * Creates a new modification for a given firearm.
      *
      * @param request the modification creation request
+     * @param user    the authenticated user creating the modification
      * @return the created modification response
      */
-    public ModificationResponse create(ModificationRequest request) {
-        return modificationManager.create(request);
+    public ModificationResponse create(ModificationRequest request, User user) {
+        return modificationManager.create(request, user);
     }
 
     /**
      * Creates multiple modifications in a single batch operation.
      *
      * @param requests list of modification creation requests
+     * @param user     the authenticated user creating the modifications
      * @return list of created modification responses
      */
-    public List<ModificationResponse> batchCreate(List<ModificationRequest> requests) {
-        return modificationManager.batchCreate(requests);
+    public List<ModificationResponse> batchCreate(List<ModificationRequest> requests, User user) {
+        return modificationManager.batchCreate(requests, user);
     }
 
     /**

@@ -4,6 +4,7 @@ import com.onixbyte.deltaforceguide.domain.entity.Accessory;
 import com.onixbyte.deltaforceguide.domain.entity.Firearm;
 import com.onixbyte.deltaforceguide.domain.entity.Modification;
 import com.onixbyte.deltaforceguide.domain.entity.Tuning;
+import com.onixbyte.deltaforceguide.domain.entity.User;
 import com.onixbyte.deltaforceguide.domain.dto.AccessoryRequest;
 import com.onixbyte.deltaforceguide.domain.dto.ModificationRequest;
 import com.onixbyte.deltaforceguide.domain.dto.ModificationResponse;
@@ -36,16 +37,16 @@ public class ModificationManager {
     }
 
     @Transactional
-    public ModificationResponse create(ModificationRequest request) {
+    public ModificationResponse create(ModificationRequest request, User user) {
         var firearm = firearmRepository.findById(request.firearmId())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Firearm not found: " + request.firearmId()));
-        var modification = toEntity(request, firearm);
+        var modification = toEntity(request, firearm, user);
         return ModificationResponse.from(modificationRepository.save(modification));
     }
 
     @Transactional
-    public List<ModificationResponse> batchCreate(List<ModificationRequest> requests) {
+    public List<ModificationResponse> batchCreate(List<ModificationRequest> requests, User user) {
         var firearmIds = requests.stream()
                 .map(ModificationRequest::firearmId)
                 .collect(java.util.stream.Collectors.toCollection(LinkedHashSet::new));
@@ -63,7 +64,7 @@ public class ModificationManager {
         }
 
         var modifications = requests.stream()
-                .map(req -> toEntity(req, firearmMap.get(req.firearmId())))
+                .map(req -> toEntity(req, firearmMap.get(req.firearmId()), user))
                 .toList();
         return modificationRepository.saveAll(modifications)
                 .stream()
@@ -86,7 +87,7 @@ public class ModificationManager {
         return matches.getFirst().getId();
     }
 
-    private Modification toEntity(ModificationRequest request, Firearm firearm) {
+    private Modification toEntity(ModificationRequest request, Firearm firearm, User user) {
         return Modification.builder()
                 .firearm(firearm)
                 .name(request.name())
@@ -96,6 +97,7 @@ public class ModificationManager {
                 .note(request.note())
                 .author(request.author())
                 .videoUrl(request.videoUrl())
+                .createBy(user == null ? null : user.getId())
                 .build();
     }
 
