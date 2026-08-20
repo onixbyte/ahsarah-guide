@@ -4,6 +4,8 @@ import com.onixbyte.deltaforceguide.enumeration.ModificationStatus;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
+import java.util.Optional;
+
 /**
  * JPA attribute converter that maps {@link ModificationStatus} enum to/from its integer database representation.
  *
@@ -14,7 +16,9 @@ public class ModificationStatusConverter implements AttributeConverter<Modificat
 
     @Override
     public Integer convertToDatabaseColumn(ModificationStatus attribute) {
-        return attribute == null ? null : attribute.getCode();
+        return Optional.ofNullable(attribute)
+                .map(ModificationStatus::getCode)
+                .orElse(null);
     }
 
     @Override
