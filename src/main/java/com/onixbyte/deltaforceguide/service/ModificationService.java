@@ -1,5 +1,7 @@
 package com.onixbyte.deltaforceguide.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.onixbyte.deltaforceguide.domain.dto.AccessoryRequest;
 import com.onixbyte.deltaforceguide.domain.dto.ModificationRequest;
 import com.onixbyte.deltaforceguide.domain.dto.ModificationResponse;
@@ -8,15 +10,14 @@ import com.onixbyte.deltaforceguide.domain.dto.TuningRequest;
 import com.onixbyte.deltaforceguide.domain.entity.Accessory;
 import com.onixbyte.deltaforceguide.domain.entity.Firearm;
 import com.onixbyte.deltaforceguide.domain.entity.Modification;
-import com.onixbyte.deltaforceguide.domain.entity.User;
 import com.onixbyte.deltaforceguide.domain.entity.Tuning;
+import com.onixbyte.deltaforceguide.domain.entity.User;
 import com.onixbyte.deltaforceguide.manager.ModificationManager;
 import com.onixbyte.deltaforceguide.repository.FirearmRepository;
 import com.onixbyte.deltaforceguide.repository.ModificationRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.data.domain.Page;
+import com.onixbyte.deltaforceguide.specification.ModificationSpecification;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -55,8 +56,8 @@ public class ModificationService {
      * Queries modifications with optional firearm and tag filters.
      *
      * @param firearmId optional firearm ID filter
-     * @param tags optional tag list filter
-     * @param pageable pagination parameters
+     * @param tags      optional tag list filter
+     * @param pageable  pagination parameters
      * @return a paginated response of modification records
      */
     public PageResponse<ModificationResponse> pageQuery(Long firearmId, List<String> tags, Pageable pageable) {
@@ -68,13 +69,13 @@ public class ModificationService {
                 throw new RuntimeException("Failed to serialize tags", e);
             }
         }
-        
-        Page<Modification> page;
-        if (tagsJson != null || firearmId != null) {
-            page = modificationRepository.pageQueryByFirearmAndTags(firearmId, tagsJson, pageable);
-        } else {
-            page = modificationRepository.findAllBy(pageable);
-        }
+
+        var spec = Specification.allOf(
+                ModificationSpecification.hasFirearmId(firearmId),
+                ModificationSpecification.containsTags(tagsJson)
+        );
+
+        var page = modificationManager.findBySpec(spec, pageable);
 
         return PageResponse.from(page.map(ModificationResponse::from));
     }
@@ -126,7 +127,7 @@ public class ModificationService {
     /**
      * Updates an existing modification identified by ID.
      *
-     * @param id the modification ID
+     * @param id      the modification ID
      * @param request the updated modification data
      * @return the updated modification response
      */

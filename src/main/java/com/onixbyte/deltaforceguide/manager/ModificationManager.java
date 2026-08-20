@@ -11,6 +11,9 @@ import com.onixbyte.deltaforceguide.domain.dto.ModificationResponse;
 import com.onixbyte.deltaforceguide.domain.dto.TuningRequest;
 import com.onixbyte.deltaforceguide.repository.FirearmRepository;
 import com.onixbyte.deltaforceguide.repository.ModificationRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -128,5 +131,10 @@ public class ModificationManager {
         tuning.setTuningName(request.tuningName());
         tuning.setTuningValue(request.tuningValue());
         return tuning;
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Modification> findBySpec(Specification<Modification> spec, Pageable pageable) {
+        return modificationRepository.findAll(spec, pageable);
     }
 }

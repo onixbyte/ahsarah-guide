@@ -4,6 +4,7 @@ import com.onixbyte.deltaforceguide.domain.entity.Modification;
 import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -16,44 +17,22 @@ import java.util.Optional;
 
 /**
  * Spring Data JPA repository for {@link Modification} entity operations,
- * including native JSONB tag filtering for Postgres.
+ * including JSONB tag filtering for Postgres via the specification API.
  *
  * @author zihluwang
  */
 @Repository
 public interface ModificationRepository extends JpaRepository<Modification, Long>, JpaSpecificationExecutor<Modification> {
 
+    @Override
     @EntityGraph(attributePaths = {"firearm"})
-    Page<Modification> findAllBy(Pageable pageable);
-
-    @EntityGraph(attributePaths = {"firearm"})
-    Page<Modification> findAllByFirearm_Id(Long firearmId, Pageable pageable);
+    @NonNull
+    Page<Modification> findAll(Specification<Modification> spec, @NonNull Pageable pageable);
 
     @Override
     @EntityGraph(attributePaths = {"firearm"})
     @NonNull
     Optional<Modification> findById(@NonNull Long id);
-
-    /**
-     * Page query modifications with optional firearm and JSONB tag filtering.
-     *
-     * @param firearmId optional firearm ID filter (nullable)
-     * @param tagsJson  optional JSON array of tags to match via Postgres {@code @>} operator (nullable)
-     * @param pageable  pagination information
-     * @return a page of matching modifications
-     */
-    @Query(value = """
-            SELECT * FROM modification m
-            WHERE (:firearmId IS NULL OR m.firearm_id = :firearmId)
-              AND (CAST(:tagsJson AS text) IS NULL OR cast(m.tags as jsonb) @> cast(CAST(:tagsJson AS text) as jsonb))
-            """,
-            countQuery = """
-            SELECT count(*) FROM modification m
-            WHERE (:firearmId IS NULL OR m.firearm_id = :firearmId)
-              AND (CAST(:tagsJson AS text) IS NULL OR cast(m.tags as jsonb) @> cast(CAST(:tagsJson AS text) as jsonb))
-            """,
-            nativeQuery = true)
-    Page<Modification> pageQueryByFirearmAndTags(@Param("firearmId") Long firearmId, @Param("tagsJson") String tagsJson, Pageable pageable);
 
     /**
      * Retrieve all distinct tag values from modifications, optionally filtered by firearm.
