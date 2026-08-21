@@ -3,6 +3,7 @@ package com.onixbyte.deltaforceguide.service;
 import com.onixbyte.captcha.text.TextProducer;
 import com.onixbyte.deltaforceguide.client.EmailClient;
 import com.onixbyte.deltaforceguide.client.TokenClient;
+import com.onixbyte.deltaforceguide.domain.dto.EmailVerificationCode;
 import com.onixbyte.deltaforceguide.domain.dto.LoginRequest;
 import com.onixbyte.deltaforceguide.domain.dto.RegisterRequest;
 import com.onixbyte.deltaforceguide.domain.dto.SendVerificationCodeRequest;
@@ -118,13 +119,24 @@ public class AuthService {
         var code = request.verificationCode();
         var verificationCodeId = request.verificationCodeId();
 
-        var storedCode = redisTemplate.opsForValue().get("verification-code:" + verificationCodeId);
-        if (!(storedCode instanceof String strStoredCode)) {
-            log.error("storedCode not a String, storedCode={}", storedCode);
+        var _req = redisTemplate.opsForValue().get("verification-code:" + verificationCodeId);
+        if (!(_req instanceof EmailVerificationCode verificationCode)) {
+            log.error("_req not a EmailVerificationCode, storedCode={}", _req);
             throw new InternalServerErrorException("系统内部错误，请重试");
         }
 
-        if (!code.equalsIgnoreCase(strStoredCode)) {
+        if (!request.username().equals(verificationCode.username())
+                || !request.email().equals(verificationCode.email())) {
+            log.error(
+                    "Username and email address do not match the data submitted "
+                            + "when requesting the verification code."
+            );
+            log.error("EmailVerificationCode={}", verificationCode);
+            log.error("RegisterRequest={}", request);
+            throw new BadRequestException("用户名或邮箱与获取验证码时不一致，请重新获取验证码。");
+        }
+
+        if (!code.equalsIgnoreCase(verificationCode.code())) {
             throw new BadRequestException("邮箱验证码不正确，请重试。");
         }
 
@@ -189,7 +201,11 @@ public class AuthService {
         var code = textProducer.getText();
 
         // Save verification code to cache.
-        redisTemplate.opsForValue().set("verification-code:" + uuid, code, Duration.ofMinutes(10L));
+        redisTemplate.opsForValue().set(
+                "verification-code:" + uuid,
+                new EmailVerificationCode(request.username(), request.email(), code),
+                Duration.ofMinutes(10L)
+        );
 
         // Send email.
         emailClient.sendVerificationCode(request.email(), request.username(), code, 10);
