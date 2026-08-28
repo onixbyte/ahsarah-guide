@@ -1,0 +1,6 @@
+delta-force-guide-server.iml
+build/
+!.gitlab-ci.yml
+!build/libs/*.jar
+.idea/
+.gradle
