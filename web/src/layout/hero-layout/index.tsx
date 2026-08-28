@@ -38,7 +38,7 @@ export default function HeroLayout() {
         <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-10 h-full">
           <div className="flex justify-between items-center h-20">
             <div className="flex items-center">
-              <h1 className="text-xl font-semibold text-white">《三角洲》指南</h1>
+              <h1 className="text-xl font-semibold text-white">阿萨拉向导</h1>
             </div>
             <nav className="flex h-full">
               <NavLink
@@ -100,14 +100,14 @@ export default function HeroLayout() {
               {isDropdownOpen && (
                 <div className="absolute top-full left-2/3 -translate-x-1/2 w-18 bg-gray-950 border border-gray-700 rounded-lg shadow-xl py-1 z-20 opacity-60">
                   <a
-                    href="https://github.com/zihluwang/delta-force-guide-web"
+                    href="https://onixbyte.dev/onixbyte/ahsarah-guide"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition-colors">
                     Web
                   </a>
                   <a
-                    href="https://github.com/zihluwang/delta-force-guide-server"
+                    href="https://onixbyte.dev/onixbyte/ahsarah-guide"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 hover:text-white transition-colors">

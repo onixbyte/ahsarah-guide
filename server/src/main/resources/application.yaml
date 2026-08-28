@@ -1,6 +1,6 @@
 spring:
   application:
-    name: delta-force-guide
+    name: ahsarah-guide
   cache:
     type: redis
     redis:
@@ -42,8 +42,8 @@ mybatis:
   configuration:
     log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
     map-underscore-to-camel-case: true
-  type-aliases-package: com.onixbyte.deltaforceguide.domain.entity
-  type-handlers-package: com.onixbyte.deltaforceguide.mapper.handler
+  type-aliases-package: com.onixbyte.ahsarahguide.domain.entity
+  type-handlers-package: com.onixbyte.ahsarahguide.mapper.handler
   mapper-locations: classpath:/mapper/*.xml
 
 logging:

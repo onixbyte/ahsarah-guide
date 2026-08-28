@@ -8,7 +8,7 @@ val artefactVersion: String by project
 val buildChannel: String by project
 val vendor: String by project
 
-group = "com.onixbyte.helix"
+group = "com.onixbyte.ahsarahguide"
 version = artefactVersion
 
 tasks.withType<JavaCompile> {

@@ -11,4 +11,4 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "delta-force-guide-server"
+rootProject.name = "ahsarah-guide-server"

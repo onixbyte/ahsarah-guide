@@ -1,4 +1,4 @@
-# 《三角洲行动游戏指南》隐私政策
+# 阿萨拉向导隐私政策
 
 本隐私政策旨在向您说明在无需登录的情况下，本站如何处理与您相关的信息。
 
@@ -30,4 +30,4 @@
 
 开发者： Zihlu Wang、Xingyao Fan
 
-联系渠道： [GitHub](https://github.com/zihluwang/delta-force-guide-web)
+联系渠道： [Gitea](https://onixbyte.dev/onixbyte/ahsarah-guide)

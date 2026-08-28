@@ -1,0 +1,25 @@
+package com.onixbyte.ahsarahguide.config;
+
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.onixbyte.ahsarahguide.shared.JacksonModules;
+import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+/**
+ * Configuration for Jackson JSON serialisation and deserialisation settings.
+ *
+ * @author zihluwang
+ */
+@Configuration
+public class JacksonConfig {
+
+    @Bean
+    public Jackson2ObjectMapperBuilderCustomizer jacksonCustomiser() {
+        return (builder) -> {
+            builder.modules(JacksonModules.DATE_TIME_MODULE);
+            builder.featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        };
+    }
+}
+

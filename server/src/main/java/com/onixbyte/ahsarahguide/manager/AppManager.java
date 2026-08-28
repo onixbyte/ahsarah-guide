@@ -1,0 +1,27 @@
+package com.onixbyte.ahsarahguide.manager;
+
+import com.onixbyte.ahsarahguide.properties.AppProperties;
+import org.springframework.stereotype.Component;
+
+@Component
+public class AppManager {
+
+    private final AppProperties appProperties;
+
+    public AppManager(AppProperties appProperties) {
+        this.appProperties = appProperties;
+    }
+
+    /**
+     * Retrieves the application version.
+     *
+     * @return the version string of this application
+     */
+    public String getVersion() {
+        return "v%s-%s by @%s".formatted(
+                appProperties.version(),
+                appProperties.channel(),
+                appProperties.vendor()
+        );
+    }
+}

@@ -95,7 +95,7 @@ app:
     max-age: PT2H
   jwt:
     # Issuer identifier, domain name is recommended.
-    issuer: dfguide.local
+    issuer: ahsarah-guide.local
 
     # Token signing secret, a 32-byte long or longer string is recommended.
     secret: qwertyuiopasdfghjklzxcvbnm123456
