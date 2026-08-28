@@ -8,7 +8,7 @@ val artefactVersion: String by project
 val buildChannel: String by project
 val vendor: String by project
 
-group = "com.onixbyte.helix"
+group = "com.onixbyte.ahsarahguide"
 version = artefactVersion
 
 tasks.withType<JavaCompile> {
@@ -24,47 +24,33 @@ java {
 }
 
 dependencies {
-    implementation(libs.jspecify.core)
+    // BOMs are imported as platforms, so they cannot be bundled.
     implementation(platform(libs.aws.sdk.bom))
-    implementation(libs.aws.sdk.s3)
-    implementation(libs.commons.io)
-    implementation(libs.commons.lang)
-    implementation(libs.commons.collections)
-    implementation(libs.hypersistence.core)
     implementation(platform(libs.onixbyte.versionCatalogue))
-    implementation(libs.onixbyte.tuple)
-    implementation(libs.onixbyte.commonToolbox)
-    implementation(libs.onixbyte.mathToolbox)
-    implementation(libs.onixbyte.identityGenerator)
-    implementation(libs.onixbyte.captcha)
-    implementation(libs.onixbyte.regions)
-    implementation(libs.onixbyte.cryptoToolbox)
-    implementation(libs.jwt.core)
+
+    implementation(libs.bundles.utilities)
+    implementation(libs.bundles.onixbyte)
+    implementation(libs.bundles.web)
+    implementation(libs.bundles.persistence)
+    implementation(libs.bundles.security)
+    implementation(libs.bundles.cache)
+    implementation(libs.bundles.observability)
+    implementation(libs.bundles.mail)
+    implementation(libs.bundles.aws)
+    implementation(libs.bundles.docs)
+
+    // Annotation processor for @ConfigurationProperties; kept out of bundles.
     implementation(libs.spring.boot.configurationProcessor)
-    implementation(libs.spring.boot.actuator)
-    implementation(libs.spring.boot.starter.web)
-    implementation(libs.spring.boot.starter.webFlux)
-    implementation(libs.spring.boot.starter.validation)
-    implementation(libs.spring.boot.starter.redis)
-    implementation(libs.spring.boot.starter.cache)
-    implementation(libs.spring.boot.starter.jpa)
-    implementation(libs.mybatis.starter.core)
-    implementation(libs.flyway.core)
-    implementation(libs.flyway.postgresql)
-    implementation(libs.jackson.jsr310)
-    implementation(libs.spring.boot.starter.doc)
-    implementation(libs.spring.boot.starter.security)
-    testImplementation(libs.spring.boot.starter.test)
-    testImplementation(libs.reactor.test)
-    testImplementation(libs.mybatis.starter.test)
-    testImplementation(libs.spring.security.test)
+
     runtimeOnly(libs.postgres.driver)
-    testRuntimeOnly(libs.h2.database)
-    testRuntimeOnly(libs.junit.launcher)
+
+    testImplementation(libs.bundles.testing)
+    testRuntimeOnly(libs.bundles.testRuntime)
 }
 
 tasks.processResources {
     filesMatching("application.yaml") {
+        println("appVersion = ${artefactVersion}, channel = ${buildChannel}, vendor = ${vendor}")
         expand(
             "appVersion" to artefactVersion,
             "channel" to buildChannel,

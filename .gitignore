@@ -97,7 +97,7 @@ fabric.properties
 # Editor-based HTTP Client
 http-client.private.env.json
 
-### Server
+### Java
 # Compiled class file
 *.class
 
@@ -111,25 +111,17 @@ http-client.private.env.json
 .mtj.tmp/
 
 # Package Files #
+*.jar
 *.war
 *.nar
 *.ear
 *.zip
 *.tar.gz
 *.rar
-*.jar
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
-
-# Config
-config/*.yml
-config/*.yaml
-config/*.properties
-
-# Tests
-test/
 
 ### Gradle
 .gradle
@@ -143,13 +135,6 @@ test/
 gradle-app.setting
 .gradletasknamecache
 
-### Claude Code
-.claude/settings.local.json
-.claude/memory/
-.claude/plans/
-.claude/worktrees/
-.claude/scheduled_tasks.json
-
 # Eclipse Gradle plugin generated files
 # Eclipse Core
 .project
@@ -158,5 +143,100 @@ gradle-app.setting
 
 gradle.properties
 
+### Node.js
+# Logs
+logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Diagnostic reports (https://nodejs.org/api/report.html)
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# Dependency directories
+node_modules/
+jspm_packages/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional stylelint cache
+.stylelintcache
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variable files
+.env
+.env.*
+!.env.example
+
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+.parcel-cache
+
+# Next.js build output
+.next
+out
+
+# Nuxt.js build / generate output
+.nuxt
+dist
+
+# Vite logs files
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+# Stores VSCode versions used for testing VSCode extensions
+.vscode-test
+
+# yarn v3
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+### Server-specific
+# Config
+server/config/*.yml
+server/config/*.yaml
+server/config/*.properties
+
+# Tests
+server/test/
+
 # frp config
 frpc.toml
+
+### Claude Code
+.claude/settings.local.json
+.claude/memory/
+.claude/plans/
+.claude/worktrees/
+.claude/scheduled_tasks.json

@@ -59,6 +59,11 @@ spring-boot-actuator = { group = "org.springframework.boot", name = "spring-boot
 spring-boot-starter-security = { group = "org.springframework.boot", name = "spring-boot-starter-security" }
 jwt-core = { group = "com.auth0", name = "java-jwt", version.ref = "javaJwtVersion" }
 
+# Java Mail & Templating
+spring-boot-starter-mail = { module = "org.springframework.boot:spring-boot-starter-mail" }
+spring-boot-starter-thymeleaf = { group = "org.springframework.boot", name = "spring-boot-starter-thymeleaf" }
+thymeleaf-extras-springsecurity6 = { group = "org.thymeleaf.extras", name = "thymeleaf-extras-springsecurity6" }
+
 # Spring Doc
 spring-boot-starter-doc = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-ui", version.ref = "springDocVersion" }
 
@@ -72,6 +77,89 @@ spring-security-test = { group = "org.springframework.security", name = "spring-
 reactor-test = { group = "io.projectreactor", name = "reactor-test", version.ref = "reactorVersion" }
 junit-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version.ref = "junitPlatformVersion" }
 mybatis-starter-test = { group = "org.mybatis.spring.boot", name = "mybatis-spring-boot-starter-test", version.ref = "mybatisVersion" }
+
+[bundles]
+# General utilities
+utilities = [
+    "jspecify-core",
+    "commons-io",
+    "commons-lang",
+    "commons-collections",
+    "jackson-jsr310",
+]
+
+# Onixbyte ecosystem (the version-catalogue BOM stays out of bundles, it is imported as a platform)
+onixbyte = [
+    "onixbyte-tuple",
+    "onixbyte-commonToolbox",
+    "onixbyte-cryptoToolbox",
+    "onixbyte-mathToolbox",
+    "onixbyte-identityGenerator",
+    "onixbyte-captcha",
+    "onixbyte-regions",
+]
+
+# Web layer
+web = [
+    "spring-boot-starter-web",
+    "spring-boot-starter-webFlux",
+    "spring-boot-starter-validation",
+]
+
+# Persistence and database
+persistence = [
+    "spring-boot-starter-jpa",
+    "mybatis-starter-core",
+    "hypersistence-core",
+    "flyway-core",
+    "flyway-postgresql",
+]
+
+# Security and authentication
+security = [
+    "spring-boot-starter-security",
+    "jwt-core",
+]
+
+# Caching (Redis)
+cache = [
+    "spring-boot-starter-redis",
+    "spring-boot-starter-cache",
+]
+
+# Observability
+observability = [
+    "spring-boot-actuator",
+]
+
+# Mail and templating
+mail = [
+    "spring-boot-starter-mail",
+    "spring-boot-starter-thymeleaf",
+    "thymeleaf-extras-springsecurity6",
+]
+
+# AWS cloud services
+aws = [
+    "aws-sdk-s3",
+]
+
+# API documentation
+docs = [
+    "spring-boot-starter-doc",
+]
+
+# Testing
+testing = [
+    "spring-boot-starter-test",
+    "spring-security-test",
+    "reactor-test",
+    "mybatis-starter-test",
+]
+testRuntime = [
+    "h2-database",
+    "junit-launcher",
+]
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "springBootVersion" }

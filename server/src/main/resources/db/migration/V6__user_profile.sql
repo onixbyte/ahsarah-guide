@@ -1,0 +1,6 @@
+ALTER TABLE app_user
+    ADD COLUMN nickname       VARCHAR(64),
+    ADD COLUMN avatar_url     VARCHAR(512),
+    ADD COLUMN enabled        BOOLEAN   NOT NULL DEFAULT TRUE,
+    ADD COLUMN created_at     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    ADD COLUMN updated_at     TIMESTAMPTZ NOT NULL DEFAULT NOW();
