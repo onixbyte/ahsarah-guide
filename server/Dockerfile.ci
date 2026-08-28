@@ -1,0 +1,19 @@
+FROM amazoncorretto:21-alpine
+WORKDIR /app
+
+ARG JAR_FILE
+ARG IMAGE_VERSION=dev
+ARG IMAGE_VENDOR=OnixByte
+ARG BUILD_DATE
+
+COPY ${JAR_FILE} app.jar
+
+LABEL org.opencontainers.image.title="delta-force-guide-server" \
+      org.opencontainers.image.description="REST API backend for managing Delta Force game firearm builds and modifications" \
+      org.opencontainers.image.version="${IMAGE_VERSION}" \
+      org.opencontainers.image.vendor="${IMAGE_VENDOR}" \
+      org.opencontainers.image.source="https://git.onixbyte.com/onixbyte/delta-force-guide-server" \
+      org.opencontainers.image.licenses="MIT" \
+      org.opencontainers.image.created="${BUILD_DATE}"
+
+ENTRYPOINT ["java", "-jar", "app.jar"]

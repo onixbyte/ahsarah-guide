@@ -1,0 +1,78 @@
+[versions]
+jspecifyVersion = "1.0.0"
+javaJwtVersion = "4.5.1"
+postgresDriverVersion = "42.7.9"
+h2Version = "2.2.224"
+springBootVersion = "3.5.13"
+reactorVersion = "3.7.8"
+junitPlatformVersion = "1.12.2"
+onixbyteVersion = "3.4.0"
+onixbyteCaptcha = "1.1.0"
+onixbyteRegions = "2025.12.0"
+awsSdkVersion = "2.25.48"
+commonsIoVersion = "2.16.1"
+commonsCollections = "4.5.0"
+commonsLangVersion = "3.20.0"
+mybatisVersion = "3.0.5"
+jacksonVersion = "2.19.2"
+hypersistenceVersion = "3.14.0"
+springDependencyManagementVersion = "1.1.7"
+springDocVersion = "2.8.16"
+
+[libraries]
+# General Utilities
+jspecify-core = { group = "org.jspecify", name = "jspecify", version.ref = "jspecifyVersion" }
+commons-io = { group = "commons-io", name = "commons-io", version.ref = "commonsIoVersion" }
+commons-collections = { group = "org.apache.commons", name = "commons-collections4", version.ref = "commonsCollections" }
+commons-lang = { group = "org.apache.commons", name = "commons-lang3", version.ref = "commonsLangVersion" }
+jackson-jsr310 = { group = "com.fasterxml.jackson.datatype", name = "jackson-datatype-jsr310", version.ref = "jacksonVersion" }
+
+# Onixbyte Ecosystem
+onixbyte-versionCatalogue = { group = "com.onixbyte", name = "version-catalogue", version.ref = "onixbyteVersion" }
+onixbyte-tuple = { group = "com.onixbyte", name = "tuple" }
+onixbyte-commonToolbox = { group = "com.onixbyte", name = "common-toolbox" }
+onixbyte-cryptoToolbox = { group = "com.onixbyte", name = "crypto-toolbox", version.ref = "onixbyteVersion" }
+onixbyte-mathToolbox = { group = "com.onixbyte", name = "math-toolbox" }
+onixbyte-identityGenerator = { group = "com.onixbyte", name = "identity-generator" }
+onixbyte-captcha = { group = "com.onixbyte", name = "captcha", version.ref = "onixbyteCaptcha" }
+onixbyte-regions = { group = "com.onixbyte", name = "regions4j", version.ref = "onixbyteRegions" }
+
+# Persistence & Database
+mybatis-starter-core = { group = "org.mybatis.spring.boot", name = "mybatis-spring-boot-starter", version.ref = "mybatisVersion" }
+spring-boot-starter-jpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa" }
+hypersistence-core = { group = "io.hypersistence", name = "hypersistence-utils-hibernate-63", version.ref = "hypersistenceVersion" }
+postgres-driver = { group = "org.postgresql", name = "postgresql", version.ref = "postgresDriverVersion" }
+h2-database = { group = "com.h2database", name = "h2", version.ref = "h2Version" }
+spring-boot-starter-redis = { group = "org.springframework.boot", name = "spring-boot-starter-data-redis", version.ref = "springBootVersion" }
+flyway-core = { group = "org.flywaydb", name = "flyway-core" }
+flyway-postgresql = { group = "org.flywaydb", name = "flyway-database-postgresql" }
+
+# Spring Boot Core & Web
+spring-boot-starter-web = { group = "org.springframework.boot", name = "spring-boot-starter-web" }
+spring-boot-starter-webFlux = { group = "org.springframework.boot", name = "spring-boot-starter-webflux" }
+spring-boot-starter-validation = { group = "org.springframework.boot", name = "spring-boot-starter-validation" }
+spring-boot-starter-cache = { group = "org.springframework.boot", name = "spring-boot-starter-cache" }
+spring-boot-configurationProcessor = { group = "org.springframework.boot", name = "spring-boot-configuration-processor" }
+spring-boot-actuator = { group = "org.springframework.boot", name = "spring-boot-starter-actuator" }
+
+# Security & Auth
+spring-boot-starter-security = { group = "org.springframework.boot", name = "spring-boot-starter-security" }
+jwt-core = { group = "com.auth0", name = "java-jwt", version.ref = "javaJwtVersion" }
+
+# Spring Doc
+spring-boot-starter-doc = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-ui", version.ref = "springDocVersion" }
+
+# Cloud Services
+aws-sdk-bom = { group = "software.amazon.awssdk", name = "bom", version.ref = "awsSdkVersion" }
+aws-sdk-s3 = { group = "software.amazon.awssdk", name = "s3" }
+
+# Testing
+spring-boot-starter-test = { group = "org.springframework.boot", name = "spring-boot-starter-test", version.ref = "springBootVersion" }
+spring-security-test = { group = "org.springframework.security", name = "spring-security-test" }
+reactor-test = { group = "io.projectreactor", name = "reactor-test", version.ref = "reactorVersion" }
+junit-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version.ref = "junitPlatformVersion" }
+mybatis-starter-test = { group = "org.mybatis.spring.boot", name = "mybatis-spring-boot-starter-test", version.ref = "mybatisVersion" }
+
+[plugins]
+spring-boot = { id = "org.springframework.boot", version.ref = "springBootVersion" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "springDependencyManagementVersion" }

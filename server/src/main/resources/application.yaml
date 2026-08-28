@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: delta-force-guide
+  cache:
+    type: redis
+    redis:
+      time-to-live: PT2H
+  data:
+    redis:
+      repositories:
+        # Disable redis repositories
+        enabled: false
+  jta:
+    # Disable JTA support
+    enabled: false
+  jpa:
+    properties:
+      hibernate:
+        transaction:
+          jta:
+            # No need to use distributed transaction manager for 1 datasource.
+            platform: org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+  datasource:
+    hikari:
+      minimum-idle: 1
+      maximum-pool-size: 10
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+    map-underscore-to-camel-case: true
+  type-aliases-package: com.onixbyte.deltaforceguide.domain.entity
+  type-handlers-package: com.onixbyte.deltaforceguide.mapper.handler
+  mapper-locations: classpath:/mapper/*.xml
+
+logging:
+  level:
+    org.hibernate:
+      orm.connections.pooling: off
+
+app:
+  common:
+    version: ${appVersion}
+    channel: ${channel}
+    vendor: ${vendor}
