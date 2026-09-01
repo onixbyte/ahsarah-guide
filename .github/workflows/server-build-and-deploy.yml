@@ -1,0 +1,95 @@
+name: Server Build and Deploy
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+env:
+  APP_NAME: ahsarah-guide-server
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21 (Corretto)
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: corretto
+          cache: gradle
+
+      - name: Build with Gradle
+        run: >
+          ./gradlew bootJar -x test
+          -PartefactVersion="${{ github.event.release.tag_name }}"
+          -PbuildChannel=stable
+          -Pvendor=${{ vars.VENDOR }}
+
+      - name: Resolve JAR file path
+        id: jar
+        run: |
+          JAR_PATH=$(find build/libs -name '*.jar' | head -1)
+          echo "file=$JAR_PATH" >> "$GITHUB_OUTPUT"
+
+      - name: Prepare release asset
+        id: asset
+        run: |
+          TAG="${{ github.event.release.tag_name }}"
+          FILE="${{ steps.jar.outputs.file }}"
+          ASSET_NAME="${APP_NAME}-${TAG}.jar"
+          cp "${FILE}" "../${ASSET_NAME}"
+          echo "path=${ASSET_NAME}" >> "$GITHUB_OUTPUT"
+
+      - name: Upload JAR to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ steps.asset.outputs.path }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+      - name: Generate image tags
+        id: meta
+        run: |
+          DOCKERHUB_USER="${{ vars.DOCKER_HUB_USERNAME }}"
+          echo "tag_version=${DOCKERHUB_USER}/${APP_NAME}:${{ github.event.release.tag_name }}" >> "$GITHUB_OUTPUT"
+          echo "tag_latest=${DOCKERHUB_USER}/${APP_NAME}:latest" >> "$GITHUB_OUTPUT"
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: server
+          file: server/Dockerfile.ci
+          build-args: |
+            JAR_FILE=${{ steps.jar.outputs.file }}
+            IMAGE_VERSION=${{ github.event.release.tag_name }}
+            IMAGE_VENDOR=${{ vars.VENDOR }}
+            BUILD_DATE=${{ github.event.release.published_at }}
+          push: true
+          tags: |
+            ${{ steps.meta.outputs.tag_version }}
+            ${{ steps.meta.outputs.tag_latest }}
+
+      - name: Push README to Docker Hub
+        uses: christian-korneck/update-container-description-action@v1
+        env:
+          DOCKER_USER: ${{ vars.DOCKER_HUB_USERNAME }}
+          DOCKER_PASS: ${{ secrets.DOCKER_HUB_TOKEN }}
+        with:
+          destination_container_repo: ${{ vars.DOCKER_HUB_USERNAME }}/${{ env.APP_NAME }}
+          provider: dockerhub
+          readme_file: server/README.md

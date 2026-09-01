@@ -1,0 +1,109 @@
+name: Web Build and Deploy
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    name: Build release archive
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: web/pnpm-lock.yaml
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build release archive
+        run: pnpm build:tar
+
+      - name: Clean up previous build artefacts on server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ vars.DEPLOY_HOST }}
+          username: ${{ vars.DEPLOY_USER }}
+          port: ${{ vars.DEPLOY_PORT }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          command: rm -rf /tmp/dist.tar.gz /tmp/dist.tar.gz/
+
+      - name: Upload artefact to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ vars.DEPLOY_HOST }}
+          username: ${{ vars.DEPLOY_USER }}
+          port: ${{ vars.DEPLOY_PORT }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          source: "dist.tar.gz"
+          target: "/tmp/"
+
+  upload-release-asset:
+    name: Upload to GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download artefact from server
+        env:
+          DEPLOY_HOST: ${{ vars.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ vars.DEPLOY_USER }}
+          DEPLOY_PORT: ${{ vars.DEPLOY_PORT }}
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+        run: |
+          set -e
+          SSH_DIR="${RUNNER_TEMP}/ssh"
+          mkdir -p "$SSH_DIR"
+          chmod 700 "$SSH_DIR"
+          printf '%s\n' "$DEPLOY_SSH_KEY" > "$SSH_DIR/key"
+          chmod 600 "$SSH_DIR/key"
+          scp -i "$SSH_DIR/key" \
+              -P "$DEPLOY_PORT" \
+              -o StrictHostKeyChecking=accept-new \
+              -o UserKnownHostsFile="$SSH_DIR/known_hosts" \
+              "${DEPLOY_USER}@${DEPLOY_HOST}:/tmp/dist.tar.gz" \
+              ./dist.tar.gz
+          rm -rf "$SSH_DIR"
+
+      - name: Upload release asset to GitHub
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist.tar.gz
+
+  deploy-to-server:
+    name: Deploy to onixbyte.cn
+    needs: [build, upload-release-asset]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Extract archive and deploy
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ vars.DEPLOY_HOST }}
+          username: ${{ vars.DEPLOY_USER }}
+          port: ${{ vars.DEPLOY_PORT }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script_stop: true
+          script: |
+            set -e
+            DEPLOY_PATH="${{ vars.DEPLOY_PATH }}"
+            mkdir -p "$DEPLOY_PATH"
+            rm -rf "$DEPLOY_PATH"/*
+            tar -xzf /tmp/dist.tar.gz -C "$DEPLOY_PATH" --strip-components=1
+            chown -R caddy:caddy "$DEPLOY_PATH"
+            rm -f /tmp/dist.tar.gz

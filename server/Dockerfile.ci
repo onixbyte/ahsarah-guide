@@ -12,7 +12,7 @@ LABEL org.opencontainers.image.title="ahsarah-guide-server" \
       org.opencontainers.image.description="REST API backend for Ahsarah Guide" \
       org.opencontainers.image.version="${IMAGE_VERSION}" \
       org.opencontainers.image.vendor="${IMAGE_VENDOR}" \
-      org.opencontainers.image.source="https://onixbyte.dev/onixbyte/ahsarah-guide" \
+      org.opencontainers.image.source="https://github.com/onixbyte/ahsarah-guide" \
       org.opencontainers.image.licenses="MIT" \
       org.opencontainers.image.created="${BUILD_DATE}"
 
