@@ -2,10 +2,8 @@ package com.onixbyte.ahsarahguide.config;
 
 import com.onixbyte.ahsarahguide.interceptor.GitHubWebhookInterceptor;
 import com.onixbyte.ahsarahguide.interceptor.TrafficInterceptor;
-import com.onixbyte.ahsarahguide.properties.AppProperties;
 import com.onixbyte.ahsarahguide.security.resolver.CurrentUserArgumentResolver;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -14,7 +12,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.List;
 
 @Configuration
-@EnableConfigurationProperties(AppProperties.class)
 public class AppConfig implements WebMvcConfigurer {
 
     private final TrafficInterceptor trafficInterceptor;

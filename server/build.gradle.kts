@@ -23,6 +23,22 @@ java {
     }
 }
 
+// Generate META-INF/build-info.properties at build time. The build version comes
+// from the project version (driven by the git tag in CI); channel and vendor are
+// stamped alongside it so the runtime no longer needs template placeholders.
+springBoot {
+    buildInfo {
+        properties {
+            additional.set(
+                mapOf(
+                    "channel" to buildChannel,
+                    "vendor" to vendor
+                )
+            )
+        }
+    }
+}
+
 dependencies {
     // BOMs are imported as platforms, so they cannot be bundled.
     implementation(platform(libs.aws.sdk.bom))
@@ -46,17 +62,6 @@ dependencies {
 
     testImplementation(libs.bundles.testing)
     testRuntimeOnly(libs.bundles.testRuntime)
-}
-
-tasks.processResources {
-    filesMatching("application.yaml") {
-        println("appVersion = ${artefactVersion}, channel = ${buildChannel}, vendor = ${vendor}")
-        expand(
-            "appVersion" to artefactVersion,
-            "channel" to buildChannel,
-            "vendor" to vendor
-        )
-    }
 }
 
 tasks.test {

@@ -1,15 +1,15 @@
 package com.onixbyte.ahsarahguide.manager;
 
-import com.onixbyte.ahsarahguide.properties.AppProperties;
+import org.springframework.boot.info.BuildProperties;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AppManager {
 
-    private final AppProperties appProperties;
+    private final BuildProperties buildProperties;
 
-    public AppManager(AppProperties appProperties) {
-        this.appProperties = appProperties;
+    public AppManager(BuildProperties buildProperties) {
+        this.buildProperties = buildProperties;
     }
 
     /**
@@ -19,9 +19,9 @@ public class AppManager {
      */
     public String getVersion() {
         return "v%s-%s by @%s".formatted(
-                appProperties.version(),
-                appProperties.channel(),
-                appProperties.vendor()
+                buildProperties.getVersion(),
+                buildProperties.get("channel"),
+                buildProperties.get("vendor")
         );
     }
 }

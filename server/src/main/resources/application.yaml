@@ -53,8 +53,3 @@ logging:
     org.hibernate:
       orm.connections.pooling: off
 
-app:
-  common:
-    version: ${appVersion}
-    channel: ${channel}
-    vendor: ${vendor}
